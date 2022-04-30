@@ -13,13 +13,15 @@ const val fullCircle = "●"
 
 class MainActivity : AppCompatActivity() {
 
-    @SuppressLint("SetTextI18n")
+    private val textView: TextView by lazy { findViewById(R.id.pin_code_textView) }
+    private val pinCode = IntArray(4) { 0 }
+    private var index = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        val textView: TextView = findViewById(R.id.pin_code_textView)
         val numberButtons = mutableListOf<Button>()
         val buttonBack: Button = findViewById(R.id.buttonBack)
         val buttonOk: Button = findViewById(R.id.buttonOk)
@@ -29,8 +31,6 @@ class MainActivity : AppCompatActivity() {
             R.id.button6, R.id.button7, R.id.button8,
             R.id.button9,
         )
-        val pinCode = IntArray(4) { 0 }
-        var index = 0
 
         for (i in 0..9) {
             val button: Button = findViewById(buttonIndices[i])
@@ -38,23 +38,20 @@ class MainActivity : AppCompatActivity() {
             button.setOnClickListener {
                 if (index < 4) {
                     pinCode[index] = (it as Button).text.toString().toInt()
-                    index++
+                    updatePinCodeText(index + 1, textView)
                 }
-                textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
             }
             numberButtons.add(button)
         }
 
         buttonBack.setOnClickListener {
             if (index > 0) {
-                index--
-                textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+                updatePinCodeText(index - 1, textView)
             }
         }
 
         buttonBack.setOnLongClickListener {
-            index = 0
-            textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+            updatePinCodeText(0, textView)
             true
         }
 
@@ -64,13 +61,19 @@ class MainActivity : AppCompatActivity() {
                     "Correct!"
                 } else {
                     textView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
-                    index = 0
-                    textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+                    updatePinCodeText(0, textView)
                     "Incorrect!"
                 }
                 Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    @SuppressLint("SetTextI18n")
+    private fun updatePinCodeText(index: Int, textView: TextView) {
+        this.index = index
+        textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+    }
+
 }
 
