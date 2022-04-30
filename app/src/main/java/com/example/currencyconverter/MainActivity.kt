@@ -2,13 +2,11 @@ package com.example.currencyconverter
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 
 const val emptyCircle = "○"
 const val fullCircle = "●"
@@ -52,6 +50,12 @@ class MainActivity : AppCompatActivity() {
                 index--
                 textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
             }
+        }
+
+        buttonBack.setOnLongClickListener {
+            index = 0
+            textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+            true
         }
 
         buttonOk.setOnClickListener {
