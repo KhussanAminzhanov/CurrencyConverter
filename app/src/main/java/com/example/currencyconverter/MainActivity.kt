@@ -45,9 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonBack.setOnClickListener {
-            if (index > 0) {
-                updatePinCodeText(index - 1, textView)
-            }
+            if (index > 0) updatePinCodeText(index - 1, textView)
         }
 
         buttonBack.setOnLongClickListener {
