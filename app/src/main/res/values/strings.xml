@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Currency Converter</string>
     <string name="pin_code">%1$s%2$s</string>
-    <string name="enter_pin_code">Введите код</string>
+    <string name="enter_pin_code_hint_text">Введите код</string>
+    <string name="pin_code_hide">○○○○</string>
     <string name="_9">9</string>
     <string name="_8">8</string>
     <string name="_7">7</string>

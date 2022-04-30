@@ -2,6 +2,7 @@ package com.example.currencyconverter
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
@@ -30,42 +31,41 @@ class MainActivity : AppCompatActivity() {
             R.id.button6, R.id.button7, R.id.button8,
             R.id.button9,
         )
-        val pinCode = List<Int>(4) { 0 }
-        val index = 0
+        val pinCode = IntArray(4) { 0 }
+        var index = 0
 
         for (i in 0..9) {
             val button: Button = findViewById(buttonIndices[i])
             button.text = i.toString()
-            button.setOnClickListener { textView.text = textView.text.toString() + i }
+            button.setOnClickListener {
+                if (index < 4) {
+                    pinCode[index] = (it as Button).text.toString().toInt()
+                    index++
+                }
+                textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+            }
             numberButtons.add(button)
         }
 
         buttonBack.setOnClickListener {
-            textView.setTextColor(
-                ContextCompat.getColor(
-                    applicationContext,
-                    R.color.blue_text_color
-                )
-            )
-            if (textView.text.isNotBlank()) {
-                textView.text = textView.text.subSequence(0, textView.text.length - 1)
+            if (index > 0) {
+                index--
+                textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
             }
         }
 
         buttonOk.setOnClickListener {
-            val text = if (textView.text == "1567") {
-                "Correct!"
-            } else {
-                textView.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.incorrect_pin_code
-                    )
-                )
-                textView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
-                "Incorrect!"
+            if (index == 4) {
+                val text = if (pinCode.joinToString("") == "1567") {
+                    "Correct!"
+                } else {
+                    textView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
+                    index = 0
+                    textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+                    "Incorrect!"
+                }
+                Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
         }
     }
 }
