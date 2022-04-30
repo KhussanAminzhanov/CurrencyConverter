@@ -6,7 +6,7 @@
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_shape_pressed.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_shape_selector.xml" value="0.298" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
       </map>
     </option>
   </component>
