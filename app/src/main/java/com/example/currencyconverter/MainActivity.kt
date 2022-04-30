@@ -1,6 +1,7 @@
 package com.example.currencyconverter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -55,14 +56,14 @@ class MainActivity : AppCompatActivity() {
 
         buttonOk.setOnClickListener {
             if (index == 4) {
-                val text = if (pinCode.joinToString("") == "1567") {
-                    "Correct!"
+                if (pinCode.joinToString("") == "1567") {
+                    val intent = Intent(this, MainScreen::class.java)
+                    finish()
+                    startActivity(intent)
                 } else {
                     textView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
                     updatePinCodeText(0, textView)
-                    "Incorrect!"
                 }
-                Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
             }
         }
     }
