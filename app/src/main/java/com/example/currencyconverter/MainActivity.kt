@@ -11,11 +11,13 @@ const val EMPTY_CIRCLE = "○"
 const val FULL_CIRCLE = "●"
 const val PIN_CODE_LENGTH = 4
 const val CORRECT_PIN_CODE = "1567"
+const val PIN_CODE_INSTANCE_KEY = "PIN_CODE"
+const val PIN_CODE_INDEX = "PIN_CODE_INDEX"
 
 class MainActivity : AppCompatActivity() {
 
     private val textView: TextView by lazy { findViewById(R.id.pin_code_textView) }
-    private val pinCode = IntArray(PIN_CODE_LENGTH) { 0 }
+    private var pinCode = IntArray(PIN_CODE_LENGTH) { 0 }
     private var index = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +70,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putIntArray(PIN_CODE_INSTANCE_KEY, pinCode)
+        outState.putInt(PIN_CODE_INDEX, index)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        pinCode = savedInstanceState.getIntArray(PIN_CODE_INSTANCE_KEY) ?: IntArray(PIN_CODE_LENGTH) { 0 }
+        index = savedInstanceState.getInt(PIN_CODE_INDEX)
+        textView.text = updatePinCodeText(index)
     }
 
     private fun updatePinCodeText(index: Int): String {
