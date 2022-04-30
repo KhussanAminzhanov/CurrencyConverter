@@ -1,21 +1,21 @@
 package com.example.currencyconverter
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-const val emptyCircle = "○"
-const val fullCircle = "●"
+const val EMPTY_CIRCLE = "○"
+const val FULL_CIRCLE = "●"
+const val PIN_CODE_LENGTH = 4
+const val CORRECT_PIN_CODE = "1567"
 
 class MainActivity : AppCompatActivity() {
 
     private val textView: TextView by lazy { findViewById(R.id.pin_code_textView) }
-    private val pinCode = IntArray(4) { 0 }
+    private val pinCode = IntArray(PIN_CODE_LENGTH) { 0 }
     private var index = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,45 +33,46 @@ class MainActivity : AppCompatActivity() {
             R.id.button9,
         )
 
+        textView.text = updatePinCodeText(0)
+
         for (i in 0..9) {
             val button: Button = findViewById(buttonIndices[i])
             button.text = i.toString()
             button.setOnClickListener {
-                if (index < 4) {
+                if (index < PIN_CODE_LENGTH) {
                     pinCode[index] = (it as Button).text.toString().toInt()
-                    updatePinCodeText(index + 1, textView)
+                    textView.text = updatePinCodeText(index + 1)
                 }
             }
             numberButtons.add(button)
         }
 
         buttonBack.setOnClickListener {
-            if (index > 0) updatePinCodeText(index - 1, textView)
+            if (index > 0) textView.text = updatePinCodeText(index - 1)
         }
 
         buttonBack.setOnLongClickListener {
-            updatePinCodeText(0, textView)
+            textView.text = updatePinCodeText(0)
             true
         }
 
         buttonOk.setOnClickListener {
-            if (index == 4) {
-                if (pinCode.joinToString("") == "1567") {
+            if (index == PIN_CODE_LENGTH) {
+                if (pinCode.joinToString("") == CORRECT_PIN_CODE) {
                     val intent = Intent(this, MainScreen::class.java)
                     finish()
                     startActivity(intent)
                 } else {
                     textView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
-                    updatePinCodeText(0, textView)
+                    textView.text = updatePinCodeText(0)
                 }
             }
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun updatePinCodeText(index: Int, textView: TextView) {
+    private fun updatePinCodeText(index: Int): String {
         this.index = index
-        textView.text = fullCircle.repeat(index) + emptyCircle.repeat(4 - index)
+        return FULL_CIRCLE.repeat(index) + EMPTY_CIRCLE.repeat(PIN_CODE_LENGTH - index)
     }
 
 }
