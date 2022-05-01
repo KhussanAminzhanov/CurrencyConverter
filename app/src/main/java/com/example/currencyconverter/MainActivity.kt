@@ -2,10 +2,12 @@ package com.example.currencyconverter
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 const val EMPTY_CIRCLE = "○"
 const val FULL_CIRCLE = "●"
@@ -14,7 +16,7 @@ const val CORRECT_PIN_CODE = "1567"
 const val PIN_CODE_INSTANCE_KEY = "PIN_CODE"
 const val PIN_CODE_INDEX = "PIN_CODE_INDEX"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Animation.AnimationListener {
 
     private val textView: TextView by lazy { findViewById(R.id.pin_code_textView) }
     private var pinCode = IntArray(PIN_CODE_LENGTH) { 0 }
@@ -65,7 +67,9 @@ class MainActivity : AppCompatActivity() {
                     finish()
                     startActivity(intent)
                 } else {
-                    textView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
+                    val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
+                    animation.setAnimationListener(this)
+                    textView.startAnimation(animation)
                     textView.text = updatePinCodeText(0)
                 }
             }
@@ -89,6 +93,16 @@ class MainActivity : AppCompatActivity() {
         this.index = index
         return FULL_CIRCLE.repeat(index) + EMPTY_CIRCLE.repeat(PIN_CODE_LENGTH - index)
     }
+
+    override fun onAnimationStart(p0: Animation?) {
+        textView.setTextColor(ContextCompat.getColor(this, R.color.incorrect_pin_code))
+    }
+
+    override fun onAnimationEnd(p0: Animation?) {
+        textView.setTextColor(ContextCompat.getColor(this, R.color.blue_text_color))
+    }
+
+    override fun onAnimationRepeat(p0: Animation?) {}
 
 }
 
