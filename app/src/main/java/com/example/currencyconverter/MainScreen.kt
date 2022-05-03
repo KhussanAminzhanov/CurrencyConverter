@@ -14,9 +14,9 @@ const val REQUEST_IMAGE_CAPTURE = 1
 
 class MainScreen : AppCompatActivity() {
 
-    val userIcon: ImageView by lazy { findViewById(R.id.user_icon) }
-    val userName: TextView by lazy { findViewById(R.id.user_name) }
-    val userEmail: TextView by lazy { findViewById(R.id.user_email) }
+    private val userIcon: ImageView by lazy { findViewById(R.id.user_icon) }
+    private val userName: TextView by lazy { findViewById(R.id.user_name) }
+    private val userEmail: TextView by lazy { findViewById(R.id.user_email) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,10 @@ class MainScreen : AppCompatActivity() {
         val shareButton: Button = findViewById(R.id.share_button)
         val shareEmailButton: Button = findViewById(R.id.share_email_button)
         val callButton: Button = findViewById(R.id.call_button)
-        val startCameraButton: Button = findViewById(R.id.start_camera_button)
+        val startCameraButton: Button = findViewById(R.id.open_camera_button)
+
+        userName.text = "User Name"
+        userEmail.text = "example@mail.com"
 
         shareButton.setOnClickListener {
             val shareIntent = Intent().apply {

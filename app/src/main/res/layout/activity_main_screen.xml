@@ -12,7 +12,8 @@
         android:layout_height="140dp"
         android:layout_gravity="center"
         android:layout_marginTop="64dp"
-        android:src="@drawable/user" />
+        android:src="@drawable/user"
+        android:contentDescription="@string/user_icon_text" />
 
     <TextView
         android:id="@+id/user_name"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="18dp"
-        android:text="Khussan Aminzhanov" />
+        tools:text="User Name"/>
 
     <TextView
         android:id="@+id/user_email"
@@ -28,8 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="30dp"
-        android:text="aminzhanov.khussan@gmail.com" />
+        tools:text="example@email.com"
+        android:layout_marginBottom="30dp" />
 
     <Button
         android:id="@+id/share_button"
@@ -41,8 +42,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/button_shape_selector"
-        android:text="Поделиться"
-        android:textSize="16dp" />
+        android:text="@string/share_button_text"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/share_email_button"
@@ -54,8 +55,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/button_shape_selector"
-        android:text="Отправить по почте"
-        android:textSize="16dp" />
+        android:text="@string/share_email_button_text"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/call_button"
@@ -67,11 +68,11 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/button_shape_selector"
-        android:text="Позвонить"
-        android:textSize="16dp" />
+        android:text="@string/call_button_text"
+        android:textSize="16sp" />
 
     <Button
-        android:id="@+id/start_camera_button"
+        android:id="@+id/open_camera_button"
         style="@style/BlueButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,7 +81,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/button_shape_selector"
-        android:text="Запустить камеру"
-        android:textSize="16dp" />
+        android:text="@string/open_camera_button_text"
+        android:textSize="16sp" />
 
 </LinearLayout>
