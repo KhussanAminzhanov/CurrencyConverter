@@ -21,4 +21,10 @@
     <string name="call_button_text">Позвонить</string>
     <string name="open_camera_button_text">Запустить камеру</string>
     <string name="user_icon_text">user icon</string>
+    <string name="translate">Translate</string>
+    <string name="favorites">Favorites</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
+    <string name="currency">Currency</string>
+    <string name="add">Add</string>
 </resources>
