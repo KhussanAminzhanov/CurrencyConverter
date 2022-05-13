@@ -1,12 +1,11 @@
 package com.example.currencyconverter
 
+import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputLayout
+import com.example.currencyconverter.databinding.CurrencyItemBinding
 
 class CurrenciesAdapter : RecyclerView.Adapter<CurrenciesAdapter.CurrenciesItemViewHolder>() {
 
@@ -20,23 +19,25 @@ class CurrenciesAdapter : RecyclerView.Adapter<CurrenciesAdapter.CurrenciesItemV
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item)
+        holder.bind(item, holder.itemView.context)
     }
 
     override fun getItemCount(): Int = data.size
 
-    class CurrenciesItemViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
+    class CurrenciesItemViewHolder(private val binding: CurrencyItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun inflateFrom(parent: ViewGroup): CurrenciesItemViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.currency_item, parent, false) as LinearLayoutCompat
+                val view = CurrencyItemBinding.inflate(layoutInflater, parent, false)
                 return CurrenciesItemViewHolder(view)
             }
         }
 
-        fun bind(item: CurrencyItem) {
-            rootView.findViewById<TextInputLayout>(R.id.currency_value_text_input_layout).hint = item.name
+        fun bind(item: CurrencyItem, context: Context) {
+            binding.currencyValueTextInputLayout.hint = item.name
+            binding.currencyName.text = item.name
+            binding.currencyFlagImage.setImageDrawable(ContextCompat.getDrawable(context, item.image))
         }
     }
 }

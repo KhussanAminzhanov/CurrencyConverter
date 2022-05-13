@@ -27,4 +27,5 @@
     <string name="profile">Profile</string>
     <string name="currency">Currency</string>
     <string name="add">Add</string>
+    <string name="flag">flag</string>
 </resources>

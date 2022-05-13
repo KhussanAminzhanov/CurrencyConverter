@@ -13,8 +13,8 @@ class CurrenciesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val currencies = mutableListOf(
-        CurrencyItem("Tenge", 0, 0L),
-        CurrencyItem("Dollar", 0, 0L)
+        CurrencyItem("Tenge", R.drawable.kazakhstan_flag, 0L),
+        CurrencyItem("Dollar", R.drawable.usa_flag, 0L)
     )
 
     override fun onCreateView(
@@ -29,7 +29,7 @@ class CurrenciesFragment : Fragment() {
         binding.currenciesListRecyclerView.adapter = adapter
 
         binding.addCurrencyButton.setOnClickListener {
-            currencies.add(CurrencyItem("Yen", 0, 0L))
+            currencies.add(CurrencyItem("Lira", R.drawable.turkey_flag, 0L))
             adapter.data = currencies
         }
 
