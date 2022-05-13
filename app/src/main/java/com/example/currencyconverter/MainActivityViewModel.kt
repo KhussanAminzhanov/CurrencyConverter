@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 
 class MainActivityViewModel : ViewModel() {
 
-    private val _pinCode = MutableLiveData("")
-    val pinCode: LiveData<String>
+    private val _pinCode = MutableLiveData<IntArray>(IntArray(PIN_CODE_LENGTH) {0})
+    val pinCode: LiveData<IntArray>
         get() = _pinCode
 
     private val _index = MutableLiveData(0)

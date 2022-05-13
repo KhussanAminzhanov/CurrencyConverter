@@ -31,6 +31,7 @@ class CurrenciesFragment : Fragment() {
         binding.addCurrencyButton.setOnClickListener {
             currencies.add(CurrencyItem("Lira", R.drawable.turkey_flag, 0L))
             adapter.data = currencies
+            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.data.size - 1)
         }
 
         return view
