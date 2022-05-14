@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.ViewModelProvider
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
@@ -31,7 +32,14 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            viewModel.addCurrency(CurrencyItem(viewModel.currentId, "Lira", R.drawable.turkey_flag, 0L))
+            viewModel.addCurrency(
+                CurrencyItem(
+                    viewModel.currentId,
+                    "Lira",
+                    R.drawable.turkey_flag,
+                    0L
+                )
+            )
         }
 
         return view
