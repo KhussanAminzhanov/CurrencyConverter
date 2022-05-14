@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrenciesFragment : Fragment() {
@@ -12,29 +13,33 @@ class CurrenciesFragment : Fragment() {
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
 
-    private val currencies = mutableListOf(
-        CurrencyItem("Tenge", R.drawable.kazakhstan_flag, 0L),
-        CurrencyItem("Dollar", R.drawable.usa_flag, 0L)
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
         val view = binding.root
+        val viewModel = ViewModelProvider(this)[CurrenciesViewModel::class.java]
 
         val adapter = CurrenciesAdapter()
-        adapter.data = currencies
+        adapter.submitList(viewModel.currencies.value!!)
         binding.currenciesListRecyclerView.adapter = adapter
 
+        viewModel.currencies.observe(viewLifecycleOwner) { newValue ->
+            adapter.submitList(newValue)
+            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
+        }
+
         binding.addCurrencyButton.setOnClickListener {
-            currencies.add(CurrencyItem("Lira", R.drawable.turkey_flag, 0L))
-            adapter.data = currencies
-            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.data.size - 1)
+            viewModel.addCurrency(CurrencyItem(viewModel.currentId, "Lira", R.drawable.turkey_flag, 0L))
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
