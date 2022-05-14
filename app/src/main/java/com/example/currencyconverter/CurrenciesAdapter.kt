@@ -4,12 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.CurrencyItemBinding
 
-class CurrenciesAdapter :
+class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
     ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()), CurrencyItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder =
@@ -44,19 +43,12 @@ class CurrenciesAdapter :
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-
-            }
-        }
+        viewModel.moveCurrencies(fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemDismiss(position: Int) {
+        viewModel.deleteCurrency(position)
         notifyItemRemoved(position)
     }
 }

@@ -3,6 +3,7 @@ package com.example.currencyconverter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.util.*
 
 class CurrenciesViewModel : ViewModel() {
 
@@ -19,5 +20,22 @@ class CurrenciesViewModel : ViewModel() {
         data.add(newCurrencyItem)
         currentId++
         _currencies.value = data
+    }
+
+    fun deleteCurrency(position: Int) {
+        data.removeAt(position)
+        _currencies.value = data
+    }
+
+    fun moveCurrencies(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(data, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(data, i, i - 1)
+            }
+        }
     }
 }

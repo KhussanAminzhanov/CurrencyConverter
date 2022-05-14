@@ -16,7 +16,7 @@ class CurrenciesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
-    private val adapter by lazy { CurrenciesAdapter() }
+    private val adapter by lazy { CurrenciesAdapter(viewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
