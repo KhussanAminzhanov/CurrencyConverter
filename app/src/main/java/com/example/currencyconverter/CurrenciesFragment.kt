@@ -5,10 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrenciesFragment : Fragment() {
@@ -26,7 +25,7 @@ class CurrenciesFragment : Fragment() {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        recyclerViewSetup()
+        setupRecyclerView()
 
         viewModel.currencies.observe(viewLifecycleOwner) { newValue ->
             adapter.submitList(newValue)
@@ -48,11 +47,17 @@ class CurrenciesFragment : Fragment() {
         _binding = null
     }
 
-    private fun recyclerViewSetup() {
+    private fun setupRecyclerView() {
         adapter.submitList(viewModel.currencies.value)
+
+        val callback = CurrenciesItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+
         binding.currenciesListRecyclerView.adapter = this@CurrenciesFragment.adapter
         binding.currenciesListRecyclerView.layoutManager =
             LinearLayoutManager(this@CurrenciesFragment.context, LinearLayoutManager.VERTICAL, false)
+
+        touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
 
 }
