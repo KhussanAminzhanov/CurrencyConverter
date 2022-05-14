@@ -1,103 +1,89 @@
- package com.example.currencyconverter
+package com.example.currencyconverter
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.currencyconverter.databinding.ActivityMainBinding
 
- const val EMPTY_CIRCLE = "○"
+const val EMPTY_CIRCLE = "○"
 const val FULL_CIRCLE = "●"
-const val PIN_CODE_LENGTH = 4
-const val CORRECT_PIN_CODE = "1567"
-const val PIN_CODE_INSTANCE_KEY = "PIN_CODE"
-const val PIN_CODE_INDEX = "PIN_CODE_INDEX"
 
 class MainActivity : AppCompatActivity(), Animation.AnimationListener {
 
     private lateinit var binding: ActivityMainBinding
-    private val textView: TextView by lazy { findViewById(R.id.pin_code_textView) }
-    private var pinCode = IntArray(PIN_CODE_LENGTH) { 0 }
-    private var index = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         val numberButtons = mutableListOf<Button>()
         val buttonIndices = intArrayOf(
             R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4,
             R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9,
         )
-        
-        binding.pinCodeTextView.text = updatePinCodeText(0)
 
         for (i in 0..9) {
             val button: Button = findViewById(buttonIndices[i])
             button.text = i.toString()
             button.setOnClickListener {
-                if (index < PIN_CODE_LENGTH) {
-                    pinCode[index] = (it as Button).text.toString().toInt()
-                    textView.text = updatePinCodeText(index + 1)
-                }
+                val digit = (it as Button).text.first().digitToInt()
+                viewModel.enterPinCodeDigit(digit)
             }
             numberButtons.add(button)
         }
 
         binding.buttonBack.setOnClickListener {
-            if (index > 0) textView.text = updatePinCodeText(index - 1)
+            viewModel.removePinCodeDigit()
         }
 
         binding.buttonBack.setOnLongClickListener {
-            textView.text = updatePinCodeText(0)
+            viewModel.resetPinCodeIndex()
             true
         }
 
         binding.buttonOk.setOnClickListener {
-            if (index == PIN_CODE_LENGTH) {
-                if (pinCode.joinToString("") == CORRECT_PIN_CODE) {
+            if (viewModel.index.value == viewModel.pinCodeLength) {
+                if (viewModel.checkPinCode()) {
                     val intent = Intent(this, MainScreen::class.java)
                     finish()
                     startActivity(intent)
                 } else {
                     val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
                     animation.setAnimationListener(this)
-                    textView.startAnimation(animation)
-                    textView.text = updatePinCodeText(0)
+                    binding.pinCodeTextView.startAnimation(animation)
+                    viewModel.resetPinCodeIndex()
                 }
             }
         }
-    }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putIntArray(PIN_CODE_INSTANCE_KEY, pinCode)
-        outState.putInt(PIN_CODE_INDEX, index)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        pinCode = savedInstanceState.getIntArray(PIN_CODE_INSTANCE_KEY) ?: IntArray(PIN_CODE_LENGTH) { 0 }
-        index = savedInstanceState.getInt(PIN_CODE_INDEX)
-        textView.text = updatePinCodeText(index)
-    }
-
-    private fun updatePinCodeText(index: Int): String {
-        this.index = index
-        return FULL_CIRCLE.repeat(index) + EMPTY_CIRCLE.repeat(PIN_CODE_LENGTH - index)
+        viewModel.index.observe(this) {
+            binding.pinCodeTextView.text = getString(
+                R.string.pin_code_text,
+                FULL_CIRCLE.repeat(viewModel.index.value!!),
+                EMPTY_CIRCLE.repeat(viewModel.pinCodeLength - viewModel.index.value!!)
+            )
+        }
     }
 
     override fun onAnimationStart(p0: Animation?) {
-        textView.setTextColor(ContextCompat.getColor(this, R.color.incorrect_pin_code))
+        binding.pinCodeTextView.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.incorrect_pin_code
+            )
+        )
     }
 
     override fun onAnimationEnd(p0: Animation?) {
-        textView.setTextColor(ContextCompat.getColor(this, R.color.blue_text_color))
+        binding.pinCodeTextView.setTextColor(ContextCompat.getColor(this, R.color.blue_text_color))
     }
 
     override fun onAnimationRepeat(p0: Animation?) {}
