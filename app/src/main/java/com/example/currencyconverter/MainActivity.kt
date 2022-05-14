@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), Animation.AnimationListener {
         setContentView(binding.root)
 
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-        val numberButtons = mutableListOf<Button>()
+
         val buttonIndices = intArrayOf(
             R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4,
             R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9,
@@ -37,12 +37,9 @@ class MainActivity : AppCompatActivity(), Animation.AnimationListener {
                 val digit = (it as Button).text.first().digitToInt()
                 viewModel.enterPinCodeDigit(digit)
             }
-            numberButtons.add(button)
         }
 
-        binding.buttonBack.setOnClickListener {
-            viewModel.removePinCodeDigit()
-        }
+        binding.buttonBack.setOnClickListener { viewModel.removePinCodeDigit() }
 
         binding.buttonBack.setOnLongClickListener {
             viewModel.resetPinCodeIndex()
@@ -52,8 +49,8 @@ class MainActivity : AppCompatActivity(), Animation.AnimationListener {
         binding.buttonOk.setOnClickListener {
             if (viewModel.index.value == viewModel.pinCodeLength) {
                 if (viewModel.checkPinCode()) {
-                    val intent = Intent(this, MainScreen::class.java)
                     finish()
+                    val intent = Intent(this, MainScreen::class.java)
                     startActivity(intent)
                 } else {
                     vibrate()
