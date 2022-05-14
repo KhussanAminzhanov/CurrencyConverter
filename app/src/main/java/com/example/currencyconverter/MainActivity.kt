@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), Animation.AnimationListener {
                     finish()
                     startActivity(intent)
                 } else {
-                    vibrateOnIncorrectPinCode()
+                    vibrate()
                     val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
                     animation.setAnimationListener(this)
                     binding.pinCodeTextView.startAnimation(animation)
@@ -87,16 +87,18 @@ class MainActivity : AppCompatActivity(), Animation.AnimationListener {
         binding.pinCodeTextView.setTextColor(ContextCompat.getColor(this, R.color.blue_text_color))
     }
 
-    override fun onAnimationRepeat(p0: Animation?) {}
+    override fun onAnimationRepeat(p0: Animation?) = Unit
 
-    fun vibrateOnIncorrectPinCode() {
+    @Suppress("DEPRECATION")
+    private fun vibrate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibratorManager =
+                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             val vibrator = vibratorManager.defaultVibrator
-            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(200)
+            vibrator.vibrate(50)
         }
 
     }
