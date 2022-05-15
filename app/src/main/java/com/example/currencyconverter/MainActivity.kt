@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), Animation.AnimationListener {
     }
 
     override fun onAnimationEnd(p0: Animation?) {
-        binding.pinCodeTextView.setTextColor(ContextCompat.getColor(this, R.color.blue_text_color))
+        binding.pinCodeTextView.setTextColor(ContextCompat.getColor(this, R.color.blue))
     }
 
     override fun onAnimationRepeat(p0: Animation?) = Unit

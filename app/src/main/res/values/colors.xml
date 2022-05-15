@@ -7,9 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="button_background_color">#F5F5F5</color>
-    <color name="button_background_color_pressed">#CDCDCD</color>
-    <color name="blue_text_color">#1789DB</color>
-    <color name="hint_text_color">#808080</color>
+    <color name="button_background">#F5F5F5</color>
+    <color name="button_background_pressed">#CDCDCD</color>
+    <color name="blue">#1789DB</color>
+    <color name="hint">#808080</color>
     <color name="incorrect_pin_code">#F91717</color>
+    <color name="primaryColor">#1789db</color>
+    <color name="primaryLightColor">#65b9ff</color>
+    <color name="primaryDarkColor">#005da9</color>
+    <color name="secondaryColor">#616161</color>
+    <color name="secondaryLightColor">#8e8e8e</color>
+    <color name="secondaryDarkColor">#373737</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#ffffff</color>
 </resources>
