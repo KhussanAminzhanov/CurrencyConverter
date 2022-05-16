@@ -24,6 +24,7 @@ class CurrenciesViewModel : ViewModel() {
 
     fun addCurrency(newCurrencyItem: CurrencyItem) {
         data.add(newCurrencyItem)
+        sortData()
         currentId++
         _currencies.value = data
     }
