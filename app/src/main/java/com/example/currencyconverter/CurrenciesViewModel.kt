@@ -52,6 +52,11 @@ class CurrenciesViewModel : ViewModel() {
         _currencies.value = data
     }
 
+    fun changeCurrencyData(position: Int, newValue: Long) {
+        data[position].value = newValue
+        _currencies.value = data
+    }
+
     private fun sortData() {
         data = when (sortingType) {
             SortType.ALPHABET -> {

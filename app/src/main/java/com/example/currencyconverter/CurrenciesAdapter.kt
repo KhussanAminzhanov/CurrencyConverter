@@ -3,6 +3,7 @@ package com.example.currencyconverter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +18,16 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
+        holder.binding.currencyValueEditText.setOnFocusChangeListener { v, hasFocus ->
+            val newValue = holder.binding.currencyValueEditText.text
+            if (!hasFocus) {
+                Toast.makeText(v.context, viewModel.currencies.value?.get(position)?.value.toString(), Toast.LENGTH_SHORT).show()
+                viewModel.changeCurrencyData(position, newValue.toString().toLong())
+            }
+        }
     }
 
-    class CurrenciesItemViewHolder(private val binding: CurrencyItemBinding) :
+    class CurrenciesItemViewHolder(val binding: CurrencyItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
