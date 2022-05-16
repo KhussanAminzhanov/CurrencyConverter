@@ -31,6 +31,7 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
         }
 
         fun bind(item: CurrencyItem, context: Context) {
+            binding.currencyValueEditText.setText(item.value.toString())
             binding.currencyValueTextInputLayout.hint = item.name
             binding.currencyName.text = item.name
             binding.currencyFlagImage.setImageDrawable(

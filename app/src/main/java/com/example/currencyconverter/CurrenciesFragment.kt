@@ -69,14 +69,6 @@ class CurrenciesFragment : Fragment() {
 
     }
 
-    private fun getSortedCurrenciesByAlphabet(list: List<CurrencyItem>): List<CurrencyItem> {
-        return list.sortedBy { it.name }
-    }
-
-    private fun getCurrenciesSortedByValues(list: List<CurrencyItem>): List<CurrencyItem> {
-        return list.sortedBy { it.value }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_currencies, menu)
     }
@@ -85,18 +77,15 @@ class CurrenciesFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_alphabet -> {
-                Toast.makeText(this.context, "Alphabet", Toast.LENGTH_SHORT).show()
-                adapter.submitList(viewModel.currencies.value?.sortedBy { it.name })
+                viewModel.setSortingType(CurrenciesViewModel.SortType.ALPHABET)
                 true
             }
             R.id.menu_value -> {
-                Toast.makeText(this.context, "Values", Toast.LENGTH_SHORT).show()
-                adapter.submitList(viewModel.currencies.value?.sortedBy { it.value })
+                viewModel.setSortingType(CurrenciesViewModel.SortType.VALUE)
                 true
             }
             R.id.menu_reset -> {
-                Toast.makeText(this.context, "Reset", Toast.LENGTH_SHORT).show()
-                adapter.submitList(viewModel.currencies.value)
+                viewModel.setSortingType(CurrenciesViewModel.SortType.UNSORTED)
                 true
             }
             else -> super.onOptionsItemSelected(item)
