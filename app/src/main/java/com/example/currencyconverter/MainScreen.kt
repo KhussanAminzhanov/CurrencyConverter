@@ -17,13 +17,14 @@ class MainScreen : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-
         val appBarConfiguration = AppBarConfiguration.Builder(navController.graph).build()
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNav.setupWithNavController(navController)
 
     }
+
 }

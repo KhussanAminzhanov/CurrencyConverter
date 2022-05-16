@@ -29,4 +29,8 @@
     <string name="currency">Currency</string>
     <string name="add">Add</string>
     <string name="flag">flag</string>
+    <string name="reset_order_of_currencies">Сбросить сортировку</string>
+    <string name="sort_by">Сортировать по</string>
+    <string name="sort_by_alphabet">Алфавиту</string>
+    <string name="sort_by_value">Стоимост</string>
 </resources>

@@ -9,7 +9,7 @@ class CurrenciesViewModel : ViewModel() {
 
     private val data = mutableListOf(
         CurrencyItem(0, "Tenge", R.drawable.kazakhstan_flag, 0L),
-        CurrencyItem(1, "Dollar", R.drawable.usa_flag, 0L)
+        CurrencyItem(1, "Dollar", R.drawable.usa_flag, 1000L)
     )
     private val _currencies = MutableLiveData<List<CurrencyItem>>(data)
     val currencies: LiveData<List<CurrencyItem>> = _currencies
