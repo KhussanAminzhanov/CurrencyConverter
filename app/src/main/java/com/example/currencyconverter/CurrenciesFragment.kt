@@ -65,22 +65,20 @@ class CurrenciesFragment : Fragment() {
             )
 
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_currencies, menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val sortType = when (item.itemId) {
             R.id.menu_alphabet -> CurrenciesViewModel.SortType.ALPHABET
             R.id.menu_value -> CurrenciesViewModel.SortType.VALUE
-            else -> CurrenciesViewModel.SortType.UNSORTED
+            R.id.menu_reset -> CurrenciesViewModel.SortType.UNSORTED
+            else -> return false
         }
         viewModel.setSortingType(sortType)
         return super.onOptionsItemSelected(item)
     }
-
 }

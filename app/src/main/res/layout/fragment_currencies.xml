@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".CurrenciesFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -13,15 +13,15 @@
             android:id="@+id/currencies_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="1"
             android:scrollbars="vertical|horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_weight="1" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_currency_button"
             android:layout_width="match_parent"
-            android:layout_margin="16dp"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:text="@string/add" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

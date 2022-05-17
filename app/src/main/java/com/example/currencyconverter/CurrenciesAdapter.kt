@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.CurrencyItemBinding
 
-class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
+class CurrenciesAdapter(
+    private val viewModel: CurrenciesViewModel
+) :
     ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
@@ -29,12 +31,15 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
 
             override fun afterTextChanged(s: Editable?) {
                 var newValue = 0L
-                if (s!!.isNotEmpty()) {
-                    newValue = s.toString().toLong()
-                }
+                if (s!!.isNotEmpty() and (Long.MAX_VALUE.toString().length > s.toString().length)) newValue = s.toString().toLong()
                 viewModel.changeCurrencyData(holder.bindingAdapterPosition, newValue)
             }
         })
+
+        holder.binding.currencyLayout.setOnLongClickListener {
+            showAlertDialog(holder.bindingAdapterPosition, holder.itemView.context)
+            true
+        }
 
         holder.itemView.context
     }
@@ -73,7 +78,7 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
         notifyItemRemoved(position)
     }
 
-    fun showAlertDialog(position: Int, context: Context) {
+    private fun showAlertDialog(position: Int, context: Context) {
         val view =
             LayoutInflater.from(context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
         val dialog = AlertDialog.Builder(context).setView(view).create()
@@ -86,6 +91,7 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
                 dialog.dismiss()
             }
         }
+
         dialog.show()
     }
 }

@@ -26,6 +26,20 @@ class CurrenciesViewModel : ViewModel() {
 
     var currentId = 2L
 
+    private fun sortData() {
+        data = when (sortingType) {
+            SortType.ALPHABET -> {
+                data.sortedBy { it.name }.toMutableList()
+            }
+            SortType.VALUE -> {
+                data.sortedBy { it.value }.toMutableList()
+            }
+            SortType.UNSORTED -> {
+                data.sortedBy { it.currencyId }.toMutableList()
+            }
+        }
+    }
+
     fun addCurrency(newCurrencyItem: CurrencyItem) {
         data.add(newCurrencyItem)
         sortData()
@@ -59,19 +73,5 @@ class CurrenciesViewModel : ViewModel() {
     fun changeCurrencyData(position: Int, newValue: Long) {
         data[position].value = newValue
         _currencies.value = data
-    }
-
-    private fun sortData() {
-        data = when (sortingType) {
-            SortType.ALPHABET -> {
-                data.sortedBy { it.name }.toMutableList()
-            }
-            SortType.VALUE -> {
-                data.sortedBy { it.value }.toMutableList()
-            }
-            SortType.UNSORTED -> {
-                data.sortedBy { it.currencyId }.toMutableList()
-            }
-        }
     }
 }

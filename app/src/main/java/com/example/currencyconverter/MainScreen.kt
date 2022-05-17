@@ -24,7 +24,5 @@ class MainScreen : AppCompatActivity() {
 
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNav.setupWithNavController(navController)
-
     }
-
 }
