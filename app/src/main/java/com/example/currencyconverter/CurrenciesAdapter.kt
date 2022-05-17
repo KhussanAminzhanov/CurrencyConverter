@@ -1,6 +1,8 @@
 package com.example.currencyconverter
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -8,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.CurrencyItemBinding
+import com.google.android.material.internal.TextWatcherAdapter
 
 class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
     ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()), CurrencyItemTouchHelperAdapter {
@@ -18,13 +21,20 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
-        holder.binding.currencyValueEditText.setOnFocusChangeListener { v, hasFocus ->
-            val newValue = holder.binding.currencyValueEditText.text
-            if (!hasFocus) {
-                Toast.makeText(v.context, viewModel.currencies.value?.get(position)?.value.toString(), Toast.LENGTH_SHORT).show()
-                viewModel.changeCurrencyData(position, newValue.toString().toLong())
+        
+        holder.binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                var newValue = 0L
+                if (s!!.isNotEmpty()) {
+                    newValue = s.toString().toLong()
+                }
+                viewModel.changeCurrencyData(holder.bindingAdapterPosition, newValue)
             }
-        }
+        })
     }
 
     class CurrenciesItemViewHolder(val binding: CurrencyItemBinding) :

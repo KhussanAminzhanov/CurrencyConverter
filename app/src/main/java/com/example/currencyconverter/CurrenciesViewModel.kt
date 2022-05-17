@@ -20,6 +20,7 @@ class CurrenciesViewModel : ViewModel() {
     val currencies: LiveData<List<CurrencyItem>> = _currencies
 
     private var sortingType = SortType.UNSORTED
+
     var currentId = 2L
 
     fun addCurrency(newCurrencyItem: CurrencyItem) {
