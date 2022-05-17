@@ -69,7 +69,13 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
     }
 
     override fun onItemDismiss(position: Int, context: Context) {
-        val view = LayoutInflater.from(context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
+        viewModel.deleteCurrency(position)
+        notifyItemRemoved(position)
+    }
+
+    fun showAlertDialog(position: Int, context: Context) {
+        val view =
+            LayoutInflater.from(context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
         val dialog = AlertDialog.Builder(context).setView(view).create()
 
         with(view) {
@@ -81,6 +87,5 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
             }
         }
         dialog.show()
-
     }
 }
