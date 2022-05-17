@@ -19,6 +19,9 @@ class CurrenciesViewModel : ViewModel() {
     private val _currencies = MutableLiveData<List<CurrencyItem>>(data)
     val currencies: LiveData<List<CurrencyItem>> = _currencies
 
+    private val _globalValue = MutableLiveData<Long>(0)
+    val globalValue: LiveData<Long> = _globalValue
+
     private var sortingType = SortType.UNSORTED
 
     var currentId = 2L

@@ -3,16 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/drawable/button_shape.xml" value="0.2355" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/drawable/button_shape_pressed.xml" value="0.2355" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/drawable/button_shape_selector.xml" value="0.2355" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/drawable/button_text_color_selector.xml" value="0.2355" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/drawable/ok_button_background.xml" value="0.2355" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/drawable/ok_button_pressed.xml" value="0.2355" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/layout-land/activity_main.xml" value="0.24559082892416226" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/layout/activity_main.xml" value="0.29010416666666666" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/layout/activity_main_screen.xml" value="0.29010416666666666" />
-        <entry key="..\:/Users/User/StudioProjects/CurrencyConverter/app/src/main/res/layout/fragment_user_profile.xml" value="0.29010416666666666" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_shape_pressed.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_shape_selector.xml" value="0.298" />
@@ -22,14 +12,14 @@
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.3298059964726631" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main_screen.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/currency_item.xml" value="0.35688405797101447" />
+        <entry key="app/src/main/res/layout/currency_item.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/delete_currency_alert_dialog_layout.xml" value="0.4005208333333333" />
         <entry key="app/src/main/res/layout/fragment_currencies.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_currency.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_translate.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.35688405797101447" />
-        <entry key="app/src/main/res/menu/menu_currencies.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.3885416666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2115" />
       </map>

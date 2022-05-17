@@ -2,7 +2,6 @@ package com.example.currencyconverter
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -75,21 +74,13 @@ class CurrenciesFragment : Fragment() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_alphabet -> {
-                viewModel.setSortingType(CurrenciesViewModel.SortType.ALPHABET)
-                true
-            }
-            R.id.menu_value -> {
-                viewModel.setSortingType(CurrenciesViewModel.SortType.VALUE)
-                true
-            }
-            R.id.menu_reset -> {
-                viewModel.setSortingType(CurrenciesViewModel.SortType.UNSORTED)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        val sortType = when (item.itemId) {
+            R.id.menu_alphabet -> CurrenciesViewModel.SortType.ALPHABET
+            R.id.menu_value -> CurrenciesViewModel.SortType.VALUE
+            else -> CurrenciesViewModel.SortType.UNSORTED
         }
+        viewModel.setSortingType(sortType)
+        return super.onOptionsItemSelected(item)
     }
 
 }

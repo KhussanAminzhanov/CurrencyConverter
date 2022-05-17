@@ -33,4 +33,7 @@
     <string name="sort_by">Сортировать по</string>
     <string name="sort_by_alphabet">Алфавиту</string>
     <string name="sort_by_value">Стоимост</string>
+    <string name="delete_currency_alert_dialog_title_text">Are you sure you want to delete?</string>
+    <string name="delete_currency_alert_dialog_cancel_button_text">Cancel</string>
+    <string name="delete_currency_alert_dialog_delete_button_text">Delete</string>
 </resources>

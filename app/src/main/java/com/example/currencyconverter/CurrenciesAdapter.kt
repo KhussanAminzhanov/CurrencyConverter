@@ -1,19 +1,20 @@
 package com.example.currencyconverter
 
+import android.app.AlertDialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.CurrencyItemBinding
-import com.google.android.material.internal.TextWatcherAdapter
 
 class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
-    ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()), CurrencyItemTouchHelperAdapter {
+    ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
+    CurrencyItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder =
         CurrenciesItemViewHolder.inflateFrom(parent)
@@ -21,10 +22,9 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
-        
+
         holder.binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
@@ -35,6 +35,8 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
                 viewModel.changeCurrencyData(holder.bindingAdapterPosition, newValue)
             }
         })
+
+        holder.itemView.context
     }
 
     class CurrenciesItemViewHolder(val binding: CurrencyItemBinding) :
@@ -66,8 +68,19 @@ class CurrenciesAdapter(private val viewModel: CurrenciesViewModel) :
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun onItemDismiss(position: Int) {
-        viewModel.deleteCurrency(position)
-        notifyItemRemoved(position)
+    override fun onItemDismiss(position: Int, context: Context) {
+        val view = LayoutInflater.from(context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
+        val dialog = AlertDialog.Builder(context).setView(view).create()
+
+        with(view) {
+            findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
+            findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
+                viewModel.deleteCurrency(position)
+                notifyItemRemoved(position)
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+
     }
 }
