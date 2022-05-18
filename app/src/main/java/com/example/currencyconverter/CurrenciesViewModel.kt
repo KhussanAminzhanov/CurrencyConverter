@@ -1,8 +1,10 @@
 package com.example.currencyconverter
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class CurrenciesViewModel : ViewModel() {
@@ -19,8 +21,8 @@ class CurrenciesViewModel : ViewModel() {
     private val _currencies = MutableLiveData<List<CurrencyItem>>(data)
     val currencies: LiveData<List<CurrencyItem>> = _currencies
 
-    private val _globalValue = MutableLiveData<Long>(0)
-    val globalValue: LiveData<Long> = _globalValue
+//    private val _globalValue = MutableLiveData<Long>(0)
+//    val globalValue: LiveData<Long> = _globalValue
 
     private var sortingType = SortType.UNSORTED
 
@@ -47,9 +49,17 @@ class CurrenciesViewModel : ViewModel() {
         _currencies.value = data
     }
 
-    fun deleteCurrency(position: Int) {
+    fun deleteCurrency(position: Int, view: View) {
+        
+        val deletedCurrencyItem = data[position].copy()
+
         data.removeAt(position)
         _currencies.value = data
+
+        Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
+            .setAction("Undo") {
+                addCurrency(deletedCurrencyItem)
+            }.show()
     }
 
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {

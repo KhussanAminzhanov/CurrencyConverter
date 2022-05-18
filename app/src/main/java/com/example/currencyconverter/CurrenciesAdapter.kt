@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
@@ -37,7 +38,7 @@ class CurrenciesAdapter(
         })
 
         holder.binding.currencyLayout.setOnLongClickListener {
-            showAlertDialog(holder.bindingAdapterPosition, holder.itemView.context)
+            showAlertDialog(holder.bindingAdapterPosition, holder.itemView)
             true
         }
 
@@ -73,20 +74,20 @@ class CurrenciesAdapter(
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun onItemDismiss(position: Int, context: Context) {
-        viewModel.deleteCurrency(position)
+    override fun onItemDismiss(position: Int, view: View) {
+        viewModel.deleteCurrency(position, view)
         notifyItemRemoved(position)
     }
 
-    private fun showAlertDialog(position: Int, context: Context) {
-        val view =
-            LayoutInflater.from(context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
-        val dialog = AlertDialog.Builder(context).setView(view).create()
+    private fun showAlertDialog(position: Int, view: View) {
+        val customView =
+            LayoutInflater.from(view.context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
+        val dialog = AlertDialog.Builder(view.context).setView(customView).create()
 
-        with(view) {
+        with(customView) {
             findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
             findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
-                viewModel.deleteCurrency(position)
+                viewModel.deleteCurrency(position, view)
                 notifyItemRemoved(position)
                 dialog.dismiss()
             }
