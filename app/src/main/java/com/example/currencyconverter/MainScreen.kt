@@ -11,7 +11,8 @@ import com.google.android.material.appbar.MaterialToolbar
 class MainScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainScreenBinding
-    var toolbar = binding.toolbar
+    val toolbar by lazy { binding.toolbar }
+    val bottomNav by lazy { binding.bottomNav }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,5 +28,4 @@ class MainScreen : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNav.setupWithNavController(navController)
     }
-
 }

@@ -38,7 +38,6 @@ class CurrenciesAdapter(
         })
 
         holder.binding.currencyLayout.setOnLongClickListener {
-//            showAlertDialog(holder.bindingAdapterPosition, holder.itemView)
             viewModel.isItemSelected(true)
             true
         }
