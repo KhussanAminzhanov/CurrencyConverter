@@ -37,4 +37,5 @@
     <string name="delete_currency_alert_dialog_cancel_button_text">Cancel</string>
     <string name="delete_currency_alert_dialog_delete_button_text">Delete</string>
     <string name="delete_item">Delete Item</string>
+    <string name="currencies_list_item_selected">Item Selected</string>
 </resources>

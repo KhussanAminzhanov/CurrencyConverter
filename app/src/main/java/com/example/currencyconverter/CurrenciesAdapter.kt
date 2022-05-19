@@ -38,11 +38,10 @@ class CurrenciesAdapter(
         })
 
         holder.binding.currencyLayout.setOnLongClickListener {
-            showAlertDialog(holder.bindingAdapterPosition, holder.itemView)
+//            showAlertDialog(holder.bindingAdapterPosition, holder.itemView)
+            viewModel.isItemSelected(true)
             true
         }
-
-        holder.itemView.context
     }
 
     class CurrenciesItemViewHolder(val binding: CurrencyItemBinding) :

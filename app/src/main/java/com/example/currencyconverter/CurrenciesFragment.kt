@@ -2,6 +2,8 @@ package com.example.currencyconverter
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,6 +17,7 @@ class CurrenciesFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
     private val adapter by lazy { CurrenciesAdapter(viewModel) }
+    private val toolbar by lazy { (activity as MainScreen).getToolbar()}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,10 @@ class CurrenciesFragment : Fragment() {
             binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
 
+        viewModel.itemSelected.observe(viewLifecycleOwner) { isItemSelected ->
+            if (isItemSelected) binding.addCurrencyButton.visibility = View.GONE
+        }
+
         binding.addCurrencyButton.setOnClickListener {
             viewModel.addCurrency(
                 CurrencyItem(viewModel.currentId, "Lira", R.drawable.turkey_flag, 0L)
@@ -43,11 +50,6 @@ class CurrenciesFragment : Fragment() {
         }
 
         return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupRecyclerView() {
@@ -67,8 +69,33 @@ class CurrenciesFragment : Fragment() {
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
 
+    private fun setupItemSelectedToolbar() {
+        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.hint))
+        toolbar.title = getString(R.string.currencies_list_item_selected)
+    }
+
+    private fun setupDefaultToolbar() {
+        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
+        toolbar.title = getString(R.string.currency)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_currencies, menu)
+        viewModel.itemSelected.observe(viewLifecycleOwner) {
+            val menuLayoutId = if (it) {
+                setupItemSelectedToolbar()
+                R.menu.item_selected_menu
+            } else {
+                setupDefaultToolbar()
+                R.menu.menu_currencies
+            }
+            menu.clear()
+            inflater.inflate(menuLayoutId, menu)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

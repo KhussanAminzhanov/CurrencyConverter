@@ -21,6 +21,9 @@ class CurrenciesViewModel : ViewModel() {
     private val _currencies = MutableLiveData<List<CurrencyItem>>(data)
     val currencies: LiveData<List<CurrencyItem>> = _currencies
 
+    private val _itemSelected = MutableLiveData(false)
+    val itemSelected: LiveData<Boolean> = _itemSelected
+
 //    private val _globalValue = MutableLiveData<Long>(0)
 //    val globalValue: LiveData<Long> = _globalValue
 
@@ -83,5 +86,9 @@ class CurrenciesViewModel : ViewModel() {
     fun changeCurrencyData(position: Int, newValue: Long) {
         data[position].value = newValue
         _currencies.value = data
+    }
+
+    fun isItemSelected(value: Boolean) {
+        _itemSelected.value = value
     }
 }

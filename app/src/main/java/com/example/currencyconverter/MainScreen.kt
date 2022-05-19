@@ -6,10 +6,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.currencyconverter.databinding.ActivityMainScreenBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 class MainScreen : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainScreenBinding
+    var toolbar = binding.toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,4 +27,5 @@ class MainScreen : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNav.setupWithNavController(navController)
     }
+
 }
