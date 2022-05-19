@@ -16,7 +16,7 @@ class CurrenciesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
-    private val adapter by lazy { CurrenciesAdapter(viewModel) }
+    private val adapter by lazy { CurrenciesAdapter(viewModel, viewLifecycleOwner) }
     private val toolbar by lazy { (activity as MainScreen).toolbar }
     private val bottomNav by lazy { (activity as MainScreen).bottomNav }
 
@@ -44,6 +44,7 @@ class CurrenciesFragment : Fragment() {
             }
 
         }
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         viewModel.currencies.observe(viewLifecycleOwner) { newValue ->
@@ -51,9 +52,8 @@ class CurrenciesFragment : Fragment() {
             binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
 
-
         viewModel.itemSelected.observe(viewLifecycleOwner) { isItemSelected ->
-            if (isItemSelected) binding.addCurrencyButton.visibility = View.GONE
+            binding.addCurrencyButton.visibility = if (isItemSelected) View.GONE else View.VISIBLE
         }
 
         binding.addCurrencyButton.setOnClickListener {
@@ -120,6 +120,10 @@ class CurrenciesFragment : Fragment() {
             R.id.menu_alphabet -> CurrenciesViewModel.SortType.ALPHABET
             R.id.menu_value -> CurrenciesViewModel.SortType.VALUE
             R.id.menu_reset -> CurrenciesViewModel.SortType.UNSORTED
+            R.id.menu_delete_item -> {
+                viewModel.deleteCurrencies(adapter.getCheckedItemIndices())
+                return super.onOptionsItemSelected(item)
+            }
             else -> return false
         }
         viewModel.setSortingType(sortType)

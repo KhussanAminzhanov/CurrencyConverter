@@ -1,6 +1,8 @@
 package com.example.currencyconverter
 
+import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -65,14 +67,27 @@ class CurrenciesViewModel : ViewModel() {
             }.show()
     }
 
+    fun deleteCurrencies(indices: List<Long>) {
+        for (index in indices) {
+            data.remove(data.find { it.currencyId == index })
+        }
+        _currencies.value = data
+    }
+
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(data, i, i + 1)
+                val id = data[i].currencyId
+                data[i].currencyId = data[i + 1].currencyId
+                data[i + 1].currencyId = id
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(data, i, i - 1)
+                val id = data[i].currencyId
+                data[i].currencyId = data[i - 1].currencyId
+                data[i - 1].currencyId = id
             }
         }
     }

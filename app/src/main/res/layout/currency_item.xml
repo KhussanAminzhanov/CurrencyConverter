@@ -49,6 +49,12 @@
                     android:contentDescription="@string/flag"
                     android:src="@drawable/turkey_flag" />
             </androidx.cardview.widget.CardView>
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView

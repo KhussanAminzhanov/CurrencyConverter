@@ -9,15 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.CurrencyItemBinding
 
 class CurrenciesAdapter(
-    private val viewModel: CurrenciesViewModel
+    private val viewModel: CurrenciesViewModel,
+    private val viewLifecycleOwner: LifecycleOwner
 ) :
     ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
+
+    private val checkItemIndices = mutableListOf<Long>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder =
         CurrenciesItemViewHolder.inflateFrom(parent)
@@ -26,13 +30,18 @@ class CurrenciesAdapter(
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
 
+        viewModel.itemSelected.observe(viewLifecycleOwner) {
+            holder.binding.checkbox.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
         holder.binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 var newValue = 0L
-                if (s!!.isNotEmpty() and (Long.MAX_VALUE.toString().length > s.toString().length)) newValue = s.toString().toLong()
+                if (s!!.isNotEmpty() and (Long.MAX_VALUE.toString().length > s.toString().length)) newValue =
+                    s.toString().toLong()
                 viewModel.changeCurrencyData(holder.bindingAdapterPosition, newValue)
             }
         })
@@ -40,6 +49,11 @@ class CurrenciesAdapter(
         holder.binding.currencyLayout.setOnLongClickListener {
             viewModel.isItemSelected(true)
             true
+        }
+
+        holder.binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) checkItemIndices.add(item.currencyId)
+            else checkItemIndices.remove(item.currencyId)
         }
     }
 
@@ -79,7 +93,8 @@ class CurrenciesAdapter(
 
     private fun showAlertDialog(position: Int, view: View) {
         val customView =
-            LayoutInflater.from(view.context).inflate(R.layout.delete_currency_alert_dialog_layout, null)
+            LayoutInflater.from(view.context)
+                .inflate(R.layout.delete_currency_alert_dialog_layout, null)
         val dialog = AlertDialog.Builder(view.context).setView(customView).create()
 
         with(customView) {
@@ -93,4 +108,6 @@ class CurrenciesAdapter(
 
         dialog.show()
     }
+
+    fun getCheckedItemIndices() = checkItemIndices
 }
