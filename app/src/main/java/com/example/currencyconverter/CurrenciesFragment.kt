@@ -38,6 +38,7 @@ class CurrenciesFragment : Fragment() {
             override fun handleOnBackPressed() {
                 if (viewModel.itemSelected.value!!) {
                     viewModel.isItemSelected(false)
+                    adapter.clearCheckedItems()
                 } else {
                     activity?.finish()
                 }
@@ -121,7 +122,8 @@ class CurrenciesFragment : Fragment() {
             R.id.menu_value -> CurrenciesViewModel.SortType.VALUE
             R.id.menu_reset -> CurrenciesViewModel.SortType.UNSORTED
             R.id.menu_delete_item -> {
-                viewModel.deleteCurrencies(adapter.getCheckedItemIndices())
+                viewModel.deleteCurrencies(adapter.checkItems)
+                adapter.clearCheckedItems()
                 return super.onOptionsItemSelected(item)
             }
             else -> return false

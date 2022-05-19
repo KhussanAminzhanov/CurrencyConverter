@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,8 @@ class CurrenciesAdapter(
     ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
-    private val checkItemIndices = mutableListOf<Long>()
+    private val _checkedItems = mutableListOf<Long>()
+    val checkItems: List<Long> = _checkedItems
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder =
         CurrenciesItemViewHolder.inflateFrom(parent)
@@ -32,6 +34,8 @@ class CurrenciesAdapter(
 
         viewModel.itemSelected.observe(viewLifecycleOwner) {
             holder.binding.checkbox.visibility = if (it) View.VISIBLE else View.GONE
+            holder.binding.checkbox.isChecked = _checkedItems.isNotEmpty()
+            holder.binding.currencyLayout.isLongClickable = !it
         }
 
         holder.binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
@@ -52,8 +56,9 @@ class CurrenciesAdapter(
         }
 
         holder.binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) checkItemIndices.add(item.currencyId)
-            else checkItemIndices.remove(item.currencyId)
+            if (isChecked) _checkedItems.add(item.currencyId)
+            else _checkedItems.remove(item.currencyId)
+            Log.i("Currencies Adapter", checkItems.joinToString(" "))
         }
     }
 
@@ -109,5 +114,6 @@ class CurrenciesAdapter(
         dialog.show()
     }
 
-    fun getCheckedItemIndices() = checkItemIndices
+    fun clearCheckedItems() = _checkedItems.clear()
+
 }
