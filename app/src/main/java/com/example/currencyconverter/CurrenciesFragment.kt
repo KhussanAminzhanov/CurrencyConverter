@@ -33,24 +33,10 @@ class CurrenciesFragment : Fragment() {
         val view = binding.root
 
         setupRecyclerView()
-
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (viewModel.itemSelected.value!!) {
-                    viewModel.isItemSelected(false)
-                    adapter.clearCheckedItems()
-                } else {
-                    activity?.finish()
-                }
-            }
-
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        setupOnBackButtonPresses()
 
         viewModel.currencies.observe(viewLifecycleOwner) { newValue ->
             adapter.submitList(newValue)
-            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
 
         viewModel.itemSelected.observe(viewLifecycleOwner) { isItemSelected ->
@@ -62,6 +48,7 @@ class CurrenciesFragment : Fragment() {
                 CurrencyItem(viewModel.currentId, "Lira", R.drawable.turkey_flag, 0L)
             )
             adapter.notifyItemInserted(adapter.itemCount - 1)
+            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
 
         return view
@@ -84,15 +71,25 @@ class CurrenciesFragment : Fragment() {
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
 
-    private fun setupItemSelectedToolbar() {
-        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.hint))
-        toolbar.title = getString(R.string.currencies_list_item_selected)
+    private fun setupOnBackButtonPresses() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewModel.itemSelected.value!!) {
+                    viewModel.isItemSelected(false)
+                } else {
+                    activity?.finish()
+                }
+            }
 
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
-    private fun setupDefaultToolbar() {
-        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
-        toolbar.title = getString(R.string.currency)
+    private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
+        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), colorId))
+        toolbar.title = getString(titleId)
+        bottomNav.visibility = bottomNavVisibility
     }
 
     override fun onDestroyView() {
@@ -103,12 +100,10 @@ class CurrenciesFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         viewModel.itemSelected.observe(viewLifecycleOwner) {
             val menuLayoutId = if (it) {
-                setupItemSelectedToolbar()
-                bottomNav.visibility = View.GONE
+                changeLayout(R.color.hint, R.string.currencies_list_item_selected, View.GONE)
                 R.menu.item_selected_menu
             } else {
-                setupDefaultToolbar()
-                bottomNav.visibility = View.VISIBLE
+                changeLayout(R.color.primaryColor, R.string.currency, View.VISIBLE)
                 R.menu.menu_currencies
             }
             menu.clear()
@@ -117,18 +112,13 @@ class CurrenciesFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val sortType = when (item.itemId) {
-            R.id.menu_alphabet -> CurrenciesViewModel.SortType.ALPHABET
-            R.id.menu_value -> CurrenciesViewModel.SortType.VALUE
-            R.id.menu_reset -> CurrenciesViewModel.SortType.UNSORTED
-            R.id.menu_delete_item -> {
-                viewModel.deleteCurrencies(adapter.checkItems)
-                adapter.clearCheckedItems()
-                return super.onOptionsItemSelected(item)
-            }
-            else -> return false
+        when (item.itemId) {
+            R.id.menu_alphabet -> viewModel.setSortingType(CurrenciesViewModel.SortType.ALPHABET)
+            R.id.menu_value -> viewModel.setSortingType(CurrenciesViewModel.SortType.VALUE)
+            R.id.menu_reset -> viewModel.setSortingType(CurrenciesViewModel.SortType.UNSORTED)
+            R.id.menu_delete_item -> adapter.showAlertDialog()
+            else -> return super.onOptionsItemSelected(item)
         }
-        viewModel.setSortingType(sortType)
         return super.onOptionsItemSelected(item)
     }
 }
