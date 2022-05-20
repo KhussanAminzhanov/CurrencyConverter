@@ -76,6 +76,7 @@ class CurrenciesAdapter(
             binding.currencyValueEditText.setText(item.value.toString())
             binding.currencyValueTextInputLayout.hint = item.name
             binding.currencyName.text = item.name
+            binding.checkbox.isChecked = false
             binding.currencyFlagImage.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,

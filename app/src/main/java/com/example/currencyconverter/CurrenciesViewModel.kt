@@ -1,8 +1,10 @@
 package com.example.currencyconverter
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class CurrenciesViewModel : ViewModel() {
@@ -11,11 +13,11 @@ class CurrenciesViewModel : ViewModel() {
         ALPHABET, VALUE, UNSORTED
     }
 
-    var currentId = 0
+    var currentId = 2L
     private var sortingType = SortType.UNSORTED
     private var data = mutableListOf(
-        CurrencyItem(currentId, "Tenge, Kazakhstan", R.drawable.kazakhstan_flag, 0L),
-        CurrencyItem(currentId, "Dollar, USA", R.drawable.usa_flag, 1000L)
+        CurrencyItem(0, "Tenge", R.drawable.kazakhstan_flag, 0L),
+        CurrencyItem(1, "Dollar", R.drawable.usa_flag, 1000L)
     )
 
     private val _currencies = MutableLiveData<List<CurrencyItem>>(data)
@@ -23,30 +25,6 @@ class CurrenciesViewModel : ViewModel() {
 
     private val _itemSelected = MutableLiveData(false)
     val itemSelected: LiveData<Boolean> = _itemSelected
-
-    fun addCurrency(newCurrencyItem: CurrencyItem) {
-        data.add(newCurrencyItem)
-        currentId++
-
-        sortData()
-        _currencies.value = data
-    }
-
-    fun deleteCurrency(currencyItemId: Int) {
-
-        var indexOfCurrencyItem = 0
-
-        for ((index, currency) in data.withIndex()) {
-            if (currency.currencyId == currencyItemId) {
-                indexOfCurrencyItem = index
-                break
-            }
-        }
-
-        data.removeAt(indexOfCurrencyItem)
-        sortData()
-        _currencies.value = data
-    }
 
     private fun sortData() {
         data = when (sortingType) {
@@ -60,6 +38,30 @@ class CurrenciesViewModel : ViewModel() {
                 data.sortedBy { it.currencyId }.toMutableList()
             }
         }
+    }
+
+    fun addCurrency(newCurrencyItem: CurrencyItem) {
+        data.add(newCurrencyItem)
+        sortData()
+        currentId++
+        _currencies.value = data
+    }
+
+    fun deleteCurrency(position: Int, view: View) {
+        val deletedCurrencyItem = data[position].copy()
+        data.removeAt(position)
+        _currencies.value = data
+        Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
+            .setAction("Undo") {
+                addCurrency(deletedCurrencyItem)
+            }.show()
+    }
+
+    fun deleteCurrencies(indices: List<Long>) {
+        for (index in indices) {
+            data.remove(data.find { it.currencyId == index })
+        }
+        _currencies.value = data
     }
 
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {
