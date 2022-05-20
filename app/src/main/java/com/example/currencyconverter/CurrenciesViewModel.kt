@@ -13,7 +13,7 @@ class CurrenciesViewModel : ViewModel() {
         ALPHABET, VALUE, UNSORTED
     }
 
-    var currentId = 2L
+    var currentId = 2
     private var sortingType = SortType.UNSORTED
     private var data = mutableListOf(
         CurrencyItem(0, "Tenge", R.drawable.kazakhstan_flag, 0L),
@@ -57,7 +57,7 @@ class CurrenciesViewModel : ViewModel() {
             }.show()
     }
 
-    fun deleteCurrencies(indices: List<Long>) {
+    fun deleteCurrencies(indices: List<Int>) {
         for (index in indices) {
             data.remove(data.find { it.currencyId == index })
         }

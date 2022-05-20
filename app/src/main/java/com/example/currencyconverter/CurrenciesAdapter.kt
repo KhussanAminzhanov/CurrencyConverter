@@ -13,7 +13,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.CurrencyItemBinding
-import com.google.android.material.snackbar.Snackbar
 
 
 class CurrenciesAdapter(
@@ -76,7 +75,7 @@ class CurrenciesAdapter(
             binding.currencyValueEditText.setText(item.value.toString())
             binding.currencyValueTextInputLayout.hint = item.name
             binding.currencyName.text = item.name
-            binding.checkbox.isChecked = false
+            binding.markDeleteCheckbox.isChecked = false
             binding.currencyFlagImage.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
@@ -92,7 +91,7 @@ class CurrenciesAdapter(
     }
 
     override fun onItemDismiss(position: Int, view: View) {
-        viewModel.deleteCurrency(getItem(position).currencyId)
+        viewModel.deleteCurrency(getItem(position).currencyId, view)
         notifyItemRemoved(position)
     }
 
@@ -105,7 +104,7 @@ class CurrenciesAdapter(
         with(customView) {
             findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
             findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
-                viewModel.deleteCurrency(getItem(selectedCurrencyItemPosition).currencyId)
+                viewModel.deleteCurrency(getItem(selectedCurrencyItemPosition).currencyId, this)
                 notifyItemRemoved(selectedCurrencyItemPosition)
                 dialog.dismiss()
                 viewModel.isItemSelected(false)
