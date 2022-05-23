@@ -88,12 +88,12 @@ class CurrenciesViewModel : ViewModel() {
         _currencies.value = data
     }
 
-    fun changeCurrencyData(position: Int, newValue: Long) {
+    fun updateCurrencyData(position: Int, newValue: Long) {
         data[position].value = newValue
         _currencies.value = data
     }
 
-    fun itemSelected(value: Boolean) {
+    fun setItemSelected(value: Boolean) {
         _isItemSelected.value = value
     }
 }

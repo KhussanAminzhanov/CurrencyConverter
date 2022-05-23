@@ -2,9 +2,6 @@ package com.example.currencyconverter
 
 import android.app.AlertDialog
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,53 +10,23 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 
 class CurrenciesAdapter(
-    private val viewModel: CurrenciesViewModel,
-    private val viewLifecycleOwner: LifecycleOwner
+    val viewModel: CurrenciesViewModel,
+    val viewLifecycleOwner: LifecycleOwner
 ) :
     ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
-    private lateinit var mContext: Context
-    private var selectedCurrencyItemPosition = -1
+    lateinit var mContext: Context
+    var selectedCurrencyItemPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
-        Log.i("adapter", "onCreateViewHolder")
-
         mContext = parent.context
-        return CurrenciesItemViewHolder.inflateFrom(parent)
+        return CurrenciesItemViewHolder.inflateFrom(parent,this)
     }
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
-        Log.i("adapter", "onBindViewHolder")
-
-        holder.binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s == null) return
-
-                var newValue = 0L
-                if (s.isNotEmpty()) {
-                    newValue = s.toString().toLong()
-                }
-                viewModel.changeCurrencyData(holder.bindingAdapterPosition, newValue)
-            }
-        })
-
-        holder.binding.currencyLayout.setOnLongClickListener {
-            if (viewModel.isItemSelected.value != true) viewModel.itemSelected(true)
-            selectedCurrencyItemPosition = holder.bindingAdapterPosition
-            true
-        }
-
-        viewModel.isItemSelected.observe(viewLifecycleOwner) { itemSelected ->
-            holder.binding.currencyLayout.isLongClickable = !itemSelected
-            holder.binding.markDeleteCheckbox.visibility =
-                if (itemSelected) View.VISIBLE else View.GONE
-        }
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -87,7 +54,5 @@ class CurrenciesAdapter(
             }
         }
         dialog.show()
-
     }
-
 }

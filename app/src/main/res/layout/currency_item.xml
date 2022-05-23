@@ -12,6 +12,7 @@
         android:paddingTop="16dp">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/inner_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -50,12 +51,6 @@
                     android:contentDescription="@string/flag"
                     android:src="@drawable/turkey_flag" />
             </androidx.cardview.widget.CardView>
-
-            <CheckBox
-                android:id="@+id/mark_delete_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView

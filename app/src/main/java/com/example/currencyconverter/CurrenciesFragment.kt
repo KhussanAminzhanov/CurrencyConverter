@@ -78,7 +78,7 @@ class CurrenciesFragment : Fragment() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (viewModel.isItemSelected.value!!) {
-                    viewModel.itemSelected(false)
+                    viewModel.setItemSelected(false)
                 } else {
                     activity?.finish()
                 }
