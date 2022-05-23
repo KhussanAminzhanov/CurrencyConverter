@@ -52,6 +52,14 @@ class CurrenciesViewModel : ViewModel() {
         return deletedCurrencyItem
     }
 
+    fun deleteCurrencies(positions: List<Int>): List<CurrencyItem> {
+        val deletedCurrencies = mutableListOf<CurrencyItem>()
+        positions.forEach { position -> deletedCurrencies.add(data[position].copy()) }
+        deletedCurrencies.forEach { currency -> data.remove(currency) }
+        _currencies.value = data
+        return deletedCurrencies
+    }
+
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {

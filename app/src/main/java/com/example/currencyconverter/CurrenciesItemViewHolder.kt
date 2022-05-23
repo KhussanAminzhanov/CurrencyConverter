@@ -3,6 +3,7 @@ package com.example.currencyconverter
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -17,6 +18,7 @@ class CurrenciesItemViewHolder(
 
     private val viewModel by lazy { adapter.viewModel }
     private val checkBox = CheckBox(adapter.mContext)
+    private var hasParent = false
 
     companion object {
         fun inflateFrom(
@@ -53,21 +55,42 @@ class CurrenciesItemViewHolder(
         })
 
         binding.currencyLayout.setOnLongClickListener {
-            if (viewModel.isItemSelected.value != true) viewModel.setItemSelected(true)
+            viewModel.setItemSelected(true)
+            Log.i("viewholder", "${viewModel.isItemSelected.value}")
             true
         }
 
         viewModel.isItemSelected.observe(adapter.viewLifecycleOwner) { itemSelected ->
             binding.currencyLayout.isLongClickable = !itemSelected
+            binding.currencyLayout
             if (itemSelected) addCheckbox() else removeCheckbox()
+        }
+
+        checkBox.isChecked = isCheckboxChecked()
+        checkBox.setOnClickListener {
+            Log.i("viewholder", absoluteAdapterPosition.toString())
+            if (checkBox.isChecked) {
+                adapter.checkedCurrencyPositions.add(absoluteAdapterPosition)
+            } else {
+                adapter.checkedCurrencyPositions.remove(absoluteAdapterPosition)
+            }
         }
     }
 
     private fun addCheckbox() {
+        if (hasParent) return
+        checkBox.isChecked = false
         binding.innerLinearLayout.addView(checkBox)
+        hasParent = true
     }
 
     private fun removeCheckbox() {
+        if (!hasParent) return
         binding.innerLinearLayout.removeView(checkBox)
+        hasParent = false
+    }
+
+    private fun isCheckboxChecked(): Boolean {
+        return adapter.checkedCurrencyPositions.contains(absoluteAdapterPosition)
     }
 }

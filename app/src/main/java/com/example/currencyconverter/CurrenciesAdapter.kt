@@ -18,7 +18,7 @@ class CurrenciesAdapter(
     CurrencyItemTouchHelperAdapter {
 
     lateinit var mContext: Context
-    var selectedCurrencyItemPosition = -1
+    val checkedCurrencyPositions = mutableListOf<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
         mContext = parent.context
@@ -47,7 +47,7 @@ class CurrenciesAdapter(
             }.show()
     }
 
-    fun showAlertDialog() {
+    fun deleteSelectedCurrencies() {
         val customView =
             LayoutInflater.from(mContext)
                 .inflate(R.layout.delete_currency_alert_dialog_layout, null)
@@ -56,7 +56,9 @@ class CurrenciesAdapter(
         with(customView) {
             findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
             findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
-
+                checkedCurrencyPositions.forEach { position -> notifyItemRemoved(position) }
+                val deletedCurrencies = viewModel.deleteCurrencies(checkedCurrencyPositions)
+                checkedCurrencyPositions.clear()
                 dialog.dismiss()
             }
         }

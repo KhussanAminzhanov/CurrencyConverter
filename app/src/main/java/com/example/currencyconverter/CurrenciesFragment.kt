@@ -57,44 +57,6 @@ class CurrenciesFragment : Fragment() {
         return view
     }
 
-    private fun setupRecyclerView() {
-        adapter.submitList(viewModel.currencies.value)
-
-        val callback = CurrenciesItemTouchHelperCallback(adapter)
-        val touchHelper = ItemTouchHelper(callback)
-
-        binding.currenciesListRecyclerView.adapter = this@CurrenciesFragment.adapter
-        binding.currenciesListRecyclerView.layoutManager =
-            LinearLayoutManager(
-                this@CurrenciesFragment.context,
-                LinearLayoutManager.VERTICAL,
-                false
-            )
-
-        touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
-    }
-
-    private fun setupOnBackButtonPresses() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (viewModel.isItemSelected.value!!) {
-                    viewModel.setItemSelected(false)
-                } else {
-                    activity?.finish()
-                }
-            }
-
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
-
-    private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
-        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), colorId))
-        toolbar.title = getString(titleId)
-        bottomNav.visibility = bottomNavVisibility
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -119,9 +81,48 @@ class CurrenciesFragment : Fragment() {
             R.id.menu_alphabet -> viewModel.setSortingType(CurrenciesViewModel.SortType.ALPHABET)
             R.id.menu_value -> viewModel.setSortingType(CurrenciesViewModel.SortType.VALUE)
             R.id.menu_reset -> viewModel.setSortingType(CurrenciesViewModel.SortType.UNSORTED)
-            R.id.menu_delete_item -> adapter.showAlertDialog()
+            R.id.menu_delete_item -> adapter.deleteSelectedCurrencies()
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupRecyclerView() {
+        adapter.submitList(viewModel.currencies.value)
+
+        val callback = CurrenciesItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+
+        binding.currenciesListRecyclerView.adapter = this@CurrenciesFragment.adapter
+        binding.currenciesListRecyclerView.layoutManager =
+            LinearLayoutManager(
+                this@CurrenciesFragment.context,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+
+        touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
+    }
+
+    private fun setupOnBackButtonPresses() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewModel.isItemSelected.value!!) {
+                    viewModel.setItemSelected(false)
+                    adapter.checkedCurrencyPositions.clear()
+                } else {
+                    activity?.finish()
+                }
+            }
+
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
+        toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), colorId))
+        toolbar.title = getString(titleId)
+        bottomNav.visibility = bottomNavVisibility
     }
 }
