@@ -132,7 +132,7 @@ class CurrenciesFragment : Fragment() {
             CurrencyItem(viewModel.currentId, "Tenge, Kazakhstan", R.drawable.kazakhstan_flag, viewModel.currentId.toLong()),
             CurrencyItem(viewModel.currentId, "Euro, EU", R.drawable.europe_flag, viewModel.currentId.toLong())
         )
-        return list[Random.nextInt(0, 4)]
+        return list.shuffled()[Random.nextInt(0, 4)]
     }
 
 }
