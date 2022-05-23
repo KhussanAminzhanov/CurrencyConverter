@@ -1,6 +1,7 @@
 package com.example.currencyconverter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
@@ -32,6 +33,8 @@ class CurrenciesFragment : Fragment() {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        Log.i("currencies fragment", "onCreateView ${viewModel.isItemSelected.value}")
+
         setupRecyclerView()
         setupOnBackButtonPresses()
 
@@ -39,7 +42,7 @@ class CurrenciesFragment : Fragment() {
             adapter.submitList(newValue)
         }
 
-        viewModel.itemSelected.observe(viewLifecycleOwner) { isItemSelected ->
+        viewModel.isItemSelected.observe(viewLifecycleOwner) { isItemSelected ->
             binding.addCurrencyButton.visibility = if (isItemSelected) View.GONE else View.VISIBLE
         }
 
@@ -74,8 +77,8 @@ class CurrenciesFragment : Fragment() {
     private fun setupOnBackButtonPresses() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.itemSelected.value!!) {
-                    viewModel.isItemSelected(false)
+                if (viewModel.isItemSelected.value!!) {
+                    viewModel.itemSelected(false)
                 } else {
                     activity?.finish()
                 }
@@ -98,7 +101,7 @@ class CurrenciesFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        viewModel.itemSelected.observe(viewLifecycleOwner) {
+        viewModel.isItemSelected.observe(viewLifecycleOwner) {
             val menuLayoutId = if (it) {
                 changeLayout(R.color.hint, R.string.currencies_list_item_selected, View.GONE)
                 R.menu.item_selected_menu

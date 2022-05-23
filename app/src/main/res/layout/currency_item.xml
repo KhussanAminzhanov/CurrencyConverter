@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.currencyconverter.CurrenciesViewModel" />
+    </data>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/currency_layout"
         android:layout_width="match_parent"
@@ -55,6 +61,7 @@
                 android:id="@+id/mark_delete_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="@{}"
                 android:checked="false" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -23,8 +23,8 @@ class CurrenciesViewModel : ViewModel() {
     private val _currencies = MutableLiveData<List<CurrencyItem>>(data)
     val currencies: LiveData<List<CurrencyItem>> = _currencies
 
-    private val _itemSelected = MutableLiveData(false)
-    val itemSelected: LiveData<Boolean> = _itemSelected
+    private val _isItemSelected = MutableLiveData(false)
+    val isItemSelected: LiveData<Boolean> = _isItemSelected
 
     private fun sortData() {
         data = when (sortingType) {
@@ -93,7 +93,7 @@ class CurrenciesViewModel : ViewModel() {
         _currencies.value = data
     }
 
-    fun isItemSelected(value: Boolean) {
-        _itemSelected.value = value
+    fun itemSelected(value: Boolean) {
+        _isItemSelected.value = value
     }
 }

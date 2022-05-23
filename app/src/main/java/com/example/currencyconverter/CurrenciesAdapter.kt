@@ -4,22 +4,20 @@ import android.app.AlertDialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.example.currencyconverter.databinding.CurrencyItemBinding
 
 
 class CurrenciesAdapter(
     private val viewModel: CurrenciesViewModel,
     private val viewLifecycleOwner: LifecycleOwner
 ) :
-    ListAdapter<CurrencyItem, CurrenciesAdapter.CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
+    ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
     private lateinit var mContext: Context
@@ -27,12 +25,14 @@ class CurrenciesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
         mContext = parent.context
+        Log.i("adapter", "onCreateViewHolder")
         return CurrenciesItemViewHolder.inflateFrom(parent)
     }
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
+        Log.i("adapter", "onBindViewHolder")
 
         holder.binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -50,39 +50,15 @@ class CurrenciesAdapter(
         })
 
         holder.binding.currencyLayout.setOnLongClickListener {
-            if (viewModel.itemSelected.value != true) viewModel.isItemSelected(true)
+            if (viewModel.isItemSelected.value != true) viewModel.itemSelected(true)
             selectedCurrencyItemPosition = holder.bindingAdapterPosition
             true
         }
 
-        viewModel.itemSelected.observe(viewLifecycleOwner) { itemSelected ->
+        viewModel.isItemSelected.observe(viewLifecycleOwner) { itemSelected ->
             holder.binding.currencyLayout.isLongClickable = !itemSelected
-            holder.binding.markDeleteCheckbox.visibility = if (itemSelected) View.VISIBLE else View.GONE
-        }
-    }
-
-    class CurrenciesItemViewHolder(val binding: CurrencyItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        companion object {
-            fun inflateFrom(parent: ViewGroup): CurrenciesItemViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val view = CurrencyItemBinding.inflate(layoutInflater, parent, false)
-                return CurrenciesItemViewHolder(view)
-            }
-        }
-
-        fun bind(item: CurrencyItem, context: Context) {
-            binding.currencyValueEditText.setText(item.value.toString())
-            binding.currencyValueTextInputLayout.hint = item.name
-            binding.currencyName.text = item.name
-            binding.markDeleteCheckbox.isChecked = false
-            binding.currencyFlagImage.setImageDrawable(
-                ContextCompat.getDrawable(
-                    context,
-                    item.image
-                )
-            )
+            holder.binding.markDeleteCheckbox.visibility =
+                if (itemSelected) View.VISIBLE else View.GONE
         }
     }
 
@@ -108,7 +84,6 @@ class CurrenciesAdapter(
                 viewModel.deleteCurrency(getItem(selectedCurrencyItemPosition).currencyId, this)
                 notifyItemRemoved(selectedCurrencyItemPosition)
                 dialog.dismiss()
-                viewModel.isItemSelected(false)
             }
         }
         dialog.show()
