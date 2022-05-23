@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
+import com.google.android.material.snackbar.Snackbar
 
 class CurrenciesAdapter(
     val viewModel: CurrenciesViewModel,
@@ -35,8 +36,15 @@ class CurrenciesAdapter(
     }
 
     override fun onItemDismiss(position: Int, view: View) {
-        viewModel.deleteCurrency(getItem(position).currencyId, view)
+        val deletedCurrency = viewModel.deleteCurrency(position)
         notifyItemRemoved(position)
+
+        Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
+            .setAnchorView(R.id.add_currency_button)
+            .setAction("Undo") {
+                notifyItemInserted(itemCount)
+                viewModel.addCurrency(deletedCurrency)
+            }.show()
     }
 
     fun showAlertDialog() {
@@ -48,8 +56,7 @@ class CurrenciesAdapter(
         with(customView) {
             findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
             findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
-                viewModel.deleteCurrency(getItem(selectedCurrencyItemPosition).currencyId, this)
-                notifyItemRemoved(selectedCurrencyItemPosition)
+
                 dialog.dismiss()
             }
         }

@@ -1,10 +1,8 @@
 package com.example.currencyconverter
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class CurrenciesViewModel : ViewModel() {
@@ -47,21 +45,11 @@ class CurrenciesViewModel : ViewModel() {
         _currencies.value = data
     }
 
-    fun deleteCurrency(position: Int, view: View) {
+    fun deleteCurrency(position: Int) : CurrencyItem {
         val deletedCurrencyItem = data[position].copy()
         data.removeAt(position)
         _currencies.value = data
-        Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
-            .setAction("Undo") {
-                addCurrency(deletedCurrencyItem)
-            }.show()
-    }
-
-    fun deleteCurrencies(indices: List<Int>) {
-        for (index in indices) {
-            data.remove(data.find { it.currencyId == index })
-        }
-        _currencies.value = data
+        return deletedCurrencyItem
     }
 
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {
