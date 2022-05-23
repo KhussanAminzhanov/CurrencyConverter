@@ -56,8 +56,8 @@ class CurrenciesAdapter(
         with(customView) {
             findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
             findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
-                checkedCurrencyPositions.forEach { position -> notifyItemRemoved(position) }
                 val deletedCurrencies = viewModel.deleteCurrencies(checkedCurrencyPositions)
+                checkedCurrencyPositions.forEach { position -> notifyItemRemoved(position) }
                 checkedCurrencyPositions.clear()
                 dialog.dismiss()
             }

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
+import kotlin.random.Random
 
 class CurrenciesFragment : Fragment() {
 
@@ -47,9 +48,7 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            viewModel.addCurrency(
-                CurrencyItem(viewModel.currentId, "Lira", R.drawable.turkey_flag, 0L)
-            )
+            viewModel.addCurrency(randomCurrency())
             adapter.notifyItemInserted(adapter.itemCount - 1)
             binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
@@ -125,4 +124,15 @@ class CurrenciesFragment : Fragment() {
         toolbar.title = getString(titleId)
         bottomNav.visibility = bottomNavVisibility
     }
+
+    private fun randomCurrency() : CurrencyItem {
+        val list = listOf(
+            CurrencyItem(viewModel.currentId, "Lira, Turkey", R.drawable.turkey_flag, viewModel.currentId.toLong()),
+            CurrencyItem(viewModel.currentId, "Dollar, USA", R.drawable.usa_flag, viewModel.currentId.toLong()),
+            CurrencyItem(viewModel.currentId, "Tenge, Kazakhstan", R.drawable.kazakhstan_flag, viewModel.currentId.toLong()),
+            CurrencyItem(viewModel.currentId, "Euro, EU", R.drawable.europe_flag, viewModel.currentId.toLong())
+        )
+        return list[Random.nextInt(0, 4)]
+    }
+
 }
