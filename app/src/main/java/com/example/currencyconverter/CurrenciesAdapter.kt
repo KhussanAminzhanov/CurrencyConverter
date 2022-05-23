@@ -12,7 +12,6 @@ import android.widget.Button
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 
-
 class CurrenciesAdapter(
     private val viewModel: CurrenciesViewModel,
     private val viewLifecycleOwner: LifecycleOwner
@@ -24,8 +23,9 @@ class CurrenciesAdapter(
     private var selectedCurrencyItemPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
-        mContext = parent.context
         Log.i("adapter", "onCreateViewHolder")
+
+        mContext = parent.context
         return CurrenciesItemViewHolder.inflateFrom(parent)
     }
 
