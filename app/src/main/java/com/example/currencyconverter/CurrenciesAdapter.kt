@@ -57,6 +57,7 @@ class CurrenciesAdapter(
 
         viewModel.itemSelected.observe(viewLifecycleOwner) { itemSelected ->
             holder.binding.currencyLayout.isLongClickable = !itemSelected
+            holder.binding.markDeleteCheckbox.visibility = if (itemSelected) View.VISIBLE else View.GONE
         }
     }
 
