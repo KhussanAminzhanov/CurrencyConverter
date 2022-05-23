@@ -55,7 +55,6 @@
                 android:id="@+id/mark_delete_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{}"
                 android:checked="false" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
