@@ -17,7 +17,7 @@ class CurrenciesItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val viewModel by lazy { adapter.viewModel }
-    private val checkBox = CheckBox(adapter.mContext)
+    private val checkBox = CheckBox(adapter.getContext())
     private var hasParent = false
 
     companion object {

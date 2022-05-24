@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ListAdapter
 import com.google.android.material.snackbar.Snackbar
 
@@ -17,7 +18,7 @@ class CurrenciesAdapter(
     ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
-    lateinit var mContext: Context
+    private lateinit var mContext: Context
     val checkedCurrencyPositions = mutableListOf<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
@@ -46,6 +47,8 @@ class CurrenciesAdapter(
                 viewModel.addCurrency(deletedCurrency)
             }.show()
     }
+
+    fun getContext() : Context = mContext
 
     fun deleteSelectedCurrencies() {
         val customView =
