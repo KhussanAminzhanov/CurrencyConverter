@@ -113,9 +113,7 @@ class CurrenciesFragment : Fragment() {
                     activity?.finish()
                 }
             }
-
         }
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 

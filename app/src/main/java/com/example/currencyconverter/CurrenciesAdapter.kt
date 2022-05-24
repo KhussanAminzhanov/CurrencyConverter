@@ -22,7 +22,7 @@ class CurrenciesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
         mContext = parent.context
-        return CurrenciesItemViewHolder.inflateFrom(parent,this)
+        return CurrenciesItemViewHolder.inflateFrom(parent, this)
     }
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
@@ -56,12 +56,23 @@ class CurrenciesAdapter(
         with(customView) {
             findViewById<Button>(R.id.alert_dialog_cancel_button).setOnClickListener { dialog.dismiss() }
             findViewById<Button>(R.id.alert_dialog_delete_button).setOnClickListener {
-                val deletedCurrencies = viewModel.deleteCurrencies(checkedCurrencyPositions)
-                checkedCurrencyPositions.forEach { position -> notifyItemRemoved(position) }
+                viewModel.deleteCurrencies(checkedCurrencyPositions)
+                val deletedCurrencyPositions = mutableListOf<Int>()
+                checkedCurrencyPositions.forEach { oldPosition ->
+                    val currentPosition = getUpdatedPosition(oldPosition, deletedCurrencyPositions)
+                    deletedCurrencyPositions.add(oldPosition)
+                    notifyItemRemoved(currentPosition)
+                }
                 checkedCurrencyPositions.clear()
                 dialog.dismiss()
             }
         }
         dialog.show()
+    }
+
+    private fun getUpdatedPosition(oldPosition: Int, deletedCurrencyPositions: MutableList<Int>): Int {
+        var position = oldPosition
+        deletedCurrencyPositions.forEach { if (oldPosition > it) position-- }
+        return position
     }
 }
