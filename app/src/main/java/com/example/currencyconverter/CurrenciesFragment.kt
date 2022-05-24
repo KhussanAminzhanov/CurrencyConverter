@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
-import kotlin.random.Random
 
 class CurrenciesFragment : Fragment() {
 
@@ -45,7 +44,7 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            viewModel.addCurrency(randomCurrency())
+            viewModel.addCurrency(viewModel.randomCurrency())
             adapter.notifyItemInserted(adapter.itemCount - 1)
             binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
@@ -89,13 +88,9 @@ class CurrenciesFragment : Fragment() {
         val callback = CurrenciesItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
 
-        binding.currenciesListRecyclerView.adapter = this@CurrenciesFragment.adapter
+        binding.currenciesListRecyclerView.adapter = adapter
         binding.currenciesListRecyclerView.layoutManager =
-            LinearLayoutManager(
-                this@CurrenciesFragment.context,
-                LinearLayoutManager.VERTICAL,
-                false
-            )
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
@@ -119,35 +114,4 @@ class CurrenciesFragment : Fragment() {
         toolbar.title = getString(titleId)
         bottomNav.visibility = bottomNavVisibility
     }
-
-    private fun randomCurrency(): CurrencyItem {
-        val list = listOf(
-            CurrencyItem(
-                viewModel.currentId,
-                "Lira, Turkey",
-                R.drawable.turkey_flag,
-                viewModel.currentId.toLong()
-            ),
-            CurrencyItem(
-                viewModel.currentId,
-                "Dollar, USA",
-                R.drawable.usa_flag,
-                viewModel.currentId.toLong()
-            ),
-            CurrencyItem(
-                viewModel.currentId,
-                "Tenge, Kazakhstan",
-                R.drawable.kazakhstan_flag,
-                viewModel.currentId.toLong()
-            ),
-            CurrencyItem(
-                viewModel.currentId,
-                "Euro, EU",
-                R.drawable.europe_flag,
-                viewModel.currentId.toLong()
-            )
-        )
-        return list.shuffled()[Random.nextInt(0, 4)]
-    }
-
 }

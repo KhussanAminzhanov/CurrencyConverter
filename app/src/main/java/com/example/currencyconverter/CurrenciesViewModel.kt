@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.*
+import kotlin.random.Random
 
 class CurrenciesViewModel : ViewModel() {
 
@@ -90,5 +91,35 @@ class CurrenciesViewModel : ViewModel() {
 
     fun setItemSelected(value: Boolean) {
         _isItemSelected.value = value
+    }
+
+    fun randomCurrency(): CurrencyItem {
+        val list = listOf(
+            CurrencyItem(
+                currentId,
+                "Lira, Turkey",
+                R.drawable.turkey_flag,
+                currentId.toLong()
+            ),
+            CurrencyItem(
+                currentId,
+                "Dollar, USA",
+                R.drawable.usa_flag,
+                currentId.toLong()
+            ),
+            CurrencyItem(
+                currentId,
+                "Tenge, Kazakhstan",
+                R.drawable.kazakhstan_flag,
+                currentId.toLong()
+            ),
+            CurrencyItem(
+                currentId,
+                "Euro, EU",
+                R.drawable.europe_flag,
+                currentId.toLong()
+            )
+        )
+        return list.shuffled()[Random.nextInt(0, 4)]
     }
 }
