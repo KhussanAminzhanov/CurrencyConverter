@@ -35,6 +35,12 @@ class CurrenciesViewModel : ViewModel() {
         }
     }
 
+    private fun swapCurrencyId(data: List<CurrencyItem>, firstIndex: Int, secondIndex: Int) {
+        val id = data[firstIndex].currencyId
+        data[firstIndex].currencyId = data[secondIndex].currencyId
+        data[secondIndex].currencyId = id
+    }
+
     fun addCurrency(newCurrencyItem: CurrencyItem) {
         data.add(newCurrencyItem)
         sortData()
@@ -43,10 +49,10 @@ class CurrenciesViewModel : ViewModel() {
     }
 
     fun deleteCurrency(position: Int) : CurrencyItem {
-        val deletedCurrencyItem = data[position].copy()
+        val deletedCurrency = data[position].copy()
         data.removeAt(position)
         _currencies.value = data
-        return deletedCurrencyItem
+        return deletedCurrency
     }
 
     fun deleteCurrencies(positions: List<Int>): List<CurrencyItem> {
@@ -61,16 +67,12 @@ class CurrenciesViewModel : ViewModel() {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(data, i, i + 1)
-                val id = data[i].currencyId
-                data[i].currencyId = data[i + 1].currencyId
-                data[i + 1].currencyId = id
+                swapCurrencyId(data, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(data, i, i - 1)
-                val id = data[i].currencyId
-                data[i].currencyId = data[i - 1].currencyId
-                data[i - 1].currencyId = id
+                swapCurrencyId(data, i, i - 1)
             }
         }
     }

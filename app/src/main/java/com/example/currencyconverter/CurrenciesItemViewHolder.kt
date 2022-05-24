@@ -3,7 +3,6 @@ package com.example.currencyconverter
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -56,7 +55,6 @@ class CurrenciesItemViewHolder(
 
         binding.currencyLayout.setOnLongClickListener {
             viewModel.setItemSelected(true)
-            Log.i("viewholder", "${viewModel.isItemSelected.value}")
             true
         }
 
@@ -68,7 +66,6 @@ class CurrenciesItemViewHolder(
 
         checkBox.isChecked = isCheckboxChecked()
         checkBox.setOnClickListener {
-            Log.i("viewholder", absoluteAdapterPosition.toString())
             if (checkBox.isChecked) {
                 adapter.checkedCurrencyPositions.add(absoluteAdapterPosition)
             } else {

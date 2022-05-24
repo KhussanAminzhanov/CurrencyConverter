@@ -7,15 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ListAdapter
 import com.google.android.material.snackbar.Snackbar
 
 class CurrenciesAdapter(
     val viewModel: CurrenciesViewModel,
     val viewLifecycleOwner: LifecycleOwner
-) :
-    ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
+) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
     private lateinit var mContext: Context
@@ -48,7 +46,7 @@ class CurrenciesAdapter(
             }.show()
     }
 
-    fun getContext() : Context = mContext
+    fun getContext(): Context = mContext
 
     fun deleteSelectedCurrencies() {
         val customView =
@@ -73,7 +71,10 @@ class CurrenciesAdapter(
         dialog.show()
     }
 
-    private fun getUpdatedPosition(oldPosition: Int, deletedCurrencyPositions: MutableList<Int>): Int {
+    private fun getUpdatedPosition(
+        oldPosition: Int,
+        deletedCurrencyPositions: MutableList<Int>
+    ): Int {
         var position = oldPosition
         deletedCurrencyPositions.forEach { if (oldPosition > it) position-- }
         return position
