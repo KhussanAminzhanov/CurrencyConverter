@@ -1,17 +1,26 @@
 package com.example.currencyconverter
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.example.currencyconverter.databinding.DeleteCurrencyAlertDialogLayoutBinding
 
 class DeleteCurrencyConfirmationDialogFragment(val onPositive: () -> Unit) : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext())
-            .setMessage(R.string.delete_currency_alert_dialog_title_text)
-            .setPositiveButton("Delete") { _, _ -> onPositive(); dismiss()}
-            .setNegativeButton("Cancel") { _, _ -> dismiss()}
-            .create()
+
+    private val binding by lazy { DeleteCurrencyAlertDialogLayoutBinding.inflate(layoutInflater) }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = binding.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.alertDialogCancelButton.setOnClickListener { dismiss() }
+        binding.alertDialogDeleteButton.setOnClickListener { onPositive(); dismiss() }
     }
 
     companion object {
