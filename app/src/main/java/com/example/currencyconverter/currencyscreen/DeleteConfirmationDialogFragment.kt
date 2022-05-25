@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.currencyconverter.databinding.DeleteCurrencyAlertDialogLayoutBinding
+import com.example.currencyconverter.databinding.DialogFragmentDeleteConfirmationBinding
 
-class DeleteCurrencyConfirmationDialogFragment(val onPositive: () -> Unit) : DialogFragment() {
+class DeleteConfirmationDialogFragment(val onPositive: () -> Unit) : DialogFragment() {
 
-    private val binding by lazy { DeleteCurrencyAlertDialogLayoutBinding.inflate(layoutInflater) }
+    private val binding by lazy { DialogFragmentDeleteConfirmationBinding.inflate(layoutInflater) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

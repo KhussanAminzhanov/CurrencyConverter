@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.currencyconverter.databinding.CurrencyItemBinding
+import com.example.currencyconverter.databinding.ItemCurrencyBinding
 
 class CurrenciesItemViewHolder(
-    private val binding: CurrencyItemBinding,
+    private val binding: ItemCurrencyBinding,
     private val adapter: CurrenciesAdapter
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -25,7 +25,7 @@ class CurrenciesItemViewHolder(
             adapter: CurrenciesAdapter
         ): CurrenciesItemViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val view = CurrencyItemBinding.inflate(layoutInflater, parent, false)
+            val view = ItemCurrencyBinding.inflate(layoutInflater, parent, false)
             return CurrenciesItemViewHolder(view, adapter)
         }
     }

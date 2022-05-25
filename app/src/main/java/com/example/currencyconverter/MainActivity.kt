@@ -5,18 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.currencyconverter.databinding.ActivityMainScreenBinding
-import com.google.android.material.appbar.MaterialToolbar
+import com.example.currencyconverter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainScreenBinding
+    private lateinit var binding: ActivityMainBinding
     val toolbar by lazy { binding.toolbar }
     val bottomNav by lazy { binding.bottomNav }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainScreenBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 

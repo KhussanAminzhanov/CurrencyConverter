@@ -13,10 +13,8 @@ import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrenciesFragment : Fragment() {
-
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
     private val adapter by lazy { CurrenciesAdapter(viewModel, viewLifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
@@ -63,10 +61,10 @@ class CurrenciesFragment : Fragment() {
         viewModel.isItemSelected.observe(viewLifecycleOwner) {
             val menuLayoutId = if (it) {
                 changeLayout(R.color.hint, R.string.currencies_list_item_selected, View.GONE)
-                R.menu.item_selected_menu
+                R.menu.fragment_currencies_currency_selected
             } else {
                 changeLayout(R.color.primaryColor, R.string.currency, View.VISIBLE)
-                R.menu.menu_currencies
+                R.menu.fragment_currencies_normal
             }
             menu.clear()
             inflater.inflate(menuLayoutId, menu)

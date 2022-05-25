@@ -11,18 +11,18 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
-import com.example.currencyconverter.databinding.ActivityMainBinding
+import com.example.currencyconverter.databinding.ActivityLoginBinding
 
 const val EMPTY_CIRCLE = "○"
 const val FULL_CIRCLE = "●"
 
-class LoginScreenActivity : AppCompatActivity(), Animation.AnimationListener {
+class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]

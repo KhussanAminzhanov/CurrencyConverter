@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 class CurrenciesAdapter(
     val viewModel: CurrenciesViewModel,
     val viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
+) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrenciesDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
     private lateinit var mContext: Context
@@ -48,8 +48,8 @@ class CurrenciesAdapter(
     fun getContext(): Context = mContext
 
     fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {
-        val dialog = DeleteCurrencyConfirmationDialogFragment { deleteCurrencies() }
-        dialog.show(fragmentManager, DeleteCurrencyConfirmationDialogFragment.TAG)
+        val dialog = DeleteConfirmationDialogFragment { deleteCurrencies() }
+        dialog.show(fragmentManager, DeleteConfirmationDialogFragment.TAG)
     }
 
     private fun deleteCurrencies() {
