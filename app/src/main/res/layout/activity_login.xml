@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:columnCount="3"
             android:useDefaultMargins="true"
-            android:padding="5dp"
+            android:padding="40dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

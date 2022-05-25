@@ -7,6 +7,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.currencyconverter.MainActivity
@@ -19,48 +20,13 @@ const val FULL_CIRCLE = "●"
 class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
 
     private lateinit var binding: ActivityLoginBinding
+    private val viewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-        val okButton = Button(this)
-        val backButton = Button(this)
-
-        for (i in 1..9) {
-            val numericKeypad = layoutInflater.inflate(R.layout.btn_numeric_keypad, null) as Button
-            numericKeypad.text = i.toString()
-            numericKeypad.setOnClickListener {
-                val digit = (it as Button).text.first().digitToInt()
-                viewModel.enterPinCodeDigit(digit)
-            }
-            binding.gridLayoutNumericKeypad?.addView(numericKeypad)
-        }
-
-        backButton.setOnClickListener { viewModel.removePinCodeDigit() }
-
-        backButton.setOnLongClickListener {
-            viewModel.resetPinCodeIndex()
-            true
-        }
-
-        okButton.setOnClickListener {
-            if (viewModel.index.value == viewModel.pinCodeLength) {
-                if (viewModel.checkPinCode()) {
-                    finish()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    vibrate()
-                    val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
-                    animation.setAnimationListener(this)
-                    binding.textViewPinCode.startAnimation(animation)
-                    viewModel.resetPinCodeIndex()
-                }
-            }
-        }
+        setupNumericKeypad()
 
         viewModel.index.observe(this) {
             binding.textViewPinCode.text = getString(
@@ -97,7 +63,55 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(50)
         }
+    }
 
+    private fun setupNumericKeypad() {
+        for (i in 1..9) {
+            binding.gridLayoutNumericKeypad.addView(getNormalNumericButton(i.toString()) {
+                viewModel.enterPinCodeDigit(i)
+            })
+        }
+
+        binding.gridLayoutNumericKeypad.addView(getBackButton())
+        binding.gridLayoutNumericKeypad.addView(getNormalNumericButton("0") {
+            viewModel.enterPinCodeDigit(0)
+        })
+        binding.gridLayoutNumericKeypad.addView(getOkButton())
+    }
+
+    private fun getNormalNumericButton(text: String, onClickListener: () -> Unit = {}): Button {
+        val numericKeypad = layoutInflater.inflate(R.layout.btn_numeric_keypad, null) as Button
+        numericKeypad.text = text
+        numericKeypad.setOnClickListener { onClickListener() }
+        return numericKeypad
+    }
+
+    private fun getBackButton(): Button {
+        val backButton = getNormalNumericButton(getString(R.string.back_button_text))
+        backButton.setOnClickListener { viewModel.removePinCodeDigit() }
+        backButton.setOnLongClickListener { viewModel.resetPinCodeIndex(); true }
+        return backButton
+    }
+
+    private fun getOkButton(): Button {
+        val okButton = getNormalNumericButton(getString(R.string.ok_button_text))
+        okButton.background = AppCompatResources.getDrawable(this, R.drawable.ok_button_background)
+        okButton.setOnClickListener {
+            if (viewModel.index.value == viewModel.pinCodeLength) {
+                if (viewModel.checkPinCode()) {
+                    finish()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    vibrate()
+                    val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
+                    animation.setAnimationListener(this)
+                    binding.textViewPinCode.startAnimation(animation)
+                    viewModel.resetPinCodeIndex()
+                }
+            }
+        }
+        return okButton
     }
 
 }
