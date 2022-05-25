@@ -1,5 +1,6 @@
 package com.example.currencyconverter.loginscreen
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.*
@@ -17,7 +18,7 @@ import com.example.currencyconverter.databinding.ActivityLoginBinding
 const val EMPTY_CIRCLE = "○"
 const val FULL_CIRCLE = "●"
 
-class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val viewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
@@ -36,21 +37,6 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
             )
         }
     }
-
-    override fun onAnimationStart(p0: Animation?) {
-        binding.textViewPinCode.setTextColor(
-            ContextCompat.getColor(
-                this,
-                R.color.incorrect_pin_code
-            )
-        )
-    }
-
-    override fun onAnimationEnd(p0: Animation?) {
-        binding.textViewPinCode.setTextColor(ContextCompat.getColor(this, R.color.blue))
-    }
-
-    override fun onAnimationRepeat(p0: Animation?) = Unit
 
     @Suppress("DEPRECATION")
     private fun vibrate() {
@@ -79,6 +65,7 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
         binding.gridLayoutNumericKeypad.addView(getOkButton())
     }
 
+    @SuppressLint("InflateParams")
     private fun getNormalNumericButton(text: String, onClickListener: () -> Unit = {}): Button {
         val numericKeypad = layoutInflater.inflate(R.layout.btn_numeric_keypad, null) as Button
         numericKeypad.text = text
@@ -105,7 +92,7 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
                 } else {
                     vibrate()
                     val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
-                    animation.setAnimationListener(this)
+                    animation.setAnimationListener(getPinCodeTextViewAnimationListener())
                     binding.textViewPinCode.startAnimation(animation)
                     viewModel.resetPinCodeIndex()
                 }
@@ -114,5 +101,26 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
         return okButton
     }
 
+
+    private fun getPinCodeTextViewAnimationListener(): Animation.AnimationListener {
+        return object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+                binding.textViewPinCode.setTextColor(
+                    ContextCompat.getColor(this@LoginActivity, R.color.incorrect_pin_code)
+                )
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                binding.textViewPinCode.setTextColor(
+                    ContextCompat.getColor(
+                        this@LoginActivity,
+                        R.color.blue
+                    )
+                )
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) = Unit
+        }
+    }
 }
 
