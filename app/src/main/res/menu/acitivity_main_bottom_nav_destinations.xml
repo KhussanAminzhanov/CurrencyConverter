@@ -2,25 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/translateFragment"
-        android:icon="@drawable/icon_translate"
+        android:icon="@drawable/ic_translate"
         android:title="@string/translate" />
     <item
         android:id="@+id/favoritesFragment"
-        android:icon="@drawable/icon_favorites"
+        android:icon="@drawable/ic_favorites"
         android:title="@string/favorites" />
 
     <item
         android:id="@+id/currencyFragment"
-        android:icon="@drawable/icon_currency"
+        android:icon="@drawable/ic_currency"
         android:title="@string/currency" />
 
     <item
         android:id="@+id/searchFragment"
-        android:icon="@drawable/icon_search"
+        android:icon="@drawable/ic_search"
         android:title="@string/search" />
 
     <item
         android:id="@+id/userProfileFragment"
-        android:icon="@drawable/icon_account"
+        android:icon="@drawable/ic_account"
         android:title="@string/profile" />
 </menu>

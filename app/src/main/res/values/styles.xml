@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="BlueButton" parent="TextAppearance.AppCompat.Button">
-        <item name="android:textColor">@drawable/button_text_color_selector</item>
-        <item name="android:background">@drawable/button_shape_selector</item>
+        <item name="android:textColor">@drawable/btn_numeric_keypad_color_selector</item>
+        <item name="android:background">@drawable/btn_numeric_keypad_selector</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:layout_marginRight">20dp</item>

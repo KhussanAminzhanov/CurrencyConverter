@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun getOkButton(): Button {
         val okButton = getNormalNumericButton(getString(R.string.ok_button_text))
-        okButton.background = AppCompatResources.getDrawable(this, R.drawable.ok_button_background)
+        okButton.background = AppCompatResources.getDrawable(this, R.drawable.btn_ok_selector)
         okButton.setOnClickListener {
             if (viewModel.index.value == viewModel.pinCodeLength) {
                 if (viewModel.checkPinCode()) {
@@ -90,11 +90,11 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 } else {
+                    viewModel.resetPinCodeIndex()
                     vibrate()
                     val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
                     animation.setAnimationListener(getPinCodeTextViewAnimationListener())
                     binding.textViewPinCode.startAnimation(animation)
-                    viewModel.resetPinCodeIndex()
                 }
             }
         }

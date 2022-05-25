@@ -99,25 +99,25 @@ class CurrenciesViewModel : ViewModel() {
             CurrencyItem(
                 currentId,
                 "Lira, Turkey",
-                R.drawable.turkey_flag,
+                R.drawable.flag_turkey,
                 currentId.toLong()
             ),
             CurrencyItem(
                 currentId,
                 "Dollar, USA",
-                R.drawable.usa_flag,
+                R.drawable.flag_usa,
                 currentId.toLong()
             ),
             CurrencyItem(
                 currentId,
                 "Tenge, Kazakhstan",
-                R.drawable.kazakhstan_flag,
+                R.drawable.flag_kazakhstan,
                 currentId.toLong()
             ),
             CurrencyItem(
                 currentId,
                 "Euro, EU",
-                R.drawable.europe_flag,
+                R.drawable.flag_europe,
                 currentId.toLong()
             )
         )

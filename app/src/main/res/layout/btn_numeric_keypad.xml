@@ -6,6 +6,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@drawable/button_shape_selector"
+    android:background="@drawable/btn_numeric_keypad_selector"
     app:backgroundTint="@null"
     tools:text="1" />

@@ -3,12 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/btn_ok_selected.xml" value="0.3125" />
+        <entry key="app/src/main/res/drawable/btn_ok_selector.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_shape_pressed.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_shape_selector.xml" value="0.298" />
+        <entry key="app/src/main/res/drawable/button_text_color_selector.xml" value="0.3125" />
+        <entry key="app/src/main/res/drawable/ic_currency.xml" value="0.3125" />
+        <entry key="app/src/main/res/drawable/ic_delete.xml" value="0.3125" />
+        <entry key="app/src/main/res/drawable/ic_favorites.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.26" />
+        <entry key="app/src/main/res/drawable/ok_button_background.xml" value="0.3125" />
         <entry key="app/src/main/res/layout-land/activity_login.xml" value="0.44166666666666665" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.3298059964726631" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.38958333333333334" />
