@@ -26,29 +26,27 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
         setContentView(binding.root)
 
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        val okButton = Button(this)
+        val backButton = Button(this)
 
-        val buttonIndices = intArrayOf(
-            R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4,
-            R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9,
-        )
-
-        for (i in 0..9) {
-            val button: Button = findViewById(buttonIndices[i])
-            button.text = i.toString()
-            button.setOnClickListener {
+        for (i in 1..9) {
+            val numericKeypad = layoutInflater.inflate(R.layout.btn_numeric_keypad, null) as Button
+            numericKeypad.text = i.toString()
+            numericKeypad.setOnClickListener {
                 val digit = (it as Button).text.first().digitToInt()
                 viewModel.enterPinCodeDigit(digit)
             }
+            binding.gridLayoutNumericKeypad?.addView(numericKeypad)
         }
 
-        binding.buttonBack.setOnClickListener { viewModel.removePinCodeDigit() }
+        backButton.setOnClickListener { viewModel.removePinCodeDigit() }
 
-        binding.buttonBack.setOnLongClickListener {
+        backButton.setOnLongClickListener {
             viewModel.resetPinCodeIndex()
             true
         }
 
-        binding.buttonOk.setOnClickListener {
+        okButton.setOnClickListener {
             if (viewModel.index.value == viewModel.pinCodeLength) {
                 if (viewModel.checkPinCode()) {
                     finish()
@@ -58,14 +56,14 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
                     vibrate()
                     val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
                     animation.setAnimationListener(this)
-                    binding.pinCodeTextView.startAnimation(animation)
+                    binding.textViewPinCode.startAnimation(animation)
                     viewModel.resetPinCodeIndex()
                 }
             }
         }
 
         viewModel.index.observe(this) {
-            binding.pinCodeTextView.text = getString(
+            binding.textViewPinCode.text = getString(
                 R.string.pin_code_text,
                 FULL_CIRCLE.repeat(viewModel.index.value!!),
                 EMPTY_CIRCLE.repeat(viewModel.pinCodeLength - viewModel.index.value!!)
@@ -74,7 +72,7 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
     }
 
     override fun onAnimationStart(p0: Animation?) {
-        binding.pinCodeTextView.setTextColor(
+        binding.textViewPinCode.setTextColor(
             ContextCompat.getColor(
                 this,
                 R.color.incorrect_pin_code
@@ -83,7 +81,7 @@ class LoginActivity : AppCompatActivity(), Animation.AnimationListener {
     }
 
     override fun onAnimationEnd(p0: Animation?) {
-        binding.pinCodeTextView.setTextColor(ContextCompat.getColor(this, R.color.blue))
+        binding.textViewPinCode.setTextColor(ContextCompat.getColor(this, R.color.blue))
     }
 
     override fun onAnimationRepeat(p0: Animation?) = Unit

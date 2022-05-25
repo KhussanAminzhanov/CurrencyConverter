@@ -9,7 +9,7 @@
         tools:context=".LoginScreenActivity">
 
         <TextView
-            android:id="@+id/pin_code_textView"
+            android:id="@+id/text_view_pin_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:width="250dp"
