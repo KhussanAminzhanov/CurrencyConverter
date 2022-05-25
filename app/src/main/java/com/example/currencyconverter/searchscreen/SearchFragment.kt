@@ -1,18 +1,19 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.searchscreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.currencyconverter.R
 
-class TranslateFragment : Fragment() {
+class SearchFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_translate, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
 }

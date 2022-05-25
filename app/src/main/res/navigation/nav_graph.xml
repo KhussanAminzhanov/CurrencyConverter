@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/currencyFragment"
-        android:name="com.example.currencyconverter.CurrenciesFragment"
+        android:name="com.example.currencyconverter.currencyscreen.CurrenciesFragment"
         android:label="@string/currency"
         tools:layout="@layout/fragment_currencies" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.currencyconverter.FavoritesFragment"
+        android:name="com.example.currencyconverter.favoritesscreen.FavoritesFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.currencyconverter.SearchFragment"
+        android:name="com.example.currencyconverter.searchscreen.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/translateFragment"
-        android:name="com.example.currencyconverter.TranslateFragment"
+        android:name="com.example.currencyconverter.translatescreen.TranslateFragment"
         android:label="@string/translate"
         tools:layout="@layout/fragment_translate" />
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.currencyconverter.UserProfileFragment"
+        android:name="com.example.currencyconverter.userprofilescreen.UserProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_user_profile" />
 </navigation>

@@ -1,4 +1,6 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.currencyscreen
+
+import com.example.currencyconverter.R
 
 data class CurrencyItem(
     var currencyId: Int = 0,

@@ -1,12 +1,11 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.loginscreen
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 
-class MainActivityViewModel : ViewModel() {
+class LoginViewModel : ViewModel() {
 
     private val correctPinCode = "1567"
     val pinCodeLength = 4

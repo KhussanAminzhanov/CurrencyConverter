@@ -1,8 +1,9 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.currencyscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.currencyconverter.R
 import java.util.*
 import kotlin.random.Random
 

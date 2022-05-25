@@ -1,4 +1,4 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.currencyscreen
 
 import android.content.Context
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
+import com.example.currencyconverter.*
 import com.google.android.material.snackbar.Snackbar
 
 class CurrenciesAdapter(

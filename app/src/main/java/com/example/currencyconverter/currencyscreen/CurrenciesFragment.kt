@@ -1,4 +1,4 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.currencyscreen
 
 import android.os.Bundle
 import android.view.*
@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.currencyconverter.MainActivity
+import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrenciesFragment : Fragment() {
@@ -17,8 +19,8 @@ class CurrenciesFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
     private val adapter by lazy { CurrenciesAdapter(viewModel, viewLifecycleOwner) }
-    private val toolbar by lazy { (activity as MainScreen).toolbar }
-    private val bottomNav by lazy { (activity as MainScreen).bottomNav }
+    private val toolbar by lazy { (activity as MainActivity).toolbar }
+    private val bottomNav by lazy { (activity as MainActivity).bottomNav }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
