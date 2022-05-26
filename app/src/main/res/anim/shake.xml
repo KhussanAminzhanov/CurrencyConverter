@@ -3,9 +3,9 @@
 
     <translate
         android:duration="50"
-        android:fromXDelta="-3%"
+        android:fromXDelta="-5%"
         android:repeatCount="3"
         android:repeatMode="reverse"
-        android:toXDelta="3%" />
+        android:toXDelta="5%" />
 
 </set>

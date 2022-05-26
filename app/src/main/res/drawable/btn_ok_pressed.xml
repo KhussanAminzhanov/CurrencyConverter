@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:shape="rectangle">
-    <corners android:radius="26dp" />
+    <corners android:radius="@dimen/btn_numeric_keypad_radius" />
     <size
-        android:width="81dp"
-        android:height="52dp" />
+        tools:height="@dimen/btn_numeric_keypad_height"
+        tools:width="@dimen/btn_numeric_keypad_width" />
     <gradient
         android:angle="90"
-        android:startColor="@color/blue"
         android:centerColor="@color/black"
         android:endColor="@color/blue"
-        android:type="linear"/>
+        android:startColor="@color/blue"
+        android:type="linear" />
 </shape>

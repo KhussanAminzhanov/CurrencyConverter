@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="btn_numeric_keypad_default_text_size">22dp</dimen>
-    <dimen name="btn_numeric_keypad_width">81dp</dimen>
-    <dimen name="btn_numeric_keypad_height">52dp</dimen>
-    <dimen name="btn_numeric_keypad_margin">20dp</dimen>
-</resources>
