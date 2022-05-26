@@ -3,12 +3,15 @@ package com.example.currencyconverter.currencyscreen
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
+
+const val TAG_VIEW_HOLDER = "view_holder"
 
 class CurrenciesItemViewHolder(
     private val binding: ItemCurrencyBinding,
@@ -59,6 +62,7 @@ class CurrenciesItemViewHolder(
         }
 
         viewModel.isItemSelected.observe(adapter.viewLifecycleOwner) { itemSelected ->
+            Log.i(TAG_VIEW_HOLDER, "isItemSelected observer called, itemSelected = $itemSelected")
             binding.currencyLayout.isLongClickable = !itemSelected
             binding.currencyLayout
             if (itemSelected) addCheckbox() else removeCheckbox()
@@ -75,6 +79,7 @@ class CurrenciesItemViewHolder(
     }
 
     private fun addCheckbox() {
+        Log.i(TAG_VIEW_HOLDER, "addCheckbox called")
         if (hasParent) return
         checkBox.isChecked = false
         binding.innerLinearLayout.addView(checkBox)
@@ -82,6 +87,7 @@ class CurrenciesItemViewHolder(
     }
 
     private fun removeCheckbox() {
+        Log.i(TAG_VIEW_HOLDER, "removeCheckbox called")
         if (!hasParent) return
         binding.innerLinearLayout.removeView(checkBox)
         hasParent = false

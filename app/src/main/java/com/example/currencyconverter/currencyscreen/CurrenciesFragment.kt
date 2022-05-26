@@ -5,6 +5,7 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +17,7 @@ class CurrenciesFragment : Fragment() {
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
-    private val adapter by lazy { CurrenciesAdapter(viewModel, viewLifecycleOwner) }
+    private val adapter by lazy { CurrenciesAdapter(viewModel, activity as LifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
 

@@ -1,13 +1,17 @@
 package com.example.currencyconverter.currencyscreen
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.*
 import com.google.android.material.snackbar.Snackbar
+
+const val TAG_ADAPTER_CURRENCY = "currency_adapter"
 
 class CurrenciesAdapter(
     val viewModel: CurrenciesViewModel,
@@ -19,13 +23,19 @@ class CurrenciesAdapter(
     val checkedCurrencyPositions = mutableListOf<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
+        Log.i(TAG_ADAPTER_CURRENCY, "onCreateViewHolder called")
         mContext = parent.context
         return CurrenciesItemViewHolder.inflateFrom(parent, this)
     }
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
+        Log.i(TAG_ADAPTER_CURRENCY, "onBindViewHolder called")
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
+
+        viewModel.isItemSelected.observe(viewLifecycleOwner) {
+            Log.i(TAG_ADAPTER_CURRENCY, "isItemSelected observer called")
+        }
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
