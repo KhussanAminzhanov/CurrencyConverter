@@ -3,6 +3,7 @@ package com.example.currencyconverter.currencyscreen
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -11,15 +12,23 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
+import com.example.currencyconverter.databinding.BottomSheetCurrencySelectorBinding
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class CurrenciesFragment : Fragment() {
+
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
+    private var _bindingBottomSheet: BottomSheetCurrencySelectorBinding? = null
+    private val bindingBottomSheet get() = _bindingBottomSheet!!
+
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
     private val adapter by lazy { CurrenciesAdapter(viewModel, activity as LifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayoutCompat>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +40,9 @@ class CurrenciesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
-        val view = binding.root
+        _bindingBottomSheet = BottomSheetCurrencySelectorBinding.inflate(inflater, container, false)
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
 
         setupRecyclerView()
         setupOnBackButtonPresses()
@@ -45,12 +56,19 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            viewModel.addCurrency(viewModel.randomCurrency())
-            adapter.notifyItemInserted(adapter.itemCount - 1)
-            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
+            setBottomSheetVisibility(true)
+
+//            PREVIOUS VERSION OF ADDING CURRENCY
+//            viewModel.addCurrency(viewModel.randomCurrency())
+//            adapter.notifyItemInserted(adapter.itemCount - 1)
+//            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
 
-        return view
+        binding.buttonAddCurrency.setOnClickListener {
+            setBottomSheetVisibility(false)
+        }
+
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -99,7 +117,9 @@ class CurrenciesFragment : Fragment() {
     private fun setupOnBackButtonPresses() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.isItemSelected.value!!) {
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                    setBottomSheetVisibility(false)
+                } else if (viewModel.isItemSelected.value!!) {
                     viewModel.setItemSelected(false)
                     adapter.checkedCurrencyPositions.clear()
                 } else {
@@ -114,5 +134,11 @@ class CurrenciesFragment : Fragment() {
         toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), colorId))
         toolbar.title = getString(titleId)
         bottomNav.visibility = bottomNavVisibility
+    }
+
+    private fun setBottomSheetVisibility(isVisible: Boolean) {
+        bottomSheetBehavior.state =
+            if (isVisible) BottomSheetBehavior.STATE_EXPANDED
+            else BottomSheetBehavior.STATE_COLLAPSED
     }
 }
