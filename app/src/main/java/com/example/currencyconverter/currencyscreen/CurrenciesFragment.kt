@@ -60,9 +60,7 @@ class CurrenciesFragment : Fragment() {
             setBottomSheetVisibility(true)
 
 //            PREVIOUS VERSION OF ADDING CURRENCY
-//            viewModel.addCurrency(viewModel.randomCurrency())
-//            adapter.notifyItemInserted(adapter.itemCount - 1)
-//            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
+            addCurrency(viewModel.randomCurrency())
         }
 
         bindingBottomSheet.buttonAddCurrency.setOnClickListener {
@@ -129,6 +127,12 @@ class CurrenciesFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun addCurrency(currency: CurrencyItem) {
+        viewModel.addCurrency(currency)
+        adapter.notifyItemInserted(adapter.itemCount - 1)
+        binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
     }
 
     private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
