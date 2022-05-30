@@ -40,9 +40,10 @@ class CurrenciesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
-        _bindingBottomSheet = BottomSheetCurrencySelectorBinding.inflate(inflater, container, false)
+        _bindingBottomSheet = binding.bottomSheet
 
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
+        bottomSheetBehavior =
+            BottomSheetBehavior.from<LinearLayoutCompat>(bindingBottomSheet.root)
 
         setupRecyclerView()
         setupOnBackButtonPresses()
@@ -64,7 +65,7 @@ class CurrenciesFragment : Fragment() {
 //            binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
         }
 
-        binding.buttonAddCurrency.setOnClickListener {
+        bindingBottomSheet.buttonAddCurrency.setOnClickListener {
             setBottomSheetVisibility(false)
         }
 
