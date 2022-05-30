@@ -43,7 +43,7 @@ class CurrenciesFragment : Fragment() {
         _bindingBottomSheet = binding.bottomSheet
 
         bottomSheetBehavior =
-            BottomSheetBehavior.from<LinearLayoutCompat>(bindingBottomSheet.root)
+            BottomSheetBehavior.from(bindingBottomSheet.root)
 
         setupRecyclerView()
         setupOnBackButtonPresses()
