@@ -7,4 +7,5 @@
     <dimen name="btn_numeric_keypad_stroke_width">1dp</dimen>
     <dimen name="btn_numeric_keypad_radius">26dp</dimen>
     <dimen name="grid_layout_numeric_keypad_margin_top">30dp</dimen>
+    <dimen name="bottom_sheet_currency_selector_radius">16dp</dimen>
 </resources>

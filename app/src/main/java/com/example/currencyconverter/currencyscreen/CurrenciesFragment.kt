@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
+import com.example.currencyconverter.currencyscreen.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.databinding.BottomSheetCurrencySelectorBinding
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -20,8 +21,6 @@ class CurrenciesFragment : Fragment() {
 
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
-    private var _bindingBottomSheet: BottomSheetCurrencySelectorBinding? = null
-    private val bindingBottomSheet get() = _bindingBottomSheet!!
 
     private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
     private val adapter by lazy { CurrenciesAdapter(viewModel, activity as LifecycleOwner) }
@@ -40,10 +39,6 @@ class CurrenciesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
-        _bindingBottomSheet = binding.bottomSheet
-
-        bottomSheetBehavior =
-            BottomSheetBehavior.from(bindingBottomSheet.root)
 
         setupRecyclerView()
         setupOnBackButtonPresses()
@@ -57,14 +52,13 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            setBottomSheetVisibility(true)
+            CurrencySelectorBottomSheet().show(parentFragmentManager, CurrencySelectorBottomSheet.TAG)
+
+//            IMPLEMENTATION USING STANDARD BOTTOM SHEET
+//            setBottomSheetVisibility(true)
 
 //            PREVIOUS VERSION OF ADDING CURRENCY
             addCurrency(viewModel.randomCurrency())
-        }
-
-        bindingBottomSheet.buttonAddCurrency.setOnClickListener {
-            setBottomSheetVisibility(false)
         }
 
         return binding.root
@@ -116,9 +110,7 @@ class CurrenciesFragment : Fragment() {
     private fun setupOnBackButtonPresses() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                    setBottomSheetVisibility(false)
-                } else if (viewModel.isItemSelected.value!!) {
+                if (viewModel.isItemSelected.value!!) {
                     viewModel.setItemSelected(false)
                     adapter.checkedCurrencyPositions.clear()
                 } else {
@@ -139,11 +131,5 @@ class CurrenciesFragment : Fragment() {
         toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), colorId))
         toolbar.title = getString(titleId)
         bottomNav.visibility = bottomNavVisibility
-    }
-
-    private fun setBottomSheetVisibility(isVisible: Boolean) {
-        bottomSheetBehavior.state =
-            if (isVisible) BottomSheetBehavior.STATE_EXPANDED
-            else BottomSheetBehavior.STATE_COLLAPSED
     }
 }

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/bottom_sheet_currency_selector.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/btn_delete_confirmation.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/btn_numeric_keypad_color_selector.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/btn_numeric_keypad_normal.xml" value="0.3125" />
@@ -15,6 +16,7 @@
         <entry key="app/src/main/res/drawable/button_shape_selector.xml" value="0.298" />
         <entry key="app/src/main/res/drawable/button_text_color_selector.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/dialog_fragment_delete_confirmation.xml" value="0.3125" />
+        <entry key="app/src/main/res/drawable/ic_account.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/ic_currency.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/ic_delete.xml" value="0.3125" />
         <entry key="app/src/main/res/drawable/ic_favorites.xml" value="0.3125" />
