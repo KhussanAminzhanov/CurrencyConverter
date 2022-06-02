@@ -3,7 +3,6 @@ package com.example.currencyconverter.currencyscreen
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -13,9 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.currencyscreen.currencyselector.CurrencySelectorBottomSheet
-import com.example.currencyconverter.databinding.BottomSheetCurrencySelectorBinding
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class CurrenciesFragment : Fragment() {
 
@@ -26,8 +23,6 @@ class CurrenciesFragment : Fragment() {
     private val adapter by lazy { CurrenciesAdapter(viewModel, activity as LifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
-
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayoutCompat>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +47,7 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            CurrencySelectorBottomSheet().show(parentFragmentManager, CurrencySelectorBottomSheet.TAG)
-
-//            IMPLEMENTATION USING STANDARD BOTTOM SHEET
-//            setBottomSheetVisibility(true)
-
-//            PREVIOUS VERSION OF ADDING CURRENCY
+            CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
             addCurrency(viewModel.randomCurrency())
         }
 

@@ -4,20 +4,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.currencyconverter.databinding.BottomSheetCurrencySelectorBinding
+import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CurrencySelectorBottomSheet : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetCurrencySelectorBinding? = null
+    private val data = listOf(
+        "United States dollar USD",
+        "Euro EUR",
+        "Kazakhstani tenge KZT",
+        "Turkish lira TRY"
+    )
+
+    private var _binding: BottomSheetAddCurrencyBinding? = null
     private val binding get() = _binding!!
+
+    private val adapter by lazy { CurrencySelectorAdapter(data) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BottomSheetCurrencySelectorBinding.inflate(layoutInflater, container, false)
+        _binding = BottomSheetAddCurrencyBinding.inflate(inflater, container, false)
+
+        binding.btnCancel.setOnClickListener { this.dialog?.dismiss() }
+
+        binding.recyclerViewCurrenciesNames.adapter = adapter
+
         return binding.root
     }
 

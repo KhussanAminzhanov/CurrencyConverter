@@ -20,4 +20,5 @@
     <color name="secondaryDarkColor">#373737</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
+    <color name="toolbar_background">#ffffff</color>
 </resources>

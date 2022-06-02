@@ -31,7 +31,7 @@
             android:layout_gravity="start"
             android:layout_marginEnd="15dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_delete_confirmation"
+            android:background="@drawable/btn_delete_confirmation_shape"
             android:text="@string/delete_currency_alert_dialog_cancel_button_text"
             app:backgroundTint="@null" />
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_delete_confirmation"
+            android:background="@drawable/btn_delete_confirmation_shape"
             android:text="@string/delete_currency_alert_dialog_delete_button_text"
             app:backgroundTint="@null" />
 
