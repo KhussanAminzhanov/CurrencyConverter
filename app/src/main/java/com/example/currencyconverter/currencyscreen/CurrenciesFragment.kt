@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.currencyscreen.currencyselector.CurrencySelectorBottomSheet
+import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrenciesFragment : Fragment() {
@@ -48,7 +49,7 @@ class CurrenciesFragment : Fragment() {
 
         binding.addCurrencyButton.setOnClickListener {
             CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
-            addCurrency(viewModel.randomCurrency())
+            addCurrency(CurrenciesData.randomCurrency())
         }
 
         return binding.root
@@ -75,9 +76,9 @@ class CurrenciesFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_alphabet -> viewModel.setSortingType(CurrenciesViewModel.SortType.ALPHABET)
-            R.id.menu_value -> viewModel.setSortingType(CurrenciesViewModel.SortType.VALUE)
-            R.id.menu_reset -> viewModel.setSortingType(CurrenciesViewModel.SortType.UNSORTED)
+            R.id.menu_alphabet -> CurrenciesData.setSortingType(CurrenciesData.SortType.ALPHABET)
+            R.id.menu_value -> CurrenciesData.setSortingType(CurrenciesData.SortType.VALUE)
+            R.id.menu_reset -> CurrenciesData.setSortingType(CurrenciesData.SortType.UNSORTED)
             R.id.menu_delete_item -> adapter.showDeleteConfirmationDialog(parentFragmentManager)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -112,7 +113,7 @@ class CurrenciesFragment : Fragment() {
     }
 
     private fun addCurrency(currency: CurrencyItem) {
-        viewModel.addCurrency(currency)
+        CurrenciesData.addCurrency(currency)
         adapter.notifyItemInserted(adapter.itemCount - 1)
         binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
     }

@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
+import com.example.currencyconverter.database.CurrenciesData
 import com.google.android.material.snackbar.Snackbar
 
 const val TAG_ADAPTER_CURRENCY = "currency_adapter"
@@ -38,19 +39,19 @@ class CurrenciesAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        viewModel.moveCurrencies(fromPosition, toPosition)
+        CurrenciesData.moveCurrencies(fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemDismiss(position: Int, view: View) {
-        val deletedCurrency = viewModel.deleteCurrency(position)
+        val deletedCurrency = CurrenciesData.deleteCurrency(position)
         notifyItemRemoved(position)
 
         Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.add_currency_button)
             .setAction("Undo") {
                 notifyItemInserted(itemCount)
-                viewModel.addCurrency(deletedCurrency)
+                CurrenciesData.addCurrency(deletedCurrency)
             }.show()
     }
 
@@ -62,7 +63,7 @@ class CurrenciesAdapter(
     }
 
     private fun deleteCurrencies() {
-        viewModel.deleteCurrencies(checkedCurrencyPositions)
+        CurrenciesData.deleteCurrencies(checkedCurrencyPositions)
         val deletedCurrencyPositions = mutableListOf<Int>()
         checkedCurrencyPositions.forEach { oldPosition ->
             val currentPosition = getUpdatedPosition(oldPosition, deletedCurrencyPositions)

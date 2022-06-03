@@ -9,7 +9,7 @@ interface CurrencyItemTouchHelperAdapter {
     fun onItemDismiss(position: Int, view: View)
 }
 
-class CurrenciesItemTouchHelperCallback(val adapter: CurrencyItemTouchHelperAdapter) :
+class CurrenciesItemTouchHelperCallback(private val adapter: CurrencyItemTouchHelperAdapter) :
     ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(

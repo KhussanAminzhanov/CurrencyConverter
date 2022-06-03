@@ -7,14 +7,9 @@ import android.view.ViewGroup
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class CurrencySelectorBottomSheet : BottomSheetDialogFragment() {
+class CurrencySelectorBottomSheet() : BottomSheetDialogFragment() {
 
-    private val data = listOf(
-        "United States dollar USD",
-        "Euro EUR",
-        "Kazakhstani tenge KZT",
-        "Turkish lira TRY"
-    )
+    private val data = listOf<String>()
 
     private var _binding: BottomSheetAddCurrencyBinding? = null
     private val binding get() = _binding!!

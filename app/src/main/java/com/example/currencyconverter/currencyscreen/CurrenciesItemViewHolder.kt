@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
 
 const val TAG_VIEW_HOLDER = "view_holder"
@@ -52,7 +53,7 @@ class CurrenciesItemViewHolder(
                 if (s == null) return
                 var newValue = 0L
                 if (s.isNotEmpty()) newValue = s.toString().toLong()
-                viewModel.updateCurrencyData(bindingAdapterPosition, newValue)
+                CurrenciesData.updateCurrencyData(bindingAdapterPosition, newValue)
             }
         })
 
