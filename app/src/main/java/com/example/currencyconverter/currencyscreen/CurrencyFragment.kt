@@ -80,7 +80,7 @@ class CurrencyFragment : Fragment() {
             R.id.menu_alphabet -> CurrenciesData.setSortingType(CurrenciesData.SortType.ALPHABET)
             R.id.menu_value -> CurrenciesData.setSortingType(CurrenciesData.SortType.VALUE)
             R.id.menu_reset -> CurrenciesData.setSortingType(CurrenciesData.SortType.UNSORTED)
-            R.id.menu_delete_item -> adapter.showDeleteConfirmationDialog(parentFragmentManager)
+            R.id.menu_delete_item -> model.showDeleteConfirmationDialog(parentFragmentManager)
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
@@ -111,7 +111,7 @@ class CurrencyFragment : Fragment() {
             override fun handleOnBackPressed() {
                 if (model.isItemSelected.value!!) {
                     model.isItemSelected.value = false
-                    adapter.checkedCurrencyPositions.clear()
+                    model.checkedCurrencyPositions.clear()
                 } else {
                     activity?.finish()
                 }

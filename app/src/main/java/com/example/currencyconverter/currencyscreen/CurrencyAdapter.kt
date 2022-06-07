@@ -1,13 +1,10 @@
 package com.example.currencyconverter.currencyscreen
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
-import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.database.CurrencyItem
 import com.google.android.material.snackbar.Snackbar
 
@@ -17,11 +14,10 @@ class CurrenciesAdapter(
 ) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
-    private lateinit var mContext: Context
-    val checkedCurrencyPositions = mutableListOf<Int>()
+    lateinit var parent: ViewGroup
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
-        mContext = parent.context
+        this.parent = parent
         return CurrenciesItemViewHolder.inflateFrom(parent, this)
     }
 
@@ -31,8 +27,8 @@ class CurrenciesAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        viewModel.moveCurrencies(getItem(fromPosition).currencyId, getItem(toPosition).currencyId)
-//        notifyItemMoved(fromPosition, toPosition)
+        viewModel.moveCurrencies(fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemDismiss(position: Int, view: View) {
@@ -43,34 +39,7 @@ class CurrenciesAdapter(
             .setAnchorView(R.id.add_currency_button)
             .setAction("Undo") {
                 notifyItemInserted(itemCount)
-                CurrenciesData.addCurrency(deletedCurrency)
+                viewModel.addCurrency(deletedCurrency)
             }.show()
-    }
-
-    fun getContext(): Context = mContext
-
-    fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {
-        val dialog = DeleteConfirmationDialogFragment { deleteCurrencies() }
-        dialog.show(fragmentManager, DeleteConfirmationDialogFragment.TAG)
-    }
-
-    private fun deleteCurrencies() {
-        CurrenciesData.deleteCurrencies(checkedCurrencyPositions)
-        val deletedCurrencyPositions = mutableListOf<Int>()
-        checkedCurrencyPositions.forEach { oldPosition ->
-            val currentPosition = getUpdatedPosition(oldPosition, deletedCurrencyPositions)
-            deletedCurrencyPositions.add(oldPosition)
-            notifyItemRemoved(currentPosition)
-        }
-        checkedCurrencyPositions.clear()
-    }
-
-    private fun getUpdatedPosition(
-        oldPosition: Int,
-        deletedCurrencyPositions: MutableList<Int>
-    ): Int {
-        var position = oldPosition
-        deletedCurrencyPositions.forEach { if (oldPosition > it) position-- }
-        return position
     }
 }

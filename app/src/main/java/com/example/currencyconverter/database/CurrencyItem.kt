@@ -10,6 +10,5 @@ data class CurrencyItem(
     @PrimaryKey(autoGenerate = true) var currencyId: Int = 0,
     @ColumnInfo(name = "currency_name") var name: String = "Tenge, Kazakhstan",
     @ColumnInfo(name = "currency_image") var image: Int = R.drawable.flag_kazakhstan,
-    @ColumnInfo(name = "currency_value") var value: Long = 0L,
-    @ColumnInfo(name = "currency_position") var position: Int = 0
+    @ColumnInfo(name = "currency_exchange_rate") var exchangeRate: Double,
 )

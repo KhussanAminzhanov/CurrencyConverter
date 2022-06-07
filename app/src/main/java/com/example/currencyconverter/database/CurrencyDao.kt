@@ -21,7 +21,7 @@ interface CurrencyDao {
     @Query("SELECT * FROM currency_table WHERE currencyId = :currencyId")
     fun get(currencyId: Int): LiveData<CurrencyItem>
 
-    @Query("SELECT * FROM currency_table ORDER BY currency_position")
+    @Query("SELECT * FROM currency_table ORDER BY currencyId")
     fun getAll(): LiveData<List<CurrencyItem>>
 
     @Query("SELECT * FROM currency_table ORDER BY currency_value")
