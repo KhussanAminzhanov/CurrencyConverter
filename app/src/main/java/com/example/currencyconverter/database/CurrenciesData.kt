@@ -68,10 +68,6 @@ object CurrenciesData {
         sortData()
     }
 
-    fun updateCurrencyData(position: Int, newValue: Long) {
-        data[position].value = newValue
-    }
-
     fun randomCurrency(): CurrencyItem {
         val list = listOf(
             CurrencyItem(currentId, "Dollar, USA", R.drawable.flag_usa, currentId.toLong()),

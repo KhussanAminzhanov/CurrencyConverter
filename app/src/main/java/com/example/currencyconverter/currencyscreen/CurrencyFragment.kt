@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrenciesData
-import com.example.currencyconverter.database.CurrencyDao
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
@@ -21,14 +20,18 @@ class CurrencyFragment : Fragment() {
 
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
-
-    private val adapter by lazy { CurrenciesAdapter(viewModel, activity as LifecycleOwner) }
+    private val adapter by lazy { CurrenciesAdapter(model, activity as LifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
     private val application by lazy { requireNotNull(this.activity).application }
     private val dao by lazy { CurrencyDatabase.getInstance(application).currencyDao }
-    private val viewModelFactory by lazy { CurrencyViewModelFactory(dao)}
-    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[CurrencyViewModel::class.java] }
+    private val viewModelFactory by lazy { CurrencyViewModelFactory(dao) }
+    private val model by lazy {
+        ViewModelProvider(
+            this,
+            viewModelFactory
+        )[CurrencyViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +44,9 @@ class CurrencyFragment : Fragment() {
     ): View {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
 
+        setupObservers()
         setupRecyclerView()
         setupOnBackButtonPresses()
-
-        viewModel.currencies.observe(viewLifecycleOwner) { newValue ->
-            adapter.submitList(newValue)
-        }
-
-        viewModel.isItemSelected.observe(viewLifecycleOwner) { isItemSelected ->
-            binding.addCurrencyButton.visibility = if (isItemSelected) View.GONE else View.VISIBLE
-        }
 
         binding.addCurrencyButton.setOnClickListener {
 //            CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
@@ -66,7 +62,7 @@ class CurrencyFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        viewModel.isItemSelected.observe(viewLifecycleOwner) {
+        model.isItemSelected.observe(viewLifecycleOwner) {
             val menuLayoutId = if (it) {
                 changeLayout(R.color.hint, R.string.currencies_list_item_selected, View.GONE)
                 R.menu.fragment_currencies_currency_selected
@@ -91,7 +87,7 @@ class CurrencyFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter.submitList(viewModel.currencies.value)
+        adapter.submitList(model.currencies.value)
 
         val callback = CurrenciesItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
@@ -103,11 +99,18 @@ class CurrencyFragment : Fragment() {
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
 
+    private fun setupObservers() {
+        model.currencies.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        model.isItemSelected.observe(viewLifecycleOwner) {
+            binding.addCurrencyButton.visibility = if (it) View.GONE else View.VISIBLE
+        }
+    }
+
     private fun setupOnBackButtonPresses() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.isItemSelected.value!!) {
-                    viewModel.setItemSelected(false)
+                if (model.isItemSelected.value!!) {
+                    model.isItemSelected.value = false
                     adapter.checkedCurrencyPositions.clear()
                 } else {
                     activity?.finish()
@@ -118,10 +121,8 @@ class CurrencyFragment : Fragment() {
     }
 
     private fun addCurrency(currency: CurrencyItem) {
-        CurrenciesData.addCurrency(currency)
-        adapter.submitList(CurrenciesData.getCurrencies())
-        adapter.notifyItemInserted(adapter.itemCount - 1)
-        binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
+//        binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size)
+        model.addCurrency(currency)
     }
 
     private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {

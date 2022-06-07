@@ -3,7 +3,6 @@ package com.example.currencyconverter.currencyscreen
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -13,8 +12,6 @@ import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
 
-const val TAG_VIEW_HOLDER = "view_holder"
-
 class CurrenciesItemViewHolder(
     private val binding: ItemCurrencyBinding,
     private val adapter: CurrenciesAdapter
@@ -22,7 +19,7 @@ class CurrenciesItemViewHolder(
 
     private val viewModel by lazy { adapter.viewModel }
     private val checkBox = CheckBox(adapter.getContext())
-    private var hasParent = false
+    private var checkboxHasParent = false
 
     companion object {
         fun inflateFrom(
@@ -46,25 +43,24 @@ class CurrenciesItemViewHolder(
             )
         )
 
-        binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s == null) return
-                var newValue = 0L
-                if (s.isNotEmpty()) newValue = s.toString().toLong()
-                CurrenciesData.updateCurrencyData(bindingAdapterPosition, newValue)
-            }
-        })
+//        binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                if (s == null) return
+//                var newValue = 0L
+//                if (s.isNotEmpty()) newValue = s.toString().toLong()
+//                CurrenciesData.updateCurrencyData(bindingAdapterPosition, newValue)
+//            }
+//        })
 
         binding.currencyLayout.setOnLongClickListener {
-            viewModel.setItemSelected(true)
+            viewModel.isItemSelected.value = true
             true
         }
 
         viewModel.isItemSelected.observe(adapter.viewLifecycleOwner) { itemSelected ->
-            Log.i(TAG_VIEW_HOLDER, "isItemSelected observer called, itemSelected = $itemSelected")
             binding.currencyLayout.isLongClickable = !itemSelected
             binding.currencyLayout
             if (itemSelected) addCheckbox() else removeCheckbox()
@@ -81,18 +77,16 @@ class CurrenciesItemViewHolder(
     }
 
     private fun addCheckbox() {
-        Log.i(TAG_VIEW_HOLDER, "addCheckbox called")
-        if (hasParent) return
-        checkBox.isChecked = false
+        if (checkboxHasParent) return
         binding.innerLinearLayout.addView(checkBox)
-        hasParent = true
+        checkboxHasParent = true
+        checkBox.isChecked = false
     }
 
     private fun removeCheckbox() {
-        Log.i(TAG_VIEW_HOLDER, "removeCheckbox called")
-        if (!hasParent) return
+        if (!checkboxHasParent) return
         binding.innerLinearLayout.removeView(checkBox)
-        hasParent = false
+        checkboxHasParent = false
     }
 
     private fun isCheckboxChecked(): Boolean {

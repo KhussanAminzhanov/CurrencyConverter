@@ -1,7 +1,6 @@
 package com.example.currencyconverter.currencyscreen
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
@@ -11,8 +10,6 @@ import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.database.CurrencyItem
 import com.google.android.material.snackbar.Snackbar
-
-const val TAG_ADAPTER_CURRENCY = "currency_adapter"
 
 class CurrenciesAdapter(
     val viewModel: CurrencyViewModel,
@@ -24,26 +21,23 @@ class CurrenciesAdapter(
     val checkedCurrencyPositions = mutableListOf<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
-        Log.i(TAG_ADAPTER_CURRENCY, "onCreateViewHolder called")
         mContext = parent.context
         return CurrenciesItemViewHolder.inflateFrom(parent, this)
     }
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
-        Log.i(TAG_ADAPTER_CURRENCY, "onBindViewHolder called")
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        CurrenciesData.moveCurrencies(fromPosition, toPosition)
-        notifyItemMoved(fromPosition, toPosition)
+        viewModel.moveCurrencies(getItem(fromPosition).currencyId, getItem(toPosition).currencyId)
+//        notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemDismiss(position: Int, view: View) {
-        val deletedCurrency = CurrenciesData.deleteCurrency(position)
-        notifyItemRemoved(position)
-        submitList(CurrenciesData.getCurrencies())
+        val deletedCurrency = getItem(position)
+        viewModel.delete(deletedCurrency)
 
         Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.add_currency_button)
