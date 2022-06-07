@@ -15,9 +15,9 @@ import com.google.android.material.snackbar.Snackbar
 const val TAG_ADAPTER_CURRENCY = "currency_adapter"
 
 class CurrenciesAdapter(
-    val viewModel: CurrenciesViewModel,
+    val viewModel: CurrencyViewModel,
     val viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrenciesDiffItemCallback()),
+) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
     private lateinit var mContext: Context

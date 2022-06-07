@@ -7,16 +7,16 @@ import androidx.room.*
 interface CurrencyDao {
 
     @Insert
-    fun insert(currency: CurrencyItem)
+    suspend fun insert(currency: CurrencyItem)
 
     @Update
-    fun update(currency: CurrencyItem)
+    suspend fun update(currency: CurrencyItem)
 
     @Delete
-    fun delete(currency: CurrencyItem)
+    suspend fun delete(currency: CurrencyItem)
 
     @Delete
-    fun deleteAll(currencies: List<CurrencyItem>)
+    suspend fun deleteAll(currencies: List<CurrencyItem>)
 
     @Query("SELECT * FROM currency_table WHERE currencyId = :currencyId")
     fun get(currencyId: Int): LiveData<CurrencyItem>

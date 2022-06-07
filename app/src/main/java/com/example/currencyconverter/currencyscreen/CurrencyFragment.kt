@@ -12,18 +12,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrenciesData
+import com.example.currencyconverter.database.CurrencyDao
+import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
-class CurrenciesFragment : Fragment() {
+class CurrencyFragment : Fragment() {
 
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by lazy { ViewModelProvider(this)[CurrenciesViewModel::class.java] }
     private val adapter by lazy { CurrenciesAdapter(viewModel, activity as LifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
+    private val application by lazy { requireNotNull(this.activity).application }
+    private val dao by lazy { CurrencyDatabase.getInstance(application).currencyDao }
+    private val viewModelFactory by lazy { CurrencyViewModelFactory(dao)}
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[CurrencyViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
