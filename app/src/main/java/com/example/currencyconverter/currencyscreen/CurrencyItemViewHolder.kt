@@ -48,8 +48,8 @@ class CurrenciesItemViewHolder(
 
             override fun afterTextChanged(s: Editable?) {
                 if (s == null) return
-                var newValue = 0L
-                if (s.isNotEmpty()) newValue = s.toString().toLong()
+                var newValue = 0.0
+                if (s.isNotEmpty()) newValue = s.toString().toDouble()
                 item.exchangeRate = newValue
                 viewModel.update(item)
             }
