@@ -32,10 +32,6 @@ class CurrenciesAdapter(
         Log.i(TAG_ADAPTER_CURRENCY, "onBindViewHolder called")
         val item = getItem(position)
         holder.bind(item, holder.itemView.context)
-
-        viewModel.isItemSelected.observe(viewLifecycleOwner) {
-            Log.i(TAG_ADAPTER_CURRENCY, "isItemSelected observer called")
-        }
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -46,6 +42,7 @@ class CurrenciesAdapter(
     override fun onItemDismiss(position: Int, view: View) {
         val deletedCurrency = CurrenciesData.deleteCurrency(position)
         notifyItemRemoved(position)
+        submitList(CurrenciesData.getCurrencies())
 
         Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.add_currency_button)

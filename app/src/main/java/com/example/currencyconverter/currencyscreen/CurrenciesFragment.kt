@@ -48,7 +48,7 @@ class CurrenciesFragment : Fragment() {
         }
 
         binding.addCurrencyButton.setOnClickListener {
-            CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
+//            CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
             addCurrency(CurrenciesData.randomCurrency())
         }
 
@@ -114,6 +114,7 @@ class CurrenciesFragment : Fragment() {
 
     private fun addCurrency(currency: CurrencyItem) {
         CurrenciesData.addCurrency(currency)
+        adapter.submitList(CurrenciesData.getCurrencies())
         adapter.notifyItemInserted(adapter.itemCount - 1)
         binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size - 1)
     }

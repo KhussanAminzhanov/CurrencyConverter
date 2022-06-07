@@ -11,8 +11,8 @@ object CurrenciesData {
         ALPHABET, VALUE, UNSORTED
     }
 
-    private var data = mutableListOf<CurrencyItem>()
     private var sortingType = SortType.UNSORTED
+    private var data = mutableListOf<CurrencyItem>()
     var currentId = 0
 
     private fun swapCurrencyId(data: List<CurrencyItem>, firstIndex: Int, secondIndex: Int) {
@@ -75,30 +75,10 @@ object CurrenciesData {
 
     fun randomCurrency(): CurrencyItem {
         val list = listOf(
-            CurrencyItem(
-                currentId,
-                "Lira, Turkey",
-                R.drawable.flag_turkey,
-                currentId.toLong()
-            ),
-            CurrencyItem(
-                currentId,
-                "Dollar, USA",
-                R.drawable.flag_usa,
-                currentId.toLong()
-            ),
-            CurrencyItem(
-                currentId,
-                "Tenge, Kazakhstan",
-                R.drawable.flag_kazakhstan,
-                currentId.toLong()
-            ),
-            CurrencyItem(
-                currentId,
-                "Euro, EU",
-                R.drawable.flag_europe,
-                currentId.toLong()
-            )
+            CurrencyItem(currentId, "Dollar, USA", R.drawable.flag_usa, currentId.toLong()),
+            CurrencyItem(currentId, "Euro, EU", R.drawable.flag_europe, currentId.toLong()),
+            CurrencyItem(currentId, "Lira, Turkey", R.drawable.flag_turkey, currentId.toLong()),
+            CurrencyItem(currentId, "Tenge, Kazakhstan", R.drawable.flag_kazakhstan, currentId.toLong())
         )
         return list.shuffled()[Random.nextInt(0, 4)]
     }
