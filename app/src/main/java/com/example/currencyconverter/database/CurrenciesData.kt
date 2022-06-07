@@ -1,7 +1,6 @@
 package com.example.currencyconverter.database
 
 import com.example.currencyconverter.R
-import com.example.currencyconverter.currencyscreen.CurrencyItem
 import java.util.*
 import kotlin.random.Random
 

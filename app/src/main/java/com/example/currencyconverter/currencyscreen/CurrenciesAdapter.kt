@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrenciesData
+import com.example.currencyconverter.database.CurrencyItem
 import com.google.android.material.snackbar.Snackbar
 
 const val TAG_ADAPTER_CURRENCY = "currency_adapter"

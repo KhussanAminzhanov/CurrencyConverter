@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
-import com.example.currencyconverter.currencyscreen.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.database.CurrenciesData
+import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrenciesFragment : Fragment() {

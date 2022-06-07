@@ -10,6 +10,7 @@ import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.database.CurrenciesData
+import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
 
 const val TAG_VIEW_HOLDER = "view_holder"

@@ -3,12 +3,11 @@ package com.example.currencyconverter.currencyscreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrenciesData
-import java.util.*
-import kotlin.random.Random
+import com.example.currencyconverter.database.CurrencyDao
+import com.example.currencyconverter.database.CurrencyItem
 
-class CurrenciesViewModel : ViewModel() {
+class CurrenciesViewModel() : ViewModel() {
 
     private val _currencies = MutableLiveData(CurrenciesData.getCurrencies())
     val currencies: LiveData<List<CurrencyItem>> = _currencies
