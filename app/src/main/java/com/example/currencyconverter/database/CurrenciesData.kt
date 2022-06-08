@@ -27,10 +27,10 @@ object CurrenciesData {
 
     fun randomCurrency(): CurrencyItem {
         val list = listOf(
-            CurrencyItem(name = "Dollar, USA", R.drawable.flag_usa, 0.0023),
-            CurrencyItem(name = "Euro, EU", R.drawable.flag_europe, 0.0022),
-            CurrencyItem(name = "Lira, Turkey", R.drawable.flag_turkey, 0.1415),
-            CurrencyItem(name = "Tenge, Kazakhstan", R.drawable.flag_kazakhstan, 1.0)
+            CurrencyItem(name = "Dollar, USA", image = R.drawable.flag_usa, exchangeRate = 0.0023),
+            CurrencyItem(name = "Euro, EU", image = R.drawable.flag_europe, exchangeRate = 0.0022),
+            CurrencyItem(name = "Lira, Turkey", image = R.drawable.flag_turkey, exchangeRate = 0.1415),
+            CurrencyItem(name = "Tenge, Kazakhstan", image = R.drawable.flag_kazakhstan, exchangeRate = 1.0),
         )
         return list.shuffled()[Random.nextInt(0, 4)]
     }
