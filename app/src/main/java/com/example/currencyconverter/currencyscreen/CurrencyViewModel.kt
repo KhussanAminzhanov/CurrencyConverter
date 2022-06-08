@@ -11,10 +11,10 @@ import java.util.*
 
 class CurrencyViewModel(private val dao: CurrencyDao) : ViewModel() {
 
-    val checkedCurrencyPositions = mutableListOf<CurrencyItem>()
     val isItemSelected = MutableLiveData(false)
+    val balance = MutableLiveData(1.0)
+    val checkedCurrencyPositions = mutableListOf<CurrencyItem>()
     val currencies = dao.getAll()
-    val value = 0
 
     fun addCurrency(currency: CurrencyItem) = viewModelScope.launch { dao.insert(currency) }
     fun update(currency: CurrencyItem) = viewModelScope.launch { dao.update(currency) }

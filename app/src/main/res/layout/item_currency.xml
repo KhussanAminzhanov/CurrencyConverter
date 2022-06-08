@@ -52,12 +52,5 @@
                     android:src="@drawable/flag_turkey" />
             </androidx.cardview.widget.CardView>
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <TextView
-            android:id="@+id/currency_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

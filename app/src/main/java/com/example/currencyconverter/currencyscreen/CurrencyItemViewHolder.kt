@@ -32,9 +32,7 @@ class CurrenciesItemViewHolder(
     }
 
     fun bind(item: CurrencyItem, context: Context) {
-        binding.currencyValueEditText.setText(item.exchangeRate.toString())
         binding.currencyValueTextInputLayout.hint = item.name
-        binding.currencyName.text = item.name
         binding.currencyFlagImage.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
@@ -42,16 +40,19 @@ class CurrenciesItemViewHolder(
             )
         )
 
+        viewModel.balance.observe(adapter.viewLifecycleOwner) { newValue ->
+            binding.currencyValueEditText.setText(newValue.div(item.exchangeRate).toString())
+        }
+
         binding.currencyValueEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
-            override fun afterTextChanged(s: Editable?) {
-                if (s == null) return
-                var newValue = 0.0
-                if (s.isNotEmpty()) newValue = s.toString().toDouble()
-                item.exchangeRate = newValue
-                viewModel.update(item)
+            override fun afterTextChanged(text: Editable?) {
+//                if (text == null) return
+//                var newValue = 1.0
+//                if (text.isNotEmpty()) newValue = text.toString().toDouble()
+//                viewModel.balance.value = newValue.div(item.exchangeRate)
             }
         })
 

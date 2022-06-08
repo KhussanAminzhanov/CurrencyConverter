@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
+import com.example.currencyconverter.currencyscreen.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyItem
@@ -49,8 +50,8 @@ class CurrencyFragment : Fragment() {
         setupOnBackButtonPresses()
 
         binding.addCurrencyButton.setOnClickListener {
-//            CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
-            addCurrency(CurrenciesData.randomCurrency())
+            CurrencySelectorBottomSheet(model).show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
+//            addCurrency(CurrenciesData.randomCurrency())
         }
 
         return binding.root
@@ -121,7 +122,7 @@ class CurrencyFragment : Fragment() {
     }
 
     private fun addCurrency(currency: CurrencyItem) {
-//        binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size)
+        binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size)
         model.addCurrency(currency)
     }
 
