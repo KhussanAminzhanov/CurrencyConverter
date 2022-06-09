@@ -1,6 +1,8 @@
 package com.example.currencyconverter.currencyscreen
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -38,14 +40,14 @@ class CurrenciesItemViewHolder(
             )
         )
 
-        viewModel.balance.observe(adapter.viewLifecycleOwner) { newValue ->
-            val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
-            binding.currencyValueEditText.setText(newValueFormatted)
-        }
-
         binding.currencyLayout.setOnLongClickListener {
             viewModel.isItemSelected.value = true
             true
+        }
+
+        viewModel.balance.observe(adapter.viewLifecycleOwner) { newValue ->
+            val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
+            binding.currencyValueEditText.setText(newValueFormatted)
         }
 
         viewModel.isItemSelected.observe(adapter.viewLifecycleOwner) { itemSelected ->

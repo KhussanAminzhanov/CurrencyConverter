@@ -46,6 +46,6 @@
     <string name="search_currency">Search currency</string>
     <string name="add_currency">Add Currency</string>
     <string name="enter_value_to_be_converted">Enter value to be converted</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="statistics_total_spend_time">Проведенное время: %s</string>
 </resources>
