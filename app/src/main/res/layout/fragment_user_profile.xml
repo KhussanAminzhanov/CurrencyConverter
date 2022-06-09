@@ -1,98 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".UserProfileFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".userprofilescreen.UserProfileFragment">
 
-    <data></data>
+    <ImageView
+        android:id="@+id/user_icon"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="64dp"
+        android:contentDescription="@string/user_icon_text"
+        android:scaleType="centerCrop"
+        android:src="@drawable/user" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="18dp"
+        tools:text="User Name" />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        tools:text="example@email.com" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_user_profile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/user_icon"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="64dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/user_icon_text"
-            android:src="@drawable/user" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="18dp"
-            tools:text="User Name" />
-
-        <TextView
-            android:id="@+id/user_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
-            tools:text="example@email.com" />
-
-        <Button
-            android:id="@+id/share_button"
-            style="@style/ButtonNumericKeypad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_numeric_keypad_selector"
-            android:text="@string/share_button_text"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/share_email_button"
-            style="@style/ButtonNumericKeypad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_numeric_keypad_selector"
-            android:text="@string/share_email_button_text"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/call_button"
-            style="@style/ButtonNumericKeypad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_numeric_keypad_selector"
-            android:text="@string/call_button_text"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/open_camera_button"
-            style="@style/ButtonNumericKeypad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_numeric_keypad_selector"
-            android:text="@string/open_camera_button_text"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-</layout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_profile"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

@@ -39,7 +39,8 @@ class CurrenciesItemViewHolder(
         )
 
         viewModel.balance.observe(adapter.viewLifecycleOwner) { newValue ->
-            binding.currencyValueEditText.setText(newValue.div(item.exchangeRate).toString())
+            val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
+            binding.currencyValueEditText.setText(newValueFormatted)
         }
 
         binding.currencyLayout.setOnLongClickListener {
