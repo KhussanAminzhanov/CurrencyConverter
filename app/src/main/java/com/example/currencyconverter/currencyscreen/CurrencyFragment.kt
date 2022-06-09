@@ -47,13 +47,6 @@ class CurrencyFragment : Fragment() {
         setupRecyclerView()
         setupOnBackButtonPresses()
 
-        binding.addCurrencyButton.setOnClickListener {
-            CurrencySelectorBottomSheet(model).show(
-                childFragmentManager,
-                CurrencySelectorBottomSheet.TAG
-            )
-        }
-
         return binding.root
     }
 
@@ -78,6 +71,7 @@ class CurrencyFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_add_currency -> addCurrency()
             R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
             R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
             R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
@@ -85,6 +79,13 @@ class CurrencyFragment : Fragment() {
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun addCurrency() {
+        CurrencySelectorBottomSheet(model).show(
+            childFragmentManager,
+            CurrencySelectorBottomSheet.TAG
+        )
     }
 
     private fun setupRecyclerView() {

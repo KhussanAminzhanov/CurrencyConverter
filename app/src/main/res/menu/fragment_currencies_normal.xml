@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <group
         android:id="@+id/currency_default_menu_group"
         android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/menu_add_currency"
+            android:title="@string/add_currency"
+            android:icon="@drawable/ic_add_circle"
+            app:showAsAction="always" />
+
         <item
             android:id="@+id/menu_sort_by"
             android:title="@string/sort_by">
