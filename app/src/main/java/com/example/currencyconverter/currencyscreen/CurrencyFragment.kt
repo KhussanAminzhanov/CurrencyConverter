@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.currencyscreen.currencyselector.CurrencySelectorBottomSheet
-import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.database.CurrencyDatabase
-import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 
 class CurrencyFragment : Fragment() {
@@ -50,8 +48,10 @@ class CurrencyFragment : Fragment() {
         setupOnBackButtonPresses()
 
         binding.addCurrencyButton.setOnClickListener {
-            CurrencySelectorBottomSheet(model).show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
-//            addCurrency(CurrenciesData.randomCurrency())
+            CurrencySelectorBottomSheet(model).show(
+                childFragmentManager,
+                CurrencySelectorBottomSheet.TAG
+            )
         }
 
         return binding.root
@@ -78,9 +78,9 @@ class CurrencyFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_alphabet -> CurrenciesData.setSortingType(CurrenciesData.SortType.ALPHABET)
-            R.id.menu_value -> CurrenciesData.setSortingType(CurrenciesData.SortType.VALUE)
-            R.id.menu_reset -> CurrenciesData.setSortingType(CurrenciesData.SortType.UNSORTED)
+            R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
+            R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
+            R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
             R.id.menu_delete_item -> model.showDeleteConfirmationDialog(parentFragmentManager)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -101,7 +101,12 @@ class CurrencyFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        model.currencies.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        model.currencies.observe(viewLifecycleOwner) {
+            adapter.submitList(model.getCurrenciesSorted(it))
+        }
+        model.sortingType.observe(viewLifecycleOwner) {
+            adapter.submitList(model.currencies.value?.let { it1 -> model.getCurrenciesSorted(it1) })
+        }
         model.isItemSelected.observe(viewLifecycleOwner) {
             binding.addCurrencyButton.visibility = if (it) View.GONE else View.VISIBLE
         }
@@ -119,11 +124,6 @@ class CurrencyFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
-
-    private fun addCurrency(currency: CurrencyItem) {
-        binding.currenciesListRecyclerView.layoutManager?.scrollToPosition(adapter.currentList.size)
-        model.addCurrency(currency)
     }
 
     private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {

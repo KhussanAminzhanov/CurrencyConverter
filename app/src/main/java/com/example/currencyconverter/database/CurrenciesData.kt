@@ -5,26 +5,6 @@ import kotlin.random.Random
 
 object CurrenciesData {
 
-    enum class SortType {
-        ALPHABET, VALUE, UNSORTED
-    }
-
-    private var sortingType = SortType.UNSORTED
-    private var data = mutableListOf<CurrencyItem>()
-
-    private fun sortData() {
-        data = when (sortingType) {
-            SortType.ALPHABET -> data.sortedBy { it.name }.toMutableList()
-            SortType.VALUE -> data.sortedBy { it.exchangeRate }.toMutableList()
-            SortType.UNSORTED -> data.sortedBy { it.currencyId }.toMutableList()
-        }
-    }
-
-    fun setSortingType(type: SortType) {
-        sortingType = type
-        sortData()
-    }
-
     fun randomCurrency(): CurrencyItem {
         return getCurrenciesList().shuffled()[Random.nextInt(0, 4)]
     }
