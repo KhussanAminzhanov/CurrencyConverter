@@ -1,6 +1,8 @@
 package com.example.currencyconverter.currencyscreen
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
@@ -46,6 +48,17 @@ class CurrencyFragment : Fragment() {
         setupObservers()
         setupRecyclerView()
         setupOnBackButtonPresses()
+
+        binding.etCurrencyValue.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(value: Editable?) {
+                if (value == null || value.isEmpty()) return
+                model.balance.value = value.toString().toDouble()
+            }
+        })
 
         return binding.root
     }
@@ -107,9 +120,6 @@ class CurrencyFragment : Fragment() {
         }
         model.sortingType.observe(viewLifecycleOwner) {
             adapter.submitList(model.currencies.value?.let { it1 -> model.getCurrenciesSorted(it1) })
-        }
-        model.isItemSelected.observe(viewLifecycleOwner) {
-            binding.addCurrencyButton.visibility = if (it) View.GONE else View.VISIBLE
         }
     }
 

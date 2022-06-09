@@ -15,11 +15,12 @@
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/add_currency_button"
+    <EditText
+        android:id="@+id/et_currency_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/add" />
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
+        android:hint="@string/enter_value_to_be_converted"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

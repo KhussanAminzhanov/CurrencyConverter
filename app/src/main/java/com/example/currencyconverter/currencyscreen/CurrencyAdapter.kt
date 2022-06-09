@@ -36,7 +36,7 @@ class CurrenciesAdapter(
         viewModel.delete(deletedCurrency)
 
         Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
-            .setAnchorView(R.id.add_currency_button)
+            .setAnchorView(R.id.bottom_nav)
             .setAction("Undo") {
                 notifyItemInserted(itemCount)
                 viewModel.addCurrency(deletedCurrency)
