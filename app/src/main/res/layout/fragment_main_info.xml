@@ -1,13 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".userprofilescreen.MainInfoFragment">
 
-    <TextView
+    <Button
+        android:id="@+id/share_button"
+        style="@style/ButtonNumericKeypad"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Fragment Main Info" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_numeric_keypad_selector"
+        android:text="@string/share_button_text"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/share_email_button"
+        style="@style/ButtonNumericKeypad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_numeric_keypad_selector"
+        android:text="@string/share_email_button_text"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/call_button"
+        style="@style/ButtonNumericKeypad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_numeric_keypad_selector"
+        android:text="@string/call_button_text"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/open_camera_button"
+        style="@style/ButtonNumericKeypad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_numeric_keypad_selector"
+        android:text="@string/open_camera_button_text"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>
