@@ -48,4 +48,7 @@
     <string name="enter_value_to_be_converted">Enter value to be converted</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="statistics_total_spend_time">Проведенное время: %s</string>
+    <string name="play">play</string>
+    <string name="media_player">media player</string>
+    <string name="video_title">Komedıia Ákіm 2020</string>
 </resources>
