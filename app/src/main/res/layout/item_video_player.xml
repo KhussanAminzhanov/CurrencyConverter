@@ -2,9 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/cl_video"
     android:layout_height="250dp"
-    android:padding="16dp"
-    android:background="@drawable/movie_fast_and_furious">
+    android:layout_marginVertical="5dp"
+    android:background="@drawable/movie_fast_and_furious"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_title"
