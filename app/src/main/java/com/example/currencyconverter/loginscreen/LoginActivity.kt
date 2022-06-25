@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupNumericKeypad()
+        setupPinCode()
 
         viewModel.index.observe(this) {
             binding.textViewPinCode.text = getString(
@@ -38,17 +39,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
-    private fun vibrate() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager =
-                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            val vibrator = vibratorManager.defaultVibrator
-            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(50)
-        }
+    private fun setupPinCode() {
+        binding.llPinCode.addView(getPinCodeDigitView())
+    }
+
+    private fun getPinCodeDigitView() : PinCodeDigitView {
+        val pinCodeDigit = layoutInflater.inflate(R.layout.pin_code_digit, null, false) as PinCodeDigitView
+        return pinCodeDigit
     }
 
     private fun setupNumericKeypad() {
@@ -120,6 +117,19 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onAnimationRepeat(p0: Animation?) = Unit
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun vibrate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =
+                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibrator = vibratorManager.defaultVibrator
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(50)
         }
     }
 }

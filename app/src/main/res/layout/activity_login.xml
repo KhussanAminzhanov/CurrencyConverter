@@ -14,10 +14,19 @@
         android:textAlignment="center"
         android:textColor="@color/blue"
         android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_pin_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_pin_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="40dp" />
 
     <GridLayout
         android:id="@+id/grid_layout_numeric_keypad"
@@ -29,7 +38,7 @@
         android:useDefaultMargins="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_pin_code"
+        app:layout_constraintTop_toBottomOf="@+id/ll_pin_code"
         tools:background="@color/black"
         tools:padding="@dimen/grid_layout_numeric_keypad_margin_top" />
 
