@@ -34,7 +34,7 @@ class FavoritesAdapter(
                 val binding = holder.videoBinding
 
                 binding?.root?.setOnClickListener {
-                    fm.beginTransaction().add(R.id.fcv_favorites_content, MovieInfoFragment())
+                    fm.beginTransaction().add(R.id.fcv_movie_info, MovieInfoFragment())
                         .commit()
                 }
             }
