@@ -3,7 +3,6 @@ package com.example.currencyconverter.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.currencyconverter.database.CurrencyDao
 
 class CurrencyViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
 

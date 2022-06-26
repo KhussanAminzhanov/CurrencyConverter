@@ -12,3 +12,4 @@ data class CurrencyItem(
     @ColumnInfo(name = "currency_image") var image: Int = R.drawable.flag_kazakhstan,
     @ColumnInfo(name = "currency_exchange_rate") var exchangeRate: Double,
 )
+

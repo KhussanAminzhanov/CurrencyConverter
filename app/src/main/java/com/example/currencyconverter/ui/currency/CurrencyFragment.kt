@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.adapter.CurrenciesListAdapter
-import com.example.currencyconverter.ui.currency.currencyselector.CurrencySelectorBottomSheet
-import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
+import com.example.currencyconverter.ui.currency.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.example.currencyconverter.viewmodel.CurrencyViewModelFactory
 
@@ -24,26 +23,19 @@ class CurrencyFragment : Fragment() {
 
     private lateinit var viewModelFactory: CurrencyViewModelFactory
     private lateinit var model: CurrencyViewModel
+    private lateinit var adapter: CurrenciesListAdapter
 
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
-    private val adapter by lazy { CurrenciesListAdapter(model, activity as LifecycleOwner) }
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
-
-//    private val viewModelFactory by lazy { CurrencyViewModelFactory(context) }
-//    private val model by lazy {
-//        ViewModelProvider(
-//            this,
-//            viewModelFactory
-//        )[CurrencyViewModel::class.java]
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         viewModelFactory = CurrencyViewModelFactory(requireContext())
         model = ViewModelProvider(this, viewModelFactory)[CurrencyViewModel::class.java]
+        adapter = CurrenciesListAdapter(model, activity as LifecycleOwner)
     }
 
     override fun onCreateView(
@@ -58,9 +50,7 @@ class CurrencyFragment : Fragment() {
 
         binding.etCurrencyValue.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(value: Editable?) {
                 if (value == null || value.isEmpty()) return
                 model.balance.value = value.toString().toDouble()
@@ -133,7 +123,7 @@ class CurrencyFragment : Fragment() {
     private fun setupOnBackButtonPresses() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (model.isItemSelected.value!!) {
+                if (model.isItemSelected.value == true) {
                     model.isItemSelected.value = false
                     model.checkedCurrencyPositions.clear()
                 } else {
