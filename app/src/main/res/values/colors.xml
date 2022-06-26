@@ -11,7 +11,7 @@
     <color name="button_background_pressed">#CDCDCD</color>
     <color name="blue">#1789DB</color>
     <color name="hint">#808080</color>
-    <color name="incorrect_pin_code">#F91717</color>
+    <color name="red">#F91717</color>
     <color name="primaryColor">#1789db</color>
     <color name="primaryLightColor">#65b9ff</color>
     <color name="primaryDarkColor">#005da9</color>

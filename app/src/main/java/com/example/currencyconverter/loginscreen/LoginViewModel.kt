@@ -11,6 +11,7 @@ class LoginViewModel : ViewModel() {
     val pinCodeLength = 4
 
     private val _pinCode = MutableLiveData(IntArray(pinCodeLength) {0})
+    val pinCode: LiveData<IntArray> = _pinCode
 
     private val _index = MutableLiveData(0)
     val index: LiveData<Int>

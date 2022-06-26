@@ -9,19 +9,16 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.currencyconverter.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityLoginBinding
 
-const val EMPTY_CIRCLE = "○"
-const val FULL_CIRCLE = "●"
-
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val viewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
+    private val pinCodeDigitViews = mutableListOf<PinCodeDigitView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,21 +27,34 @@ class LoginActivity : AppCompatActivity() {
         setupNumericKeypad()
         setupPinCode()
 
-        viewModel.index.observe(this) {
-            binding.textViewPinCode.text = getString(
-                R.string.pin_code_text,
-                FULL_CIRCLE.repeat(viewModel.index.value!!),
-                EMPTY_CIRCLE.repeat(viewModel.pinCodeLength - viewModel.index.value!!)
-            )
-        }
+        viewModel.index.observe(this) { updatePinCodeDigitViews() }
     }
 
     private fun setupPinCode() {
-        binding.llPinCode.addView(getPinCodeDigitView())
+        repeat(viewModel.pinCodeLength) {
+            val pinCodeDigitView = getPinCodeDigitView(it)
+            pinCodeDigitViews.add(pinCodeDigitView)
+            binding.llPinCode.addView(pinCodeDigitView)
+        }
     }
 
-    private fun getPinCodeDigitView() : PinCodeDigitView {
-        val pinCodeDigit = layoutInflater.inflate(R.layout.pin_code_digit, null, false) as PinCodeDigitView
+    private fun updatePinCodeDigitViews() {
+        pinCodeDigitViews.forEachIndexed { index, pinCodeDigitView ->
+            val currentDigitIndex = (viewModel.index.value ?: 0) - 1
+            if (index <= currentDigitIndex) {
+                pinCodeDigitView.state.value = PinCodeDigitView.PinCodeDigitState.FULL
+            } else {
+                pinCodeDigitView.state.value = PinCodeDigitView.PinCodeDigitState.EMPTY
+            }
+        }
+    }
+
+    private fun getPinCodeDigitView(index: Int): PinCodeDigitView {
+        val pinCodeDigit = layoutInflater.inflate(
+            R.layout.pin_code_digit,
+            binding.llPinCode,
+            false
+        ) as PinCodeDigitView
         return pinCodeDigit
     }
 
@@ -91,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
                     vibrate()
                     val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
                     animation.setAnimationListener(getPinCodeTextViewAnimationListener())
-                    binding.textViewPinCode.startAnimation(animation)
+                    binding.llPinCode.startAnimation(animation)
                 }
             }
         }
@@ -102,19 +112,12 @@ class LoginActivity : AppCompatActivity() {
     private fun getPinCodeTextViewAnimationListener(): Animation.AnimationListener {
         return object : Animation.AnimationListener {
             override fun onAnimationStart(p0: Animation?) {
-                binding.textViewPinCode.setTextColor(
-                    ContextCompat.getColor(this@LoginActivity, R.color.incorrect_pin_code)
-                )
+                pinCodeDigitViews.forEach {
+                    it.state.value = PinCodeDigitView.PinCodeDigitState.ANIMATION
+                }
             }
 
-            override fun onAnimationEnd(p0: Animation?) {
-                binding.textViewPinCode.setTextColor(
-                    ContextCompat.getColor(
-                        this@LoginActivity,
-                        R.color.blue
-                    )
-                )
-            }
+            override fun onAnimationEnd(p0: Animation?) = updatePinCodeDigitViews()
 
             override fun onAnimationRepeat(p0: Animation?) = Unit
         }
