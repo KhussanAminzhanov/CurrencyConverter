@@ -26,7 +26,7 @@
             android:configChanges="orientation|keyboardHidden"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".loginscreen.LoginActivity"
+            android:name="com.example.currencyconverter.ui.login.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingHorizontal="14dp"
     android:paddingVertical="16dp"
-    tools:context=".searchscreen.SearchFragment">
+    tools:context=".ui.search.SearchFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

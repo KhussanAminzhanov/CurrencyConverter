@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/currencyFragment"
-        android:name="com.example.currencyconverter.currencyscreen.CurrencyFragment"
+        android:name="com.example.currencyconverter.ui.currency.CurrencyFragment"
         android:label="@string/currency"
         tools:layout="@layout/fragment_currencies" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.currencyconverter.favoritesscreen.FavoritesFragment"
+        android:name="com.example.currencyconverter.ui.favorites.FavoritesFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.currencyconverter.searchscreen.SearchFragment"
+        android:name="com.example.currencyconverter.ui.search.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/translateFragment"
-        android:name="com.example.currencyconverter.translatescreen.TranslateFragment"
+        android:name="com.example.currencyconverter.ui.translate.TranslateFragment"
         android:label="@string/translate"
         tools:layout="@layout/fragment_translate" />
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.currencyconverter.userprofilescreen.UserProfileFragment"
+        android:name="com.example.currencyconverter.ui.userprofile.UserProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_user_profile" />
 </navigation>
