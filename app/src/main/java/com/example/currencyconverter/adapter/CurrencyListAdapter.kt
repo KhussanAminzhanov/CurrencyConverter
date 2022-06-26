@@ -6,9 +6,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrencyItem
-import com.example.currencyconverter.ui.currency.CurrenciesItemViewHolder
-import com.example.currencyconverter.ui.currency.CurrencyDiffItemCallback
-import com.example.currencyconverter.ui.currency.CurrencyItemTouchHelperAdapter
+import com.example.currencyconverter.ui.converter.CurrenciesItemViewHolder
+import com.example.currencyconverter.ui.converter.CurrencyDiffItemCallback
+import com.example.currencyconverter.ui.converter.CurrencyItemTouchHelperAdapter
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.google.android.material.snackbar.Snackbar
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.repository.CurrencyRepository
-import com.example.currencyconverter.ui.currency.DeleteConfirmationDialogFragment
+import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
 import kotlinx.coroutines.launch
 import java.util.*
 

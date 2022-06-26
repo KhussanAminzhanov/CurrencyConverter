@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrencyItem
-import com.example.currencyconverter.ui.currency.currencyselector.CurrencySelectorViewHolder
+import com.example.currencyconverter.ui.currencyselector.CurrencySelectorViewHolder
 
 class CurrencySelectorAdapter(
     private val data: List<CurrencyItem>,

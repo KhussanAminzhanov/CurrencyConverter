@@ -1,4 +1,4 @@
-package com.example.currencyconverter.ui.currency
+package com.example.currencyconverter.ui.converter
 
 import android.os.Bundle
 import android.text.Editable
@@ -8,33 +8,30 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.ui.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.adapter.CurrenciesListAdapter
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
-import com.example.currencyconverter.ui.currency.currencyselector.CurrencySelectorBottomSheet
+import com.example.currencyconverter.ui.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
-import com.example.currencyconverter.viewmodel.CurrencyViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class CurrencyFragment : Fragment() {
+class ConverterFragment : Fragment() {
 
-    private lateinit var viewModelFactory: CurrencyViewModelFactory
-    private lateinit var model: CurrencyViewModel
     private lateinit var adapter: CurrenciesListAdapter
-
     private var _binding: FragmentCurrenciesBinding? = null
+
     private val binding get() = _binding!!
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
+    private val model: CurrencyViewModel by viewModel { parametersOf(requireContext()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModelFactory = CurrencyViewModelFactory(requireContext())
-        model = ViewModelProvider(this, viewModelFactory)[CurrencyViewModel::class.java]
         adapter = CurrenciesListAdapter(model, activity as LifecycleOwner)
     }
 

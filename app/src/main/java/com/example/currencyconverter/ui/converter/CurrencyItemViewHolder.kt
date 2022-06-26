@@ -1,4 +1,4 @@
-package com.example.currencyconverter.ui.currency
+package com.example.currencyconverter.ui.converter
 
 import android.content.Context
 import android.view.LayoutInflater

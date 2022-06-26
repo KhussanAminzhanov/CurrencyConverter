@@ -7,19 +7,19 @@ import android.os.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityLoginBinding
 import com.example.currencyconverter.ui.MainActivity
 import com.example.currencyconverter.viewmodel.LoginViewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val pinCodeDigitViews = mutableListOf<PinCodeDigitView>()
-    private val model by viewModels<LoginViewModel>()
+    private val model: LoginViewModel by stateViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

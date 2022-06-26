@@ -1,4 +1,4 @@
-package com.example.currencyconverter.ui.currency.currencyselector
+package com.example.currencyconverter.ui.currencyselector
 
 import android.view.View
 import android.widget.TextView

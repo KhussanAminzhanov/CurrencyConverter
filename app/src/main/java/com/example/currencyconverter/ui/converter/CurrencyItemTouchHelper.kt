@@ -1,4 +1,4 @@
-package com.example.currencyconverter.ui.currency
+package com.example.currencyconverter.ui.converter
 
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper

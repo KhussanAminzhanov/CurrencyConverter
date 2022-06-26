@@ -1,4 +1,4 @@
-package com.example.currencyconverter.ui.currency
+package com.example.currencyconverter.ui.converter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.currencyconverter.database.CurrencyItem
