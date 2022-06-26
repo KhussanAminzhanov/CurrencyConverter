@@ -26,13 +26,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupNumericKeypad()
         setupPinCode()
-
         viewModel.index.observe(this) { updatePinCodeDigitViews() }
     }
 
     private fun setupPinCode() {
         repeat(viewModel.pinCodeLength) {
-            val pinCodeDigitView = getPinCodeDigitView(it)
+            val pinCodeDigitView = getPinCodeDigitView()
             pinCodeDigitViews.add(pinCodeDigitView)
             binding.llPinCode.addView(pinCodeDigitView)
         }
@@ -49,13 +48,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getPinCodeDigitView(index: Int): PinCodeDigitView {
-        val pinCodeDigit = layoutInflater.inflate(
+    private fun getPinCodeDigitView(): PinCodeDigitView {
+        return layoutInflater.inflate(
             R.layout.pin_code_digit,
             binding.llPinCode,
             false
         ) as PinCodeDigitView
-        return pinCodeDigit
     }
 
     private fun setupNumericKeypad() {
@@ -64,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.enterPinCodeDigit(i)
             })
         }
-
         binding.gridLayoutNumericKeypad.addView(getBackButton())
         binding.gridLayoutNumericKeypad.addView(getNormalNumericButton("0") {
             viewModel.enterPinCodeDigit(0)
@@ -118,7 +115,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(p0: Animation?) = updatePinCodeDigitViews()
-
             override fun onAnimationRepeat(p0: Animation?) = Unit
         }
     }
