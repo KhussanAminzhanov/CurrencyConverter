@@ -10,7 +10,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
-import com.example.currencyconverter.MainActivity
+import com.example.currencyconverter.ui.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityLoginBinding
 import com.example.currencyconverter.viewmodel.LoginViewModel

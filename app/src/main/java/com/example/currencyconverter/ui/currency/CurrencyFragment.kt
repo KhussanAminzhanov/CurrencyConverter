@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyconverter.MainActivity
+import com.example.currencyconverter.ui.MainActivity
 import com.example.currencyconverter.R
 import com.example.currencyconverter.adapter.CurrenciesListAdapter
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding

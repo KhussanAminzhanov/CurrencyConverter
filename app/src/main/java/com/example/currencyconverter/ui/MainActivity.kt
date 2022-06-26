@@ -1,10 +1,11 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
