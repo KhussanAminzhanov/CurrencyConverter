@@ -10,7 +10,6 @@ import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.SavedStateViewModelFactory
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityLoginBinding
 import com.example.currencyconverter.ui.MainActivity
@@ -20,9 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val pinCodeDigitViews = mutableListOf<PinCodeDigitView>()
-    private val model by viewModels<LoginViewModel> {
-        SavedStateViewModelFactory(application, this)
-    }
+    private val model by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

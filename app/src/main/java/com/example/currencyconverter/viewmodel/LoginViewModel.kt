@@ -1,7 +1,9 @@
 package com.example.currencyconverter.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 
 
 class LoginViewModel(private val state: SavedStateHandle) : ViewModel() {
@@ -9,18 +11,19 @@ class LoginViewModel(private val state: SavedStateHandle) : ViewModel() {
     private val correctPinCode = "195612"
     val pinCodeLength = correctPinCode.length
 
-    private val _pinCode = state.getLiveData(KEY_PIN_CODE_INPUT, IntArray(pinCodeLength) { 0 })
-
+    private var input = state.getLiveData(KEY_PIN_CODE_STRING, "0".repeat(pinCodeLength))
+    private val _pinCode = MutableLiveData(IntArray(pinCodeLength) { 0 })
     private val _index = state.getLiveData(KEY_PIN_CODE_INDEX, 0)
+
     val index: LiveData<Int>
         get() = _index
 
-    private var pinCodeString = state.getLiveData(KEY_PIN_CODE_STRING, "")
+    init { restorePinCode() }
 
-    init {
-        Log.i("LVM", "pin code = ${_pinCode.value?.joinToString("")}")
-        Log.i("LVM", "pin index = ${_index.value}")
-        Log.i("LVM", "pin code string = ${pinCodeString.value}")
+    private fun restorePinCode() {
+        val input = input.value ?: return
+        val pinCodeArray = input.map { it.digitToInt() }.toIntArray()
+        pinCodeArray.forEachIndexed { index, i -> _pinCode.value?.set(index, i) }
     }
 
     fun enterPinCodeDigit(digit: Int) {
@@ -28,7 +31,7 @@ class LoginViewModel(private val state: SavedStateHandle) : ViewModel() {
             _pinCode.value!![_index.value!!] = digit
             _index.value = _index.value!!.plus(1)
         }
-        pinCodeString.value = _pinCode.value?.joinToString("")
+        input.value = _pinCode.value?.joinToString("")
     }
 
     fun removePinCodeDigit() {
@@ -40,17 +43,15 @@ class LoginViewModel(private val state: SavedStateHandle) : ViewModel() {
     }
 
     fun checkPinCode(): Boolean {
-        return pinCodeString.value == correctPinCode
+        return input.value == correctPinCode
     }
 
     override fun onCleared() {
-        state.set(KEY_PIN_CODE_INPUT, _pinCode.value)
         state.set(KEY_PIN_CODE_INDEX, _index.value)
-        state.set(KEY_PIN_CODE_STRING, pinCodeString.value)
+        state.set(KEY_PIN_CODE_STRING, input.value)
     }
 
     companion object {
-        private const val KEY_PIN_CODE_INPUT = "LOGIN_VIEW_MODEL_KEY_PIN_CODE_INPUT"
         private const val KEY_PIN_CODE_INDEX = "LOGIN_VIEW_MODEL_KEY_PIN_CODE_INDEX"
         private const val KEY_PIN_CODE_STRING = "LOGIN_VIEW_MODEL_KEY_PIN_CODE_STRING"
     }
