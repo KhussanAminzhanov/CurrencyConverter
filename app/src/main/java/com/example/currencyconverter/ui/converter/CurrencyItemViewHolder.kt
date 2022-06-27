@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.adapter.CurrenciesListAdapter
 import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 class CurrenciesItemViewHolder(
     private val binding: ItemCurrencyBinding,
@@ -45,8 +49,10 @@ class CurrenciesItemViewHolder(
         }
 
         viewModel.balance.observe(adapter.viewLifecycleOwner) { newValue ->
-            val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
-            binding.currencyValueEditText.setText(newValueFormatted)
+            viewModel.viewModelScope.launch {
+                val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
+                binding.currencyValueEditText.setText(newValueFormatted)
+            }
         }
 
         viewModel.isItemSelected.observe(adapter.viewLifecycleOwner) { itemSelected ->

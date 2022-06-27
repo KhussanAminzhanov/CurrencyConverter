@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.currencyconverter.adapter.CurrencySelectorAdapter
-import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.example.currencyconverter.database.CurrenciesData
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
+import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CurrencySelectorBottomSheet(val viewModel: CurrencyViewModel) : BottomSheetDialogFragment() {

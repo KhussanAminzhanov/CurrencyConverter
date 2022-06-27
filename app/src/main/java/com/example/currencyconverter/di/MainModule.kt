@@ -5,9 +5,7 @@ import com.example.currencyconverter.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val viewModelModule = module {
+val mainModule = module {
     viewModel { context -> CurrencyViewModel(context.get()) }
     viewModel { LoginViewModel(get()) }
 }
-
-val modules = listOf(viewModelModule)

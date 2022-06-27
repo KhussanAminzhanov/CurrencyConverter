@@ -9,7 +9,11 @@
         android:id="@+id/currencyFragment"
         android:name="com.example.currencyconverter.ui.converter.ConverterFragment"
         android:label="@string/currency"
-        tools:layout="@layout/fragment_currencies" />
+        tools:layout="@layout/fragment_currencies" >
+        <action
+            android:id="@+id/action_currencyFragment_to_currencySelectorBottomSheet"
+            app:destination="@id/currencySelectorBottomSheet" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.currencyconverter.ui.favorites.FavoritesFragment"
@@ -30,4 +34,12 @@
         android:name="com.example.currencyconverter.ui.userprofile.UserProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_user_profile" />
+    <dialog
+        android:id="@+id/currencySelectorBottomSheet"
+        android:name="com.example.currencyconverter.ui.currencyselector.CurrencySelectorBottomSheet"
+        android:label="CurrencySelectorBottomSheet" >
+        <action
+            android:id="@+id/action_currencySelectorBottomSheet_to_currencyFragment"
+            app:destination="@id/currencyFragment" />
+    </dialog>
 </navigation>

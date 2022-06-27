@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityLoginBinding
-import com.example.currencyconverter.ui.MainActivity
+import com.example.currencyconverter.ui.main.MainActivity
 import com.example.currencyconverter.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
