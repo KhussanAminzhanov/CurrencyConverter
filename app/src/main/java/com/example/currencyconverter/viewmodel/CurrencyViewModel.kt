@@ -1,20 +1,26 @@
 package com.example.currencyconverter.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.database.CurrencyItem
+import com.example.currencyconverter.domain.models.Currencies
+import com.example.currencyconverter.repository.CurrenciesRepository
 import com.example.currencyconverter.repository.CurrencyRepository
 import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
 import kotlinx.coroutines.launch
 import java.util.*
 
-class CurrencyViewModel(context: Context) : ViewModel() {
+class CurrencyViewModel(context: Context, val repository: CurrenciesRepository) : ViewModel() {
 
     enum class SortType { ALPHABET, VALUE, UNSORTED }
+
+    private val _currencyQuotes = MutableLiveData<Currencies>()
+    val currencyQuotes: LiveData<Currencies> = _currencyQuotes
 
     private val _sortingType = MutableLiveData(SortType.UNSORTED)
     val sortingType: LiveData<SortType> = _sortingType
@@ -24,6 +30,10 @@ class CurrencyViewModel(context: Context) : ViewModel() {
     val balance = MutableLiveData(1.0)
     val checkedCurrencyPositions = mutableListOf<CurrencyItem>()
     val currencies = repo.currencies
+
+    init {
+        refreshCurrencyQuotes()
+    }
 
     fun addCurrency(currency: CurrencyItem) = viewModelScope.launch { repo.insert(currency) }
     fun delete(currency: CurrencyItem) = viewModelScope.launch { repo.delete(currency) }
@@ -74,8 +84,30 @@ class CurrencyViewModel(context: Context) : ViewModel() {
         }
     }
 
+    fun refreshCurrencyQuotes() {
+        viewModelScope.launch {
+            repository.getCurrencies(
+                onSuccess = ::onCurrenciesFetchSuccess,
+                onError = ::onCurrenciesFetchError
+            )
+        }
+    }
+
+    private fun onCurrenciesFetchSuccess(currencies: Currencies) {
+        _currencyQuotes.value = currencies
+        Log.i(TAG, "Success fetching ${currencies.AED}")
+    }
+
+    private fun onCurrenciesFetchError() {
+        Log.e(TAG, "Error fetching currencies")
+    }
+
     fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {
         val dialog = DeleteConfirmationDialogFragment(this::deleteCurrencies)
         dialog.show(fragmentManager, DeleteConfirmationDialogFragment.TAG)
+    }
+
+    companion object {
+        private const val TAG = "currency_view_model"
     }
 }

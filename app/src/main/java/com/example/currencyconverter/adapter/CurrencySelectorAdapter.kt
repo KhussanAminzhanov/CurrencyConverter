@@ -2,15 +2,15 @@ package com.example.currencyconverter.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
 import com.example.currencyconverter.database.CurrencyItem
+import com.example.currencyconverter.ui.converter.CurrencyDiffItemCallback
 import com.example.currencyconverter.ui.currencyselector.CurrencySelectorViewHolder
 
 class CurrencySelectorAdapter(
-    private val data: List<CurrencyItem>,
     private val onItemClick: (CurrencyItem) -> Unit
-) : RecyclerView.Adapter<CurrencySelectorViewHolder>() {
+) : ListAdapter<CurrencyItem, CurrencySelectorViewHolder>(CurrencyDiffItemCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencySelectorViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_currency_name, parent, false)
@@ -18,8 +18,6 @@ class CurrencySelectorAdapter(
     }
 
     override fun onBindViewHolder(holder: CurrencySelectorViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = data.size
 }
