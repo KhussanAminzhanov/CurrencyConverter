@@ -1,7 +1,6 @@
 package com.example.currencyconverter.ui.currencyselector
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,23 +28,22 @@ class CurrencySelectorBottomSheet(val viewModel: CurrencyViewModel) : BottomShee
         _binding = BottomSheetAddCurrencyBinding.inflate(inflater, container, false)
         binding.btnCancel.setOnClickListener { this.dismiss() }
 
-
         adapter = CurrencySelectorAdapter { currencyItem ->
             viewModel.addCurrency(currencyItem)
             this.dismiss()
         }
+
         adapter.submitList(data)
         binding.recyclerViewCurrenciesNames.adapter = adapter
 
-        viewModel.currencyQuotes.observe(viewLifecycleOwner) { currencies ->
+        viewModel.currencyQuotesNames.observe(viewLifecycleOwner) { currencies ->
             val list = currencies::class.memberProperties.map { member ->
-                Log.i("bottom_sheet", "|${member.call(currencies)}|")
-                "${member.name} ${member.call(currencies)}"
+                val ticket = member.name
+                val name = member.call(currencies)
+                val change = viewModel.quotes.value?.get("KZT$ticket") ?: 1.0
+                CurrencyItem(name = "$ticket $name", image = R.drawable.flag_usa, exchangeRate = change)
             }
-            list.forEachIndexed { index, s ->
-                data.add(CurrencyItem(index, s, R.drawable.flag_usa, 1.0))
-            }
-            adapter.submitList(data)
+            adapter.submitList(list)
         }
 
         return binding.root

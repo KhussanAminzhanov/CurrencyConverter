@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.domain.models.Currencies
+import com.example.currencyconverter.domain.models.Quotes
+import com.example.currencyconverter.domain.models.toMap
 import com.example.currencyconverter.repository.CurrenciesRepository
 import com.example.currencyconverter.repository.CurrencyRepository
 import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
@@ -19,8 +21,11 @@ class CurrencyViewModel(context: Context, val repository: CurrenciesRepository) 
 
     enum class SortType { ALPHABET, VALUE, UNSORTED }
 
-    private val _currencyQuotes = MutableLiveData<Currencies>()
-    val currencyQuotes: LiveData<Currencies> = _currencyQuotes
+    private val _currencyQuotesNames = MutableLiveData<Currencies>()
+    val currencyQuotesNames: LiveData<Currencies> = _currencyQuotesNames
+
+    private val _quotes = MutableLiveData<Map<String, Double?>>()
+    val quotes: LiveData<Map<String, Double?>> = _quotes
 
     private val _sortingType = MutableLiveData(SortType.UNSORTED)
     val sortingType: LiveData<SortType> = _sortingType
@@ -32,7 +37,8 @@ class CurrencyViewModel(context: Context, val repository: CurrenciesRepository) 
     val currencies = repo.currencies
 
     init {
-        refreshCurrencyQuotes()
+        refreshCurrencyQuotesNames()
+        refreshQuotes()
     }
 
     fun addCurrency(currency: CurrencyItem) = viewModelScope.launch { repo.insert(currency) }
@@ -84,7 +90,7 @@ class CurrencyViewModel(context: Context, val repository: CurrenciesRepository) 
         }
     }
 
-    fun refreshCurrencyQuotes() {
+    fun refreshCurrencyQuotesNames() {
         viewModelScope.launch {
             repository.getCurrencies(
                 onSuccess = ::onCurrenciesFetchSuccess,
@@ -94,12 +100,29 @@ class CurrencyViewModel(context: Context, val repository: CurrenciesRepository) 
     }
 
     private fun onCurrenciesFetchSuccess(currencies: Currencies) {
-        _currencyQuotes.value = currencies
+        _currencyQuotesNames.value = currencies
         Log.i(TAG, "Success fetching ${currencies.AED}")
     }
 
     private fun onCurrenciesFetchError() {
         Log.e(TAG, "Error fetching currencies")
+    }
+
+    fun refreshQuotes() {
+        viewModelScope.launch {
+//            val date = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+            val date = "2022-01-01"
+            val source = "KZT"
+            repository.getQuotes(date, date, source, ::onQuotesFetchSuccess, ::onQuotesFetchError)
+        }
+    }
+
+    private fun onQuotesFetchSuccess(quotes: Quotes) {
+        _quotes.value = quotes.toMap()
+    }
+
+    private fun onQuotesFetchError() {
+        Log.e(TAG, "Error fetching quotes")
     }
 
     fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {

@@ -1,10 +1,10 @@
 package com.example.currencyconverter.network
 
-import com.example.currencyconverter.database.CurrencyItem
 import com.example.currencyconverter.di.BASE_URL
 import com.example.currencyconverter.domain.models.Change
 import com.example.currencyconverter.domain.models.Currencies
 import com.example.currencyconverter.domain.models.CurrenciesList
+import com.example.currencyconverter.domain.models.Quotes
 import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -63,13 +63,14 @@ object APILayerNetwork {
         startDate: String,
         endDate: String,
         source: String,
-        onSucces: (currency: CurrencyItem) -> Unit,
+        onSuccess: (quotes: Quotes) -> Unit,
         onError: () -> Unit
     ) {
         api.getChange(startDate, endDate, source).enqueue(object : Callback<Change> {
             override fun onResponse(call: Call<Change>, response: Response<Change>) {
                 if (response.isSuccessful) {
-
+                    val body = response.body()
+                    if (body != null) onSuccess(body.quotes) else onError()
                 } else onError()
             }
 

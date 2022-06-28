@@ -9,6 +9,6 @@ data class Change(
     @SerializedName("start_date") var startDate: String? = null,
     @SerializedName("end_date") var endDate: String? = null,
     @SerializedName("source") var source: String? = null,
-    @SerializedName("quotes") var quotes: Quotes? = Quotes()
+    @SerializedName("quotes") var quotes: Quotes = Quotes()
 
 )
