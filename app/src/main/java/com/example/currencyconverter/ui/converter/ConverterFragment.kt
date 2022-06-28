@@ -19,6 +19,9 @@ import com.example.currencyconverter.repository.CurrenciesRepository
 import com.example.currencyconverter.ui.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.ui.main.MainActivity
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class ConverterFragment : Fragment() {
 
@@ -27,18 +30,15 @@ class ConverterFragment : Fragment() {
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
 
-    private lateinit var database: CurrencyDatabase
-    private lateinit var repository: CurrenciesRepository
-    private lateinit var model: CurrencyViewModel
+    private val database: CurrencyDatabase by inject { parametersOf(context) }
+    private val repository: CurrenciesRepository by inject { parametersOf(database) }
+    private val model: CurrencyViewModel by viewModel { parametersOf(repository) }
     private lateinit var adapter: CurrenciesListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        database = CurrencyDatabase.getInstance(requireContext())
-        repository = CurrenciesRepository(database)
-        model = CurrencyViewModel(repository)
         adapter = CurrenciesListAdapter(model, activity as LifecycleOwner)
 
         repository.getCurrencyQuotes({}).forEach {
