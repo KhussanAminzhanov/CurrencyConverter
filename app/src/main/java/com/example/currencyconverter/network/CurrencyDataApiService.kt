@@ -84,7 +84,7 @@ object APILayerNetwork {
     }
 
     fun getCurrenciesQuotes(onError: () -> Unit) : List<CurrencyQuote> {
-        var currencyQuotes = listOf<CurrencyQuote>()
+        var currencyQuotes = listOf<CurrencyQuote>(CurrencyQuote(name = "KZT", exchangeRate = 1.0))
         api.getCurrencies().enqueue(object : Callback<CurrenciesList> {
             override fun onResponse(
                 call: Call<CurrenciesList>,
@@ -108,7 +108,7 @@ object APILayerNetwork {
         currencies: Currencies,
         onError: () -> Unit
     ): List<CurrencyQuote> {
-        var currencyQuotes = listOf<CurrencyQuote>()
+        val currencyQuotes = mutableListOf<CurrencyQuote>()
         val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val date = LocalDateTime.now().format(format)
         val source = "KZT"
@@ -124,14 +124,16 @@ object APILayerNetwork {
                             val change = body.quotes.toMap()["KZT$ticket"] ?: 1.0
                             CurrencyQuote(name = "$name $ticket", exchangeRate = change)
                         }
-                        currencyQuotes = list
+                        currencyQuotes.addAll(list)
                     } else onError()
                 } else onError()
             }
 
             override fun onFailure(call: Call<Change>, t: Throwable) = onError()
         })
-
+        currencyQuotes.forEach {
+            Log.i("api_service", it.toString())
+        }
         return currencyQuotes
     }
 

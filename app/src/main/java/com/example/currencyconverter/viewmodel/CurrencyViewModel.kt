@@ -1,6 +1,5 @@
 package com.example.currencyconverter.viewmodel
 
-import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +29,6 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
     }
 
     private fun refreshCurrencyQuotesData() {
-        Log.i(TAG, "refreshCurrencyQuotesData launched")
         viewModelScope.launch { repository.refreshCurrencyQuotes() }
     }
 

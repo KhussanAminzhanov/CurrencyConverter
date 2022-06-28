@@ -1,7 +1,6 @@
 package com.example.currencyconverter.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
@@ -13,7 +12,8 @@ import kotlinx.coroutines.withContext
 
 class CurrenciesRepository(val database: CurrencyDatabase) {
 
-    val currencyQuotesList: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
+//    val currencyQuotesList: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
+    val currencyQuotesList = MutableLiveData<List<CurrencyQuote>>()
     val currencyNames = MutableLiveData<Currencies>()
     val quotes = MutableLiveData<Map<String, Double?>>()
 
@@ -34,7 +34,7 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         APILayerNetwork.getChange(startDate, endDate, source, onSuccess, onError)
     }
 
-    private fun getCurrencyQuotes(
+    fun getCurrencyQuotes(
         onError: () -> Unit
     ) : List<CurrencyQuote> {
         return APILayerNetwork.getCurrenciesQuotes(onError)
