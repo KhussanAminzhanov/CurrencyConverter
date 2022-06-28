@@ -5,26 +5,25 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [CurrencyItem::class], version = 1, exportSchema = false)
+@Database(entities = [Currency::class, CurrencyQuote::class], version = 1, exportSchema = false)
 abstract class CurrencyDatabase : RoomDatabase() {
     abstract val currencyDao: CurrencyDao
+    abstract val currencyQuoteDao: CurrencyQuoteDao
 
     companion object {
         @Volatile
-        private var INSTANCE: CurrencyDatabase? = null
+        private lateinit var INSTANCE: CurrencyDatabase
 
-        fun getInstance(context: Context) : CurrencyDatabase {
+        fun getInstance(context: Context): CurrencyDatabase {
             synchronized(this) {
-                var instance = INSTANCE
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
+                if (!::INSTANCE.isInitialized) {
+                    INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         CurrencyDatabase::class.java,
                         "currency_database"
                     ).build()
                 }
-                INSTANCE = instance
-                return instance
+                return INSTANCE
             }
         }
     }

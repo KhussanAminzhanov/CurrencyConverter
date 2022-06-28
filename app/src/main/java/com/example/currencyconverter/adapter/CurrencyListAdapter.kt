@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
-import com.example.currencyconverter.database.CurrencyItem
+import com.example.currencyconverter.database.Currency
 import com.example.currencyconverter.ui.converter.CurrenciesItemViewHolder
 import com.example.currencyconverter.ui.converter.CurrencyDiffItemCallback
 import com.example.currencyconverter.ui.converter.CurrencyItemTouchHelperAdapter
@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 class CurrenciesListAdapter(
     val viewModel: CurrencyViewModel,
     val viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<CurrencyItem, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
+) : ListAdapter<Currency, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
     lateinit var parent: ViewGroup

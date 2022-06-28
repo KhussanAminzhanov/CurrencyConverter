@@ -12,26 +12,32 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.R
 import com.example.currencyconverter.adapter.CurrenciesListAdapter
+import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
+import com.example.currencyconverter.repository.CurrenciesRepository
 import com.example.currencyconverter.ui.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.ui.main.MainActivity
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class ConverterFragment : Fragment() {
 
-    private lateinit var adapter: CurrenciesListAdapter
     private var _binding: FragmentCurrenciesBinding? = null
-
     private val binding get() = _binding!!
     private val toolbar by lazy { (activity as MainActivity).toolbar }
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
-    private val model: CurrencyViewModel by viewModel { parametersOf(requireContext()) }
+
+    private lateinit var database: CurrencyDatabase
+    private lateinit var repository: CurrenciesRepository
+    private lateinit var model: CurrencyViewModel
+    private lateinit var adapter: CurrenciesListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        database = CurrencyDatabase.getInstance(requireContext())
+        repository = CurrenciesRepository(database)
+        model = CurrencyViewModel(repository)
         adapter = CurrenciesListAdapter(model, activity as LifecycleOwner)
     }
 

@@ -1,13 +1,11 @@
 package com.example.currencyconverter.di
 
-import com.example.currencyconverter.repository.CurrenciesRepository
-import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.example.currencyconverter.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val mainModule = module {
-    factory { CurrenciesRepository() }
-    viewModel { context -> CurrencyViewModel(context.get(), get()) }
+//    factory { database -> CurrenciesRepository(database.get()) }
+//    viewModel { (context: Context, repository: CurrenciesRepository) -> CurrencyViewModel(context, repository) }
     viewModel { LoginViewModel(get()) }
 }

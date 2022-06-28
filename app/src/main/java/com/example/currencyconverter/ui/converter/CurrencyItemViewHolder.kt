@@ -8,11 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.adapter.CurrenciesListAdapter
-import com.example.currencyconverter.database.CurrencyItem
+import com.example.currencyconverter.database.Currency
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 class CurrenciesItemViewHolder(
     private val binding: ItemCurrencyBinding,
@@ -34,7 +32,7 @@ class CurrenciesItemViewHolder(
         }
     }
 
-    fun bind(item: CurrencyItem, context: Context) {
+    fun bind(item: Currency, context: Context) {
         binding.currencyValueTextInputLayout.hint = item.name
         binding.currencyFlagImage.setImageDrawable(
             ContextCompat.getDrawable(
@@ -84,7 +82,7 @@ class CurrenciesItemViewHolder(
         checkboxHasParent = false
     }
 
-    private fun isCheckboxChecked(currency: CurrencyItem): Boolean {
+    private fun isCheckboxChecked(currency: Currency): Boolean {
         return adapter.viewModel.checkedCurrencyPositions.contains(currency)
     }
 }

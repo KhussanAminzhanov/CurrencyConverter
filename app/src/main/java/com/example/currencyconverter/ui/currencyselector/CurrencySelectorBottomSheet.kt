@@ -4,19 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.currencyconverter.R
 import com.example.currencyconverter.adapter.CurrencySelectorAdapter
-import com.example.currencyconverter.database.CurrencyItem
+import com.example.currencyconverter.database.Currency
+import com.example.currencyconverter.database.asCurrency
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlin.reflect.full.memberProperties
 
 class CurrencySelectorBottomSheet(val viewModel: CurrencyViewModel) : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetAddCurrencyBinding? = null
     private val binding get() = _binding!!
-    private var data = mutableListOf<CurrencyItem>()
+    private var data = mutableListOf<Currency>()
 
     private lateinit var adapter: CurrencySelectorAdapter
 
@@ -36,14 +35,8 @@ class CurrencySelectorBottomSheet(val viewModel: CurrencyViewModel) : BottomShee
         adapter.submitList(data)
         binding.recyclerViewCurrenciesNames.adapter = adapter
 
-        viewModel.currencyQuotesNames.observe(viewLifecycleOwner) { currencies ->
-            val list = currencies::class.memberProperties.map { member ->
-                val ticket = member.name
-                val name = member.call(currencies)
-                val change = viewModel.quotes.value?.get("KZT$ticket") ?: 1.0
-                CurrencyItem(name = "$ticket $name", image = R.drawable.flag_usa, exchangeRate = change)
-            }
-            adapter.submitList(list)
+        viewModel.repository.currencyQuotesList.observe(viewLifecycleOwner) { currencies ->
+            adapter.submitList(currencies.map { it.asCurrency() })
         }
 
         return binding.root
