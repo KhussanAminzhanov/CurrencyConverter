@@ -6,13 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.domain.models.currencydataapiservice.Currencies
-import com.example.currencyconverter.domain.models.currencydataapiservice.Quotes
-import com.example.currencyconverter.domain.models.currencydataapiservice.toMap
 import com.example.currencyconverter.network.CurrencyDataApiNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class CurrenciesRepository(val database: CurrencyDatabase) {
 
@@ -20,11 +16,12 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
     val currencyNames = MutableLiveData<Currencies>()
     val currencyRates = MutableLiveData<Map<String, Double?>>()
 
+    //Currency Names
     private suspend fun getCurrencyNames(
         onSuccess: (currencies: Currencies) -> Unit,
         onError: (msg: String) -> Unit
     ) {
-        CurrencyDataApiNetwork.getCurrencyNames(onSuccess, onError)
+        CurrencyDataApiNetwork.getCurrencies(onSuccess, onError)
     }
 
     private fun onCurrencyNamesFetchSuccess(currencyNames: Currencies) {
@@ -41,18 +38,16 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         }
     }
 
+    //Currency Rates
     private suspend fun getCurrencyRates(
-        startDate: String,
-        endDate: String,
-        source: String,
-        onSuccess: (quotes: Quotes) -> Unit,
+        onSuccess: (rates: Map<String, Double?>) -> Unit,
         onError: (msg: String) -> Unit
     ) {
-        CurrencyDataApiNetwork.getChange(startDate, endDate, source, onSuccess, onError)
+        CurrencyDataApiNetwork.getRates(onSuccess, onError)
     }
 
-    private fun onCurrencyRatesFetchSuccess(quotes: Quotes) {
-        this.currencyRates.value = quotes.toMap()
+    private fun onCurrencyRatesFetchSuccess(rates: Map<String, Double?>) {
+        this.currencyRates.value = rates
     }
 
     private fun onCurrencyRatesFetchError(msg: String) {
@@ -61,13 +56,11 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
 
     suspend fun refreshCurrencyRates() {
         withContext(Dispatchers.IO) {
-            val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            val date = LocalDateTime.now().format(format)
-            val source = "KZT"
-            getCurrencyRates(date, date, source, ::onCurrencyRatesFetchSuccess, ::onCurrencyRatesFetchError)
+            getCurrencyRates(::onCurrencyRatesFetchSuccess, ::onCurrencyRatesFetchError)
         }
     }
 
+    //Currency Quotes
     suspend fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
         withContext(Dispatchers.IO) {
             database.currencyQuoteDao.insertAll(currencyQuotes)
@@ -75,6 +68,6 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
     }
 
     companion object {
-        const val TAG = "currencyrepositry"
+        const val TAG = "currency_repository"
     }
 }

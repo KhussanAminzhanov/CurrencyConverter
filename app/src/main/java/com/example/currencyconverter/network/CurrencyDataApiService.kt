@@ -1,10 +1,9 @@
 package com.example.currencyconverter.network
 
-import com.example.currencyconverter.di.BASE_URL
 import com.example.currencyconverter.domain.models.currencydataapiservice.Change
 import com.example.currencyconverter.domain.models.currencydataapiservice.Currencies
 import com.example.currencyconverter.domain.models.currencydataapiservice.CurrenciesList
-import com.example.currencyconverter.domain.models.currencydataapiservice.Quotes
+import com.example.currencyconverter.domain.models.currencydataapiservice.toMap
 import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,12 +13,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-private const val API_KEY_KHUSSAN = "8x5iX5B7KXhCYzH9EkDgPXWoRqwhOZ8r"
-private const val API_KEY_JOHN = "BYzacKc4ZYhkunlg9Lunuz49kuRNJqc7"
-private const val API_KEY = API_KEY_JOHN
+private const val API_KEY = "8x5iX5B7KXhCYzH9EkDgPXWoRqwhOZ8r"
+private const val BASE_URL = "https://api.apilayer.com/currency_data/"
 
 interface CurrencyDataApiService {
+
+    @GET("list")
+    suspend fun getCurrencies(
+        @Header("apiKey") apiKey: String = API_KEY
+    ): Call<CurrenciesList>
 
     @GET("change")
     suspend fun getChange(
@@ -29,14 +34,9 @@ interface CurrencyDataApiService {
         @Header("apiKey") apiKey: String = API_KEY
     ): Call<Change>
 
-    @GET("list")
-    suspend fun getCurrencies(
-        @Header("apiKey") apiKey: String = API_KEY
-    ): Call<CurrenciesList>
-
 }
 
-object CurrencyDataApiNetwork {
+object CurrencyDataApiNetwork : CurrencyApiNetwork {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -45,7 +45,7 @@ object CurrencyDataApiNetwork {
 
     private val api = retrofit.create(CurrencyDataApiService::class.java)
 
-    suspend fun getCurrencyNames(
+    override suspend fun getCurrencies(
         onSuccess: (currencies: Currencies) -> Unit,
         onError: (message: String) -> Unit
     ) {
@@ -64,18 +64,18 @@ object CurrencyDataApiNetwork {
         })
     }
 
-    suspend fun getChange(
-        startDate: String,
-        endDate: String,
-        source: String,
-        onSuccess: (quotes: Quotes) -> Unit,
+    override suspend fun getRates(
+        onSuccess: (rates: Map<String, Double?>) -> Unit,
         onError: (message: String) -> Unit
     ) {
-        api.getChange(startDate, endDate, source).enqueue(object : Callback<Change> {
+        val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDateTime.now().format(format)
+        val source = "KZT"
+        api.getChange(date, date, source).enqueue(object : Callback<Change> {
             override fun onResponse(call: Call<Change>, response: Response<Change>) {
                 if (response.isSuccessful) {
                     val body = response.body()
-                    if (body != null) onSuccess(body.quotes) else onError("body is null")
+                    if (body != null) onSuccess(body.quotes.toMap(source)) else onError("body is null")
                 } else onError("response is not successful")
             }
 
