@@ -30,7 +30,6 @@ class CurrencySelectorBottomSheet(
         savedInstanceState: Bundle?
     ): View {
         _binding = BottomSheetAddCurrencyBinding.inflate(inflater, container, false)
-        viewModel.refreshCurrencyNames()
 
         setupRecyclerView()
         setupObservers()

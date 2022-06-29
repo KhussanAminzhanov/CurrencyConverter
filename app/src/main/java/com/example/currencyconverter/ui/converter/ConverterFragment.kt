@@ -18,6 +18,7 @@ import com.example.currencyconverter.repository.CurrenciesRepository
 import com.example.currencyconverter.ui.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.ui.main.MainActivity
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -114,6 +115,11 @@ class ConverterFragment : Fragment() {
     }
 
     private fun setupObservers() {
+        model.isNetworkError.observe(viewLifecycleOwner) {
+            Snackbar.make(binding.root, "Network ERROR!", Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.etCurrencyValue)
+                .show()
+        }
         model.currencies.observe(viewLifecycleOwner) {
             adapter.submitList(model.getCurrenciesSorted(it))
         }

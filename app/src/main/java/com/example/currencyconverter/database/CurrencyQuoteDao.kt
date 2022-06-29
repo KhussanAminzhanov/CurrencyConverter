@@ -21,9 +21,6 @@ interface CurrencyQuoteDao {
     @Delete
     suspend fun deleteAll(currencyQuotes: List<CurrencyQuote>)
 
-    @Query("SELECT * FROM currency_table WHERE currencyId = :currencyId")
-    fun get(currencyId: Int): LiveData<CurrencyQuote>
-
-    @Query("SELECT * FROM currency_table ORDER BY name")
+    @Query("SELECT * FROM currency_quote_table ORDER BY name")
     fun getAll(): LiveData<List<CurrencyQuote>>
 }

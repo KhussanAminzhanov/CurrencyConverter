@@ -20,6 +20,7 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
     private val _sortingType = MutableLiveData(SortType.UNSORTED)
     val sortingType: LiveData<SortType> = _sortingType
 
+    val isNetworkError = MutableLiveData(false)
     val isItemSelected = MutableLiveData(false)
     val balance = MutableLiveData(1.0)
     val checkedCurrencyPositions = mutableListOf<Currency>()
@@ -35,7 +36,7 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
             try {
                 repository.refreshCurrencyNames()
             } catch (e: Exception) {
-                Log.e(TAG, "Error refreshing currency names: ${e.message}")
+                onNetworkError("Error refreshing currency names: $e")
             }
         }
     }
@@ -45,7 +46,7 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
             try {
                 repository.refreshCurrencyRates()
             } catch (e: Exception) {
-                Log.e(TAG, "Error refreshing currency rates: ${e.message}")
+                onNetworkError("Error refreshing currency rates: $e")
             }
         }
     }
@@ -55,9 +56,14 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
             try {
                 repository.refreshCurrencyQuotes(currencyQuotes)
             } catch (e: Exception) {
-                Log.e(TAG, "Error refreshing currency quotes: ${e.message}")
+                onNetworkError("Error refreshing currency quotes: $e")
             }
         }
+    }
+
+    private fun onNetworkError(msg: String) {
+        Log.e(TAG, "Error refreshing currency quotes: $msg")
+        isNetworkError.value = true
     }
 
     fun addCurrency(currency: Currency) = viewModelScope.launch { database.insert(currency) }
