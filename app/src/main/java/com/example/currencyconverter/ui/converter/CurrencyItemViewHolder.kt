@@ -7,14 +7,14 @@ import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.currencyconverter.adapter.CurrenciesListAdapter
+import com.example.currencyconverter.adapter.CurrencyListAdapter
 import com.example.currencyconverter.database.Currency
 import com.example.currencyconverter.databinding.ItemCurrencyBinding
 import kotlinx.coroutines.launch
 
 class CurrenciesItemViewHolder(
     private val binding: ItemCurrencyBinding,
-    private val adapter: CurrenciesListAdapter
+    private val adapter: CurrencyListAdapter
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val viewModel by lazy { adapter.viewModel }
@@ -24,7 +24,7 @@ class CurrenciesItemViewHolder(
     companion object {
         fun inflateFrom(
             parent: ViewGroup,
-            adapter: CurrenciesListAdapter
+            adapter: CurrencyListAdapter
         ): CurrenciesItemViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val view = ItemCurrencyBinding.inflate(layoutInflater, parent, false)

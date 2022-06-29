@@ -1,10 +1,10 @@
 package com.example.currencyconverter.network
 
 import com.example.currencyconverter.di.BASE_URL
-import com.example.currencyconverter.domain.models.Change
-import com.example.currencyconverter.domain.models.Currencies
-import com.example.currencyconverter.domain.models.CurrenciesList
-import com.example.currencyconverter.domain.models.Quotes
+import com.example.currencyconverter.domain.models.currencydataapiservice.Change
+import com.example.currencyconverter.domain.models.currencydataapiservice.Currencies
+import com.example.currencyconverter.domain.models.currencydataapiservice.CurrenciesList
+import com.example.currencyconverter.domain.models.currencydataapiservice.Quotes
 import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,7 +36,7 @@ interface CurrencyDataApiService {
 
 }
 
-object APILayerNetwork {
+object CurrencyDataApiNetwork {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
-import com.example.currencyconverter.domain.models.Currencies
-import com.example.currencyconverter.domain.models.Quotes
-import com.example.currencyconverter.domain.models.toMap
-import com.example.currencyconverter.network.APILayerNetwork
+import com.example.currencyconverter.domain.models.currencydataapiservice.Currencies
+import com.example.currencyconverter.domain.models.currencydataapiservice.Quotes
+import com.example.currencyconverter.domain.models.currencydataapiservice.toMap
+import com.example.currencyconverter.network.CurrencyDataApiNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -24,7 +24,7 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         onSuccess: (currencies: Currencies) -> Unit,
         onError: (msg: String) -> Unit
     ) {
-        APILayerNetwork.getCurrencyNames(onSuccess, onError)
+        CurrencyDataApiNetwork.getCurrencyNames(onSuccess, onError)
     }
 
     private fun onCurrencyNamesFetchSuccess(currencyNames: Currencies) {
@@ -48,7 +48,7 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         onSuccess: (quotes: Quotes) -> Unit,
         onError: (msg: String) -> Unit
     ) {
-        APILayerNetwork.getChange(startDate, endDate, source, onSuccess, onError)
+        CurrencyDataApiNetwork.getChange(startDate, endDate, source, onSuccess, onError)
     }
 
     private fun onCurrencyRatesFetchSuccess(quotes: Quotes) {

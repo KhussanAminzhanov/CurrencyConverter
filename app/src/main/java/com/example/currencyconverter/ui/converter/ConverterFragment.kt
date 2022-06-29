@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.R
-import com.example.currencyconverter.adapter.CurrenciesListAdapter
+import com.example.currencyconverter.adapter.CurrencyListAdapter
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 import com.example.currencyconverter.repository.CurrenciesRepository
@@ -33,12 +33,12 @@ class ConverterFragment : Fragment() {
     private val database: CurrencyDatabase by inject { parametersOf(context) }
     private val repository: CurrenciesRepository by inject { parametersOf(database) }
     private val model: CurrencyViewModel by viewModel { parametersOf(repository) }
-    private lateinit var adapter: CurrenciesListAdapter
+    private lateinit var adapter: CurrencyListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        adapter = CurrenciesListAdapter(model, activity as LifecycleOwner)
+        adapter = CurrencyListAdapter(model, activity as LifecycleOwner)
     }
 
     override fun onCreateView(

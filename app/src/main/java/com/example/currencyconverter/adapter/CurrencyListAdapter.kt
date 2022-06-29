@@ -12,7 +12,7 @@ import com.example.currencyconverter.ui.converter.CurrencyItemTouchHelperAdapter
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class CurrenciesListAdapter(
+class CurrencyListAdapter(
     val viewModel: CurrencyViewModel,
     val viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<Currency, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
