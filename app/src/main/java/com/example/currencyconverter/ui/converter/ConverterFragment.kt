@@ -32,7 +32,12 @@ class ConverterFragment : Fragment() {
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
 
     private val database: CurrencyDatabase by inject { parametersOf(context) }
-    private val repository: CurrenciesRepository by inject { parametersOf(database, CurrencyApiNetworkIml) }
+    private val repository: CurrenciesRepository by inject {
+        parametersOf(
+            database,
+            CurrencyApiNetworkIml
+        )
+    }
     private val model: CurrencyViewModel by viewModel { parametersOf(repository) }
     private lateinit var adapter: CurrencyListAdapter
 
@@ -117,9 +122,11 @@ class ConverterFragment : Fragment() {
 
     private fun setupObservers() {
         model.isNetworkError.observe(viewLifecycleOwner) {
-            Snackbar.make(binding.root, "Network ERROR!", Snackbar.LENGTH_LONG)
-                .setAnchorView(binding.etCurrencyValue)
-                .show()
+            if (it) {
+                Snackbar.make(binding.root, "Network ERROR!", Snackbar.LENGTH_LONG)
+                    .setAnchorView(binding.etCurrencyValue)
+                    .show()
+            }
         }
         model.currencies.observe(viewLifecycleOwner) {
             adapter.submitList(model.getCurrenciesSorted(it))
