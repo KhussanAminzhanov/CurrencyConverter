@@ -64,7 +64,7 @@ class CurrencySelectorBottomSheet(
             }
         }
 
-        viewModel.repository.currencyQuotesList.observe(viewLifecycleOwner) {
+        viewModel.repository.currencyQuotes.observe(viewLifecycleOwner) {
             val currencyList = it.map { currencyQuote ->  currencyQuote.asCurrency() }
             adapter.submitList(currencyList)
         }

@@ -27,9 +27,7 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
     val database = repository.database.currencyDao
     val currencies = repository.database.currencyDao.getAll()
 
-    init {
-        refreshCurrencyNames()
-    }
+//    init { refreshCurrencyNames() }
 
     fun refreshCurrencyNames() {
         viewModelScope.launch {

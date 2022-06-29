@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class CurrenciesRepository(val database: CurrencyDatabase, val network: CurrencyApiNetwork) {
 
-    val currencyQuotesList: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
+    val currencyQuotes: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Map<String, String>>()
     val currencyRates = MutableLiveData<Map<String, Double?>>()
 
