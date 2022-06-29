@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.database.Currency
+import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.repository.CurrenciesRepository
 import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
 import kotlinx.coroutines.launch
@@ -21,15 +22,23 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
     val isItemSelected = MutableLiveData(false)
     val balance = MutableLiveData(1.0)
     val checkedCurrencyPositions = mutableListOf<Currency>()
-    val currencies = repository.database.currencyDao.getAll()
     val database = repository.database.currencyDao
+    val currencies = repository.database.currencyDao.getAll()
 
     init {
-        refreshCurrencyQuotesData()
+        refreshCurrencyNames()
     }
 
-    private fun refreshCurrencyQuotesData() {
-        viewModelScope.launch { repository.refreshCurrencyQuotes() }
+    fun refreshCurrencyNames() {
+        viewModelScope.launch { repository.refreshCurrencyNames() }
+    }
+
+    fun refreshCurrencyRates() {
+        viewModelScope.launch { repository.refreshCurrencyRates() }
+    }
+
+    fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
+        viewModelScope.launch { repository.refreshCurrencyQuotes(currencyQuotes) }
     }
 
     fun addCurrency(currency: Currency) = viewModelScope.launch { database.insert(currency) }

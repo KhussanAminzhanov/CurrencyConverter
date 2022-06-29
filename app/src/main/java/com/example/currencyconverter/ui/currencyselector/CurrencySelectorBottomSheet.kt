@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.currencyconverter.adapter.CurrencySelectorAdapter
 import com.example.currencyconverter.database.Currency
+import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.database.asCurrency
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlin.reflect.full.memberProperties
 
-class CurrencySelectorBottomSheet(val viewModel: CurrencyViewModel) : BottomSheetDialogFragment() {
+class CurrencySelectorBottomSheet(
+    private val viewModel: CurrencyViewModel
+) : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetAddCurrencyBinding? = null
     private val binding get() = _binding!!
@@ -25,21 +29,46 @@ class CurrencySelectorBottomSheet(val viewModel: CurrencyViewModel) : BottomShee
         savedInstanceState: Bundle?
     ): View {
         _binding = BottomSheetAddCurrencyBinding.inflate(inflater, container, false)
-        binding.btnCancel.setOnClickListener { this.dismiss() }
 
+        setupRecyclerView()
+        setupObservers()
+
+        binding.btnCancel.setOnClickListener { this.dismiss() }
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
         adapter = CurrencySelectorAdapter { currencyItem ->
             viewModel.addCurrency(currencyItem)
             this.dismiss()
         }
-
         adapter.submitList(data)
         binding.recyclerViewCurrenciesNames.adapter = adapter
+    }
 
-        viewModel.repository.currencyQuotesList.observe(viewLifecycleOwner) { currencies ->
-            adapter.submitList(currencies.map { it.asCurrency() })
+    private fun setupObservers() {
+        viewModel.repository.currencyNames.observe(viewLifecycleOwner) {
+            viewModel.refreshCurrencyRates()
         }
 
-        return binding.root
+        viewModel.repository.currencyQuotesList.observe(viewLifecycleOwner) {
+            val currencyNames = viewModel.repository.currencyNames.value
+            val currencyRates = viewModel.repository.currencyRates.value
+            if (currencyNames != null && currencyRates != null) {
+                val currencyQuotes = currencyNames::class.memberProperties.map { member ->
+                    val ticket = member.name
+                    val name = member.call(currencyNames)
+                    val change = currencyRates["KZT$ticket"] ?: 1.0
+                    CurrencyQuote(name = "$name $ticket", exchangeRate = change)
+                }
+                viewModel.refreshCurrencyQuotes(currencyQuotes)
+            }
+        }
+
+        viewModel.repository.currencyQuotesList.observe(viewLifecycleOwner) {
+            val currencyList = it.map { currencyQuote ->  currencyQuote.asCurrency() }
+            adapter.submitList(currencyList)
+        }
     }
 
     override fun onDestroyView() {

@@ -7,24 +7,41 @@ import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.domain.models.Currencies
 import com.example.currencyconverter.domain.models.Quotes
+import com.example.currencyconverter.domain.models.toMap
 import com.example.currencyconverter.network.APILayerNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class CurrenciesRepository(val database: CurrencyDatabase) {
 
     val currencyQuotesList: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Currencies>()
-    val quotes = MutableLiveData<Map<String, Double?>>()
+    val currencyRates = MutableLiveData<Map<String, Double?>>()
 
-    private fun getCurrenciesQuotesNames(
+    private suspend fun getCurrencyNames(
         onSuccess: (currencies: Currencies) -> Unit,
         onError: () -> Unit
     ) {
-        APILayerNetwork.getCurrenciesNames(onSuccess, onError)
+        APILayerNetwork.getCurrencyNames(onSuccess, onError)
     }
 
-    private fun getQuotes(
+    private fun onCurrencyNamesFetchSuccess(currencyNames: Currencies) {
+        this.currencyNames.value = currencyNames
+    }
+
+    private fun onCurrencyNamesFetchError() {
+        Log.e(TAG, "Error loading currency names")
+    }
+
+    suspend fun refreshCurrencyNames() {
+        withContext(Dispatchers.IO) {
+            getCurrencyNames(::onCurrencyNamesFetchSuccess, ::onCurrencyNamesFetchError)
+        }
+    }
+
+    private suspend fun getCurrencyRates(
         startDate: String,
         endDate: String,
         source: String,
@@ -34,73 +51,28 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         APILayerNetwork.getChange(startDate, endDate, source, onSuccess, onError)
     }
 
-    fun getCurrencyQuotes(
-        onError: () -> Unit
-    ) : List<CurrencyQuote> {
-        return APILayerNetwork.getCurrenciesQuotes(onError)
+    private fun onCurrencyRatesFetchSuccess(quotes: Quotes) {
+        this.currencyRates.value = quotes.toMap()
     }
 
-    suspend fun refreshCurrencyQuotes() {
+    private fun onCurrencyRatesFetchError() {
+        Log.e(TAG, "Error fetching quotes")
+    }
+
+    suspend fun refreshCurrencyRates() {
         withContext(Dispatchers.IO) {
-            val currencyQuotes = getCurrencyQuotes(::onCurrencyQuotesFetchError)
-            database.currencyQuoteDao.insertAll(currencyQuotes)
+            val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val date = LocalDateTime.now().format(format)
+            val source = "KZT"
+            getCurrencyRates(date, date, source, ::onCurrencyRatesFetchSuccess, ::onCurrencyRatesFetchError)
         }
     }
 
-    private fun onCurrencyQuotesFetchError() {
-        Log.e(TAG, "Error fetching currency quotes")
+    suspend fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
+        withContext(Dispatchers.IO) {
+            database.currencyQuoteDao.insertAll(currencyQuotes)
+        }
     }
-
-//    suspend fun refreshCurrencyQuotes() {
-//        withContext(Dispatchers.IO) {
-//            val currencyQuotes = getCurrencyQuotes()
-//            database.currencyQuoteDao.insertAll(currencyQuotes)
-//        }
-//    }
-//
-//    private fun getCurrencyQuotes() : List<CurrencyQuote> {
-//        return currencyNames.value!!::class.memberProperties.map { member ->
-//            val ticket = member.name
-//            val name = member.call(currencyNames.value!!)
-//            val change = quotes.value?.get("KZT$ticket") ?: 1.0
-//            CurrencyQuote(name = "$name $ticket", exchangeRate = change)
-//        }
-//    }
-
-//    suspend fun refreshCurrencyQuotesNames() {
-//        withContext(Dispatchers.IO) {
-//            getCurrenciesQuotesNames(
-//                onSuccess = ::onCurrenciesFetchSuccess,
-//                onError = ::onCurrenciesFetchError
-//            )
-//        }
-//    }
-//
-//    private fun onCurrenciesFetchSuccess(currencies: Currencies) {
-//        this.currencyNames.value = currencies
-//        Log.i(TAG, "Success fetching ${currencies.AED}")
-//    }
-//
-//    private fun onCurrenciesFetchError() {
-//        Log.e(TAG, "Error fetching currencies")
-//    }
-
-//    suspend fun refreshQuotes() {
-//        withContext(Dispatchers.IO) {
-//            val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//            val date = LocalDateTime.now().format(format)
-//            val source = "KZT"
-//            getQuotes(date, date, source, ::onQuotesFetchSuccess, ::onQuotesFetchError)
-//        }
-//    }
-//
-//    private fun onQuotesFetchSuccess(quotes: Quotes) {
-//        this.quotes.value = quotes.toMap()
-//    }
-//
-//    private fun onQuotesFetchError() {
-//        Log.e(TAG, "Error fetching quotes")
-//    }
 
     companion object {
         const val TAG = "currency_repository"

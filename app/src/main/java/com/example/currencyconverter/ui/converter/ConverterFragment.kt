@@ -3,7 +3,6 @@ package com.example.currencyconverter.ui.converter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
@@ -38,12 +37,7 @@ class ConverterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
         adapter = CurrenciesListAdapter(model, activity as LifecycleOwner)
-
-        repository.getCurrencyQuotes({}).forEach {
-            Log.i("currency_fragment", "${it.name}")
-        }
     }
 
     override fun onCreateView(
