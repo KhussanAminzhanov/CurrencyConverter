@@ -5,8 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "currency_quote_table")
 data class CurrencyQuote constructor(
-    @PrimaryKey(autoGenerate = true)
-    var currencyId: Int = 0,
+    @PrimaryKey
     var name: String = "Tenge, Kazakhstan",
     var exchangeRate: Double,
 )

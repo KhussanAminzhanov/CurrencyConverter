@@ -33,31 +33,31 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
 
     fun refreshCurrencyNames() {
         viewModelScope.launch {
-            try {
+//            try {
                 repository.refreshCurrencyNames()
-            } catch (e: Exception) {
-                onNetworkError("Error refreshing currency names: $e")
-            }
+//            } catch (e: Exception) {
+//                onNetworkError("Error refreshing currency names: $e")
+//            }
         }
     }
 
     fun refreshCurrencyRates() {
         viewModelScope.launch {
-            try {
+//            try {
                 repository.refreshCurrencyRates()
-            } catch (e: Exception) {
-                onNetworkError("Error refreshing currency rates: $e")
-            }
+//            } catch (e: Exception) {
+//                onNetworkError("Error refreshing currency rates: $e")
+//            }
         }
     }
 
     fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
         viewModelScope.launch {
-            try {
+//            try {
                 repository.refreshCurrencyQuotes(currencyQuotes)
-            } catch (e: Exception) {
-                onNetworkError("Error refreshing currency quotes: $e")
-            }
+//            } catch (e: Exception) {
+//                onNetworkError("Error refreshing currency quotes: $e")
+//            }
         }
     }
 
@@ -70,12 +70,12 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
     fun delete(currency: Currency) = viewModelScope.launch { database.delete(currency) }
 
     fun getCurrenciesSorted(list: List<Currency>) = when (_sortingType.value) {
-        SortType.ALPHABET -> list.sortedBy { it.name }
-        SortType.VALUE -> list.sortedBy { it.exchangeRate }
+        CurrencyViewModel.SortType.ALPHABET -> list.sortedBy { it.name }
+        CurrencyViewModel.SortType.VALUE -> list.sortedBy { it.exchangeRate }
         else -> list
     }
 
-    fun setSortingType(sortType: SortType) {
+    fun setSortingType(sortType: CurrencyViewModel.SortType) {
         _sortingType.value = sortType
     }
 

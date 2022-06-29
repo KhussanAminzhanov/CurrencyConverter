@@ -54,12 +54,6 @@ class CurrencySelectorBottomSheet(
             val currencyNames = viewModel.repository.currencyNames.value
             val currencyRates = viewModel.repository.currencyRates.value
             if (currencyNames != null && currencyRates != null) {
-//                val currencyQuotes = currencyNames::class.memberProperties.map { member ->
-//                    val ticket = member.name
-//                    val name = member.call(currencyNames)
-//                    val change = currencyRates["KZT$ticket"] ?: 1.0
-//                    CurrencyQuote(name = "$name $ticket", exchangeRate = change)
-//                }
                 val currencyQuotes = currencyNames.map {
                     val ticket = it.key
                     val name = it.value

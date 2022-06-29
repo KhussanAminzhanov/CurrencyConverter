@@ -6,17 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.network.CurrencyApiNetwork
-import com.example.currencyconverter.network.CurrencyApiNetworkIml
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CurrenciesRepository(val database: CurrencyDatabase) {
+class CurrenciesRepository(val database: CurrencyDatabase, val network: CurrencyApiNetwork) {
 
     val currencyQuotesList: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Map<String, String>>()
     val currencyRates = MutableLiveData<Map<String, Double?>>()
 
-    val network: CurrencyApiNetwork = CurrencyApiNetworkIml
+//    val network: CurrencyApiNetwork = CurrencyApiNetworkIml
 //    val network = CurrencyDataApiNetworkImpl
 
     //Currency Names
