@@ -22,7 +22,7 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
 
     private suspend fun getCurrencyNames(
         onSuccess: (currencies: Currencies) -> Unit,
-        onError: () -> Unit
+        onError: (msg: String) -> Unit
     ) {
         APILayerNetwork.getCurrencyNames(onSuccess, onError)
     }
@@ -31,8 +31,8 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         this.currencyNames.value = currencyNames
     }
 
-    private fun onCurrencyNamesFetchError() {
-        Log.e(TAG, "Error loading currency names")
+    private fun onCurrencyNamesFetchError(msg: String) {
+        Log.e(TAG, "Error loading currency names: $msg")
     }
 
     suspend fun refreshCurrencyNames() {
@@ -46,7 +46,7 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         endDate: String,
         source: String,
         onSuccess: (quotes: Quotes) -> Unit,
-        onError: () -> Unit
+        onError: (msg: String) -> Unit
     ) {
         APILayerNetwork.getChange(startDate, endDate, source, onSuccess, onError)
     }
@@ -55,8 +55,8 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
         this.currencyRates.value = quotes.toMap()
     }
 
-    private fun onCurrencyRatesFetchError() {
-        Log.e(TAG, "Error fetching quotes")
+    private fun onCurrencyRatesFetchError(msg: String) {
+        Log.e(TAG, "Error fetching quotes: $msg")
     }
 
     suspend fun refreshCurrencyRates() {
@@ -75,6 +75,6 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
     }
 
     companion object {
-        const val TAG = "currency_repository"
+        const val TAG = "currencyrepositry"
     }
 }

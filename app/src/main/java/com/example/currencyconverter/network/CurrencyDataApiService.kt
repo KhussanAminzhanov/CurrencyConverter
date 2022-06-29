@@ -1,6 +1,5 @@
 package com.example.currencyconverter.network
 
-import android.util.Log
 import com.example.currencyconverter.di.BASE_URL
 import com.example.currencyconverter.domain.models.Change
 import com.example.currencyconverter.domain.models.Currencies
@@ -16,7 +15,9 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-private const val API_KEY = "8x5iX5B7KXhCYzH9EkDgPXWoRqwhOZ8r"
+private const val API_KEY_KHUSSAN = "8x5iX5B7KXhCYzH9EkDgPXWoRqwhOZ8r"
+private const val API_KEY_JOHN = "BYzacKc4ZYhkunlg9Lunuz49kuRNJqc7"
+private const val API_KEY = API_KEY_JOHN
 
 interface CurrencyDataApiService {
 
@@ -46,7 +47,7 @@ object APILayerNetwork {
 
     suspend fun getCurrencyNames(
         onSuccess: (currencies: Currencies) -> Unit,
-        onError: () -> Unit
+        onError: (message: String) -> Unit
     ) {
         api.getCurrencies().enqueue(object : Callback<CurrenciesList> {
             override fun onResponse(
@@ -55,11 +56,11 @@ object APILayerNetwork {
             ) {
                 if (response.isSuccessful) {
                     val body = response.body()
-                    if (body != null) onSuccess(body.currencies) else onError()
-                } else onError()
+                    if (body != null) onSuccess(body.currencies) else onError("body is null")
+                } else onError("response in not successful")
             }
 
-            override fun onFailure(call: Call<CurrenciesList>, t: Throwable) = onError()
+            override fun onFailure(call: Call<CurrenciesList>, t: Throwable) = onError("request failure")
         })
     }
 
@@ -68,21 +69,17 @@ object APILayerNetwork {
         endDate: String,
         source: String,
         onSuccess: (quotes: Quotes) -> Unit,
-        onError: () -> Unit
+        onError: (message: String) -> Unit
     ) {
         api.getChange(startDate, endDate, source).enqueue(object : Callback<Change> {
             override fun onResponse(call: Call<Change>, response: Response<Change>) {
                 if (response.isSuccessful) {
                     val body = response.body()
-                    if (body != null) onSuccess(body.quotes) else onError()
-                } else onError()
+                    if (body != null) onSuccess(body.quotes) else onError("body is null")
+                } else onError("response is not successful")
             }
 
-            override fun onFailure(call: Call<Change>, t: Throwable) = onError()
+            override fun onFailure(call: Call<Change>, t: Throwable) = onError("request failure")
         })
-    }
-
-    private fun onError(text: String) {
-        Log.i("api", text)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.currencyconverter.viewmodel
 
+import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,15 +31,33 @@ class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
     }
 
     fun refreshCurrencyNames() {
-        viewModelScope.launch { repository.refreshCurrencyNames() }
+        viewModelScope.launch {
+            try {
+                repository.refreshCurrencyNames()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error refreshing currency names: ${e.message}")
+            }
+        }
     }
 
     fun refreshCurrencyRates() {
-        viewModelScope.launch { repository.refreshCurrencyRates() }
+        viewModelScope.launch {
+            try {
+                repository.refreshCurrencyRates()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error refreshing currency rates: ${e.message}")
+            }
+        }
     }
 
     fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
-        viewModelScope.launch { repository.refreshCurrencyQuotes(currencyQuotes) }
+        viewModelScope.launch {
+            try {
+                repository.refreshCurrencyQuotes(currencyQuotes)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error refreshing currency quotes: ${e.message}")
+            }
+        }
     }
 
     fun addCurrency(currency: Currency) = viewModelScope.launch { database.insert(currency) }

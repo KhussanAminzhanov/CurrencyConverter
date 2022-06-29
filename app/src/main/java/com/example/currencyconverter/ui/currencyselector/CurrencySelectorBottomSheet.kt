@@ -1,6 +1,7 @@
 package com.example.currencyconverter.ui.currencyselector
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ class CurrencySelectorBottomSheet(
         savedInstanceState: Bundle?
     ): View {
         _binding = BottomSheetAddCurrencyBinding.inflate(inflater, container, false)
+        viewModel.refreshCurrencyNames()
 
         setupRecyclerView()
         setupObservers()
@@ -61,6 +63,7 @@ class CurrencySelectorBottomSheet(
                     val change = currencyRates["KZT$ticket"] ?: 1.0
                     CurrencyQuote(name = "$name $ticket", exchangeRate = change)
                 }
+                currencyQuotes.forEach { Log.e(TAG, "|${it.name}|") }
                 viewModel.refreshCurrencyQuotes(currencyQuotes)
             }
         }
