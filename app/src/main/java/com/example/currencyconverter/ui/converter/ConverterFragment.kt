@@ -1,5 +1,9 @@
 package com.example.currencyconverter.ui.converter
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,12 +36,7 @@ class ConverterFragment : Fragment() {
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
 
     private val database: CurrencyDatabase by inject { parametersOf(context) }
-    private val repository: CurrenciesRepository by inject {
-        parametersOf(
-            database,
-            CurrencyApiNetworkIml
-        )
-    }
+    private val repository: CurrenciesRepository by inject { parametersOf(database, CurrencyApiNetworkIml)}
     private val model: CurrencyViewModel by viewModel { parametersOf(repository) }
     private lateinit var adapter: CurrencyListAdapter
 
@@ -67,6 +66,15 @@ class ConverterFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!isInternetAvailable()) {
+            Snackbar.make(binding.root, "Network ERROR!", Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.etCurrencyValue)
+                .show()
+        }
     }
 
     override fun onDestroyView() {
@@ -148,6 +156,35 @@ class ConverterFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        var result = false
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.activeNetwork ?: return false
+            val activityNetwork =
+                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+            result = when {
+                activityNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activityNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                activityNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            connectivityManager.run {
+                connectivityManager.activeNetworkInfo?.run {
+                    result = when (type) {
+                        ConnectivityManager.TYPE_WIFI -> true
+                        ConnectivityManager.TYPE_MOBILE -> true
+                        ConnectivityManager.TYPE_ETHERNET -> true
+                        else -> false
+                    }
+                }
+            }
+        }
+        return result
     }
 
     private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
