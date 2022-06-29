@@ -5,26 +5,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
-import com.example.currencyconverter.domain.models.currencydataapiservice.Currencies
-import com.example.currencyconverter.network.CurrencyDataApiNetwork
+import com.example.currencyconverter.network.CurrencyApiNetwork
+import com.example.currencyconverter.network.CurrencyApiNetworkIml
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CurrenciesRepository(val database: CurrencyDatabase) {
 
     val currencyQuotesList: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
-    val currencyNames = MutableLiveData<Currencies>()
+    val currencyNames = MutableLiveData<Map<String, String>>()
     val currencyRates = MutableLiveData<Map<String, Double?>>()
 
+    val network: CurrencyApiNetwork = CurrencyApiNetworkIml
+//    val network = CurrencyDataApiNetworkImpl
+
     //Currency Names
-    private suspend fun getCurrencyNames(
-        onSuccess: (currencies: Currencies) -> Unit,
+    private fun getCurrencyNames(
+        onSuccess: (currencies: Map<String, String>) -> Unit,
         onError: (msg: String) -> Unit
     ) {
-        CurrencyDataApiNetwork.getCurrencies(onSuccess, onError)
+        network.getCurrencies(onSuccess, onError)
     }
 
-    private fun onCurrencyNamesFetchSuccess(currencyNames: Currencies) {
+    private fun onCurrencyNamesFetchSuccess(currencyNames: Map<String, String>) {
         this.currencyNames.value = currencyNames
     }
 
@@ -39,11 +42,11 @@ class CurrenciesRepository(val database: CurrencyDatabase) {
     }
 
     //Currency Rates
-    private suspend fun getCurrencyRates(
+    private fun getCurrencyRates(
         onSuccess: (rates: Map<String, Double?>) -> Unit,
         onError: (msg: String) -> Unit
     ) {
-        CurrencyDataApiNetwork.getRates(onSuccess, onError)
+        network.getRates(onSuccess, onError)
     }
 
     private fun onCurrencyRatesFetchSuccess(rates: Map<String, Double?>) {

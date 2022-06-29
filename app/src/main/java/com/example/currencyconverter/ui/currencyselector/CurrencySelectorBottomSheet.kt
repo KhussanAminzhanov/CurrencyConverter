@@ -11,7 +11,6 @@ import com.example.currencyconverter.database.asCurrency
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.example.currencyconverter.viewmodel.CurrencyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlin.reflect.full.memberProperties
 
 class CurrencySelectorBottomSheet(
     private val viewModel: CurrencyViewModel
@@ -51,15 +50,21 @@ class CurrencySelectorBottomSheet(
             viewModel.refreshCurrencyRates()
         }
 
-        viewModel.repository.currencyQuotesList.observe(viewLifecycleOwner) {
+        viewModel.repository.currencyRates.observe(viewLifecycleOwner) {
             val currencyNames = viewModel.repository.currencyNames.value
             val currencyRates = viewModel.repository.currencyRates.value
             if (currencyNames != null && currencyRates != null) {
-                val currencyQuotes = currencyNames::class.memberProperties.map { member ->
-                    val ticket = member.name
-                    val name = member.call(currencyNames)
-                    val change = currencyRates["KZT$ticket"] ?: 1.0
-                    CurrencyQuote(name = "$name $ticket", exchangeRate = change)
+//                val currencyQuotes = currencyNames::class.memberProperties.map { member ->
+//                    val ticket = member.name
+//                    val name = member.call(currencyNames)
+//                    val change = currencyRates["KZT$ticket"] ?: 1.0
+//                    CurrencyQuote(name = "$name $ticket", exchangeRate = change)
+//                }
+                val currencyQuotes = currencyNames.map {
+                    val ticket = it.key
+                    val name = it.value
+                    val rate = currencyRates["KZT$ticket"] ?: 1.0
+                    CurrencyQuote(name = "$name $ticket", exchangeRate = rate)
                 }
                 viewModel.refreshCurrencyQuotes(currencyQuotes)
             }

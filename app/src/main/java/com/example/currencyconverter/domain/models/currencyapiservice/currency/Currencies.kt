@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
 
 data class Currencies (
 
-  @SerializedName("data" ) var data : Data? = Data()
+  @SerializedName("data" ) var data : Data = Data()
 
 )

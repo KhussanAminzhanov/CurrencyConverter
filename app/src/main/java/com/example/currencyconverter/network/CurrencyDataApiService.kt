@@ -1,7 +1,6 @@
 package com.example.currencyconverter.network
 
 import com.example.currencyconverter.domain.models.currencydataapiservice.Change
-import com.example.currencyconverter.domain.models.currencydataapiservice.Currencies
 import com.example.currencyconverter.domain.models.currencydataapiservice.CurrenciesList
 import com.example.currencyconverter.domain.models.currencydataapiservice.toMap
 import com.google.gson.GsonBuilder
@@ -22,12 +21,12 @@ private const val BASE_URL = "https://api.apilayer.com/currency_data/"
 interface CurrencyDataApiService {
 
     @GET("list")
-    suspend fun getCurrencies(
+    fun getCurrencies(
         @Header("apiKey") apiKey: String = API_KEY
     ): Call<CurrenciesList>
 
     @GET("change")
-    suspend fun getChange(
+    fun getChange(
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
         @Query("source") source: String,
@@ -36,7 +35,7 @@ interface CurrencyDataApiService {
 
 }
 
-object CurrencyDataApiNetwork : CurrencyApiNetwork {
+object CurrencyDataApiNetworkImpl : CurrencyApiNetwork {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -45,8 +44,8 @@ object CurrencyDataApiNetwork : CurrencyApiNetwork {
 
     private val api = retrofit.create(CurrencyDataApiService::class.java)
 
-    override suspend fun getCurrencies(
-        onSuccess: (currencies: Currencies) -> Unit,
+    override fun getCurrencies(
+        onSuccess: (currencies: Map<String, String>) -> Unit,
         onError: (message: String) -> Unit
     ) {
         api.getCurrencies().enqueue(object : Callback<CurrenciesList> {
@@ -56,15 +55,16 @@ object CurrencyDataApiNetwork : CurrencyApiNetwork {
             ) {
                 if (response.isSuccessful) {
                     val body = response.body()
-                    if (body != null) onSuccess(body.currencies) else onError("body is null")
+                    if (body != null) onSuccess(body.currencies.toMap()) else onError("body is null")
                 } else onError("response in not successful")
             }
 
-            override fun onFailure(call: Call<CurrenciesList>, t: Throwable) = onError("request failure")
+            override fun onFailure(call: Call<CurrenciesList>, t: Throwable) =
+                onError("request failure")
         })
     }
 
-    override suspend fun getRates(
+    override fun getRates(
         onSuccess: (rates: Map<String, Double?>) -> Unit,
         onError: (message: String) -> Unit
     ) {
