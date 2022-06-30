@@ -24,6 +24,7 @@ sealed class NetworkStatus {
 class NetworkStatusHelper(context: Context) : LiveData<NetworkStatus>() {
 
     val validNetworkConnections: ArrayList<Network> = ArrayList()
+    private var isInitialCheck: Boolean = true
     private var connectivityManager: ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -44,9 +45,13 @@ class NetworkStatusHelper(context: Context) : LiveData<NetworkStatus>() {
         connectivityManager.unregisterNetworkCallback(connectivityManagerCallback)
     }
 
-    fun getConnectivityManagerCallback() = object : ConnectivityManager.NetworkCallback() {
+    private fun getConnectivityManagerCallback() = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
+            if (isInitialCheck) {
+                isInitialCheck = false
+                return
+            }
             val hasNetworkConnection = isInternetAvailable()
             if (hasNetworkConnection) determineInternetAccess(network)
         }
