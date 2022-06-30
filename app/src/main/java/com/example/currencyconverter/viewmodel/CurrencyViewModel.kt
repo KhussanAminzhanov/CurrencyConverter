@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.database.Currency
 import com.example.currencyconverter.database.CurrencyQuote
-import com.example.currencyconverter.repository.CurrenciesRepository
+import com.example.currencyconverter.repository.CurrencyRepository
 import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
 import kotlinx.coroutines.launch
 import java.util.*
 
-class CurrencyViewModel(val repository: CurrenciesRepository) : ViewModel() {
+class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
 
     enum class SortType { ALPHABET, VALUE, UNSORTED }
 

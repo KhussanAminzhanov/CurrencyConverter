@@ -9,7 +9,7 @@ import com.example.currencyconverter.network.CurrencyApiNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CurrenciesRepository(val database: CurrencyDatabase, val network: CurrencyApiNetwork) {
+class CurrencyRepository(val database: CurrencyDatabase, val network: CurrencyApiNetwork) {
 
     val currencyQuotes: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Map<String, String>>()
