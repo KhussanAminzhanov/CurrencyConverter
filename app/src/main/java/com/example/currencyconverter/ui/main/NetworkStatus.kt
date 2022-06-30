@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Build
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,7 @@ sealed class NetworkStatus {
     object Unavailable : NetworkStatus()
 }
 
-class NetworkStatusHelper(private val context: Context) : LiveData<NetworkStatus>() {
+class NetworkStatusHelper(context: Context) : LiveData<NetworkStatus>() {
 
     val validNetworkConnections: ArrayList<Network> = ArrayList()
     private var connectivityManager: ConnectivityManager =
@@ -46,29 +47,13 @@ class NetworkStatusHelper(private val context: Context) : LiveData<NetworkStatus
     fun getConnectivityManagerCallback() = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-            val hasNetworkConnection =
-                networkCapabilities?.hasTransport(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    ?: false
+            val hasNetworkConnection = isInternetAvailable()
             if (hasNetworkConnection) determineInternetAccess(network)
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
             validNetworkConnections.remove(network)
-            announceStatus()
-        }
-
-        override fun onCapabilitiesChanged(
-            network: Network,
-            networkCapabilities: NetworkCapabilities
-        ) {
-            super.onCapabilitiesChanged(network, networkCapabilities)
-            if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
-                determineInternetAccess(network)
-            } else {
-                validNetworkConnections.remove(network)
-            }
             announceStatus()
         }
     }
@@ -83,6 +68,34 @@ class NetworkStatusHelper(private val context: Context) : LiveData<NetworkStatus
             }
         }
     }
+
+    fun isInternetAvailable(): Boolean {
+        var result = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.activeNetwork ?: return false
+            val activityNetwork =
+                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+            result = when {
+                activityNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activityNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                activityNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            connectivityManager.run {
+                connectivityManager.activeNetworkInfo?.run {
+                    result = when (type) {
+                        ConnectivityManager.TYPE_WIFI -> true
+                        ConnectivityManager.TYPE_MOBILE -> true
+                        ConnectivityManager.TYPE_ETHERNET -> true
+                        else -> false
+                    }
+                }
+            }
+        }
+        return result
+    }
+
 
     fun announceStatus() {
         if (validNetworkConnections.isNotEmpty()) {
