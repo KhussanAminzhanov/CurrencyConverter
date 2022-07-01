@@ -3,9 +3,9 @@ package com.example.currencyconverter.di
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
-//const val BASE_URL = "https://api.apilayer.com/currency_data/"
 
 val networkModule = module {
     factory { GsonBuilder().create() }
@@ -16,11 +16,11 @@ val networkModule = module {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-//    factory {
-//        Retrofit.Builder()
-//            .client(get())
-//            .baseUrl(BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create(get()))
-//            .build()
-//    }
+    factory { (baseUrl: String) ->
+        Retrofit.Builder()
+            .client(get())
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(get()))
+            .build()
+    }
 }

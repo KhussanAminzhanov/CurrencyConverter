@@ -6,10 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.network.CurrencyApiNetwork
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class CurrencyRepository(val database: CurrencyDatabase, val network: CurrencyApiNetwork) {
+class CurrencyRepository(
+    private val ioDispatcher: CoroutineDispatcher,
+    val database: CurrencyDatabase,
+    val network: CurrencyApiNetwork
+) {
 
     val currencyQuotes: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Map<String, String>>()
@@ -35,7 +39,7 @@ class CurrencyRepository(val database: CurrencyDatabase, val network: CurrencyAp
     }
 
     suspend fun refreshCurrencyNames() {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             getCurrencyNames(::onCurrencyNamesFetchSuccess, ::onCurrencyNamesFetchError)
         }
     }
@@ -57,14 +61,14 @@ class CurrencyRepository(val database: CurrencyDatabase, val network: CurrencyAp
     }
 
     suspend fun refreshCurrencyRates() {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             getCurrencyRates(::onCurrencyRatesFetchSuccess, ::onCurrencyRatesFetchError)
         }
     }
 
     //Currency Quotes
     suspend fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             database.currencyQuoteDao.insertAll(currencyQuotes)
         }
     }
