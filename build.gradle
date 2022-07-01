@@ -2,14 +2,20 @@
 buildscript {
     ext.fragment_version = "1.4.1"
     ext.nav_version = "2.4.2"
-    ext.lifecycle_version = "2.4.1"
+    ext.lifecycle_version = "2.5.0"
     ext.room_version = "2.4.2"
     ext.koin_version = "3.2.0"
 
+    repositories {
+        google()
+    }
+
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath 'com.google.gms:google-services:4.3.13'
     }
 }
+
 
 plugins {
     id 'com.android.application' version '7.2.0' apply false

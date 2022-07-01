@@ -1,6 +1,7 @@
 package com.example.currencyconverter.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -8,6 +9,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityMainBinding
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
     private lateinit var networkStatusHelper: NetworkStatusHelper
@@ -37,6 +42,12 @@ class MainActivity : AppCompatActivity() {
                 NetworkStatus.Unavailable -> display("Network Unavailable")
             }
         }
+
+        if (checkGooglePlayServices()) {
+            logFirebaseIdentifiers()
+        } else {
+            Log.w(TAG, "Device doesn't have google play services")
+        }
     }
 
     private fun display(msg: String): String {
@@ -46,5 +57,45 @@ class MainActivity : AppCompatActivity() {
 
     private fun initialNetworkCheck() {
         if (!networkStatusHelper.isInternetAvailable()) display("Network Unavailable")
+    }
+
+    private fun checkGooglePlayServices(): Boolean {
+        val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+        return if (status != ConnectionResult.SUCCESS) {
+            Log.e(TAG, "Error: Google Play Services is not Available")
+            false
+        } else {
+            Log.e(TAG, "Google Play Services is updated")
+            true
+        }
+    }
+
+    private fun logFirebaseIdentifiers() {
+        logTokenFirebase()
+        logInstallationIdFirebase()
+    }
+
+    private fun logTokenFirebase() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { regTokenTask ->
+            if (regTokenTask.isSuccessful) {
+                Log.d(TAG, "FCM registration token: ${regTokenTask.result}")
+            } else {
+                Log.d(TAG, "Unable to retrieve registration token", regTokenTask.exception)
+            }
+        }
+    }
+
+    private fun logInstallationIdFirebase() {
+        FirebaseInstallations.getInstance().id.addOnCompleteListener { installationIdTask ->
+            if (installationIdTask.isSuccessful) {
+                Log.d(TAG, "Firebase Installation Id: ${installationIdTask.result}")
+            } else {
+                Log.d(TAG, "Unable to retrieve installation ID", installationIdTask.exception)
+            }
+        }
+    }
+
+    companion object {
+        const val TAG = "MainActivity"
     }
 }
