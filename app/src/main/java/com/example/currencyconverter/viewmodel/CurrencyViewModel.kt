@@ -10,10 +10,14 @@ import com.example.currencyconverter.database.Currency
 import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.repository.CurrencyRepository
 import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.*
 
-class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
+class CurrencyViewModel(
+    val repository: CurrencyRepository,
+    val ioDispatcher: CoroutineDispatcher
+) : ViewModel() {
 
     enum class SortType { ALPHABET, VALUE, UNSORTED }
 
@@ -27,12 +31,14 @@ class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
     val database = repository.database.currencyDao
     val currencies = repository.database.currencyDao.getAll()
 
-    init { refreshCurrencyNames() }
+    init {
+        refreshCurrencyNames()
+    }
 
     fun refreshCurrencyNames() {
         val currencies = this.currencies.value ?: listOf()
         if (currencies.isNotEmpty()) return
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             try {
                 repository.refreshCurrencyNames()
             } catch (e: Exception) {
@@ -42,7 +48,7 @@ class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
     }
 
     fun refreshCurrencyRates() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             try {
                 repository.refreshCurrencyRates()
             } catch (e: Exception) {
@@ -52,7 +58,7 @@ class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
     }
 
     fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             repository.refreshCurrencyQuotes(currencyQuotes)
         }
     }
@@ -62,8 +68,8 @@ class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
         isNetworkError.value = true
     }
 
-    fun addCurrency(currency: Currency) = viewModelScope.launch { database.insert(currency) }
-    fun delete(currency: Currency) = viewModelScope.launch { database.delete(currency) }
+    fun addCurrency(currency: Currency) = viewModelScope.launch(ioDispatcher) { database.insert(currency) }
+    fun delete(currency: Currency) = viewModelScope.launch(ioDispatcher) { database.delete(currency) }
 
     fun getCurrenciesSorted(list: List<Currency>) = when (_sortingType.value) {
         SortType.ALPHABET -> list.sortedBy { it.name }
@@ -98,14 +104,14 @@ class CurrencyViewModel(val repository: CurrencyRepository) : ViewModel() {
         firstCurrency.currencyId = secondCurrency.currencyId
         secondCurrency.currencyId = position
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             database.update(firstCurrency)
             database.update(secondCurrency)
         }
     }
 
     private fun deleteCurrencies() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             database.deleteAll(checkedCurrencyPositions)
             checkedCurrencyPositions.clear()
         }

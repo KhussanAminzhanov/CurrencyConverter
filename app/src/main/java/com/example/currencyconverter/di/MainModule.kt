@@ -23,6 +23,6 @@ val mainModule = module {
             network
         )
     }
-    viewModel { (repository: CurrencyRepository) -> CurrencyViewModel(repository) }
+    viewModel { (repository: CurrencyRepository) -> CurrencyViewModel(repository, get(named("IODispatcher"))) }
     viewModel { LoginViewModel(get()) }
 }
