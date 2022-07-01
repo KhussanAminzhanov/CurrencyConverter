@@ -46,13 +46,13 @@ class CurrencySelectorBottomSheet(
     }
 
     private fun setupObservers() {
-        viewModel.repository.currencyNames.observe(viewLifecycleOwner) {
+        viewModel.currencyNames.observe(viewLifecycleOwner) {
             viewModel.refreshCurrencyRates()
         }
 
-        viewModel.repository.currencyRates.observe(viewLifecycleOwner) {
-            val currencyNames = viewModel.repository.currencyNames.value
-            val currencyRates = viewModel.repository.currencyRates.value
+        viewModel.currencyRates.observe(viewLifecycleOwner) {
+            val currencyNames = viewModel.currencyNames.value
+            val currencyRates = viewModel.currencyRates.value
             if (currencyNames != null && currencyRates != null) {
                 val currencyQuotes = currencyNames.map {
                     val ticket = it.key
@@ -64,7 +64,7 @@ class CurrencySelectorBottomSheet(
             }
         }
 
-        viewModel.repository.currencyQuotes.observe(viewLifecycleOwner) {
+        viewModel.currencyQuotes.observe(viewLifecycleOwner) {
             val currencyList = it.map { currencyQuote ->  currencyQuote.asCurrency() }
             adapter.submitList(currencyList)
         }

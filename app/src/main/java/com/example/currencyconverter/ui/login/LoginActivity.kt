@@ -26,9 +26,11 @@ class LoginActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
         setupNumericKeypad()
         setupPinCode()
+
         model.index.observe(this) { updatePinCodeDigitViews() }
     }
 

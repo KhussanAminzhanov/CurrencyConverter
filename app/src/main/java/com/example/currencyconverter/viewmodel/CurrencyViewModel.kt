@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class CurrencyViewModel(
-    val repository: CurrencyRepository,
-    val ioDispatcher: CoroutineDispatcher
+    private val repository: CurrencyRepository,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     enum class SortType { ALPHABET, VALUE, UNSORTED }
@@ -30,16 +30,18 @@ class CurrencyViewModel(
     val checkedCurrencyPositions = mutableListOf<Currency>()
     val database = repository.database.currencyDao
     val currencies = repository.database.currencyDao.getAll()
+    val currencyNames: LiveData<Map<String, String>> = repository.currencyNames
+    val currencyRates: LiveData<Map<String, Double?>> = repository.currencyRates
+    val currencyQuotes: LiveData<List<CurrencyQuote>> = repository.currencyQuotes
 
-    init {
-        refreshCurrencyNames()
-    }
+//    init {
+//        refreshCurrencyNames()
+//    }
 
     fun refreshCurrencyNames() {
-        val currencies = this.currencies.value ?: listOf()
-        if (currencies.isNotEmpty()) return
         viewModelScope.launch(ioDispatcher) {
             try {
+                Log.i(TAG, "refreshing currency names")
                 repository.refreshCurrencyNames()
             } catch (e: Exception) {
                 onNetworkError("Error refreshing currency names: $e")
