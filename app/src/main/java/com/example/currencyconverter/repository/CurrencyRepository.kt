@@ -7,20 +7,18 @@ import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.network.CurrencyApiNetwork
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CurrencyRepository(
-    private val ioDispatcher: CoroutineDispatcher,
     val database: CurrencyDatabase,
-    val network: CurrencyApiNetwork
+    val network: CurrencyApiNetwork,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     val currencyQuotes: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Map<String, String>>()
     val currencyRates = MutableLiveData<Map<String, Double?>>()
-
-//    val network: CurrencyApiNetwork = CurrencyApiNetworkIml
-//    val network = CurrencyDataApiNetworkImpl
 
     //Currency Names
     private fun getCurrencyNames(

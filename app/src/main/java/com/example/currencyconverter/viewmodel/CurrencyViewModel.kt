@@ -11,12 +11,13 @@ import com.example.currencyconverter.database.CurrencyQuote
 import com.example.currencyconverter.repository.CurrencyRepository
 import com.example.currencyconverter.ui.converter.DeleteConfirmationDialogFragment
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 class CurrencyViewModel(
     private val repository: CurrencyRepository,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     enum class SortType { ALPHABET, VALUE, UNSORTED }
