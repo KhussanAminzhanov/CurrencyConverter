@@ -31,7 +31,7 @@ interface CurrencyApiService {
     ): Call<Rates>
 }
 
-object CurrencyApiNetworkIml : CurrencyApiNetwork {
+object CurrencyApiNetwork {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -40,7 +40,7 @@ object CurrencyApiNetworkIml : CurrencyApiNetwork {
 
     private val api = retrofit.create(CurrencyApiService::class.java)
 
-    override fun getCurrencies(
+    fun getCurrencies(
         onSuccess: (currencies: Map<String, String>) -> Unit,
         onError: (msg: String) -> Unit
     ) {
@@ -57,7 +57,7 @@ object CurrencyApiNetworkIml : CurrencyApiNetwork {
         })
     }
 
-    override fun getRates(
+    fun getRates(
         onSuccess: (rates: Map<String, Double?>) -> Unit,
         onError: (msg: String) -> Unit
     ) {

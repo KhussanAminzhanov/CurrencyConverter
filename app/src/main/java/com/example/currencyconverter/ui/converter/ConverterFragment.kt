@@ -14,7 +14,7 @@ import com.example.currencyconverter.R
 import com.example.currencyconverter.adapter.CurrencyListAdapter
 import com.example.currencyconverter.database.CurrencyDatabase
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
-import com.example.currencyconverter.network.CurrencyApiNetworkIml
+import com.example.currencyconverter.network.CurrencyApiNetwork
 import com.example.currencyconverter.repository.CurrencyRepository
 import com.example.currencyconverter.ui.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.ui.main.MainActivity
@@ -32,7 +32,7 @@ class ConverterFragment : Fragment() {
     private val bottomNav by lazy { (activity as MainActivity).bottomNav }
 
     private val database: CurrencyDatabase by inject { parametersOf(context) }
-    private val repo: CurrencyRepository by inject { parametersOf(database, CurrencyApiNetworkIml) }
+    private val repo: CurrencyRepository by inject { parametersOf(database, CurrencyApiNetwork) }
     private val model: CurrencyViewModel by viewModel { parametersOf(repo) }
     private lateinit var adapter: CurrencyListAdapter
 

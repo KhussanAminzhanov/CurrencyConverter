@@ -12,13 +12,14 @@ import kotlinx.coroutines.withContext
 
 class CurrencyRepository(
     val database: CurrencyDatabase,
-    val network: CurrencyApiNetwork,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     val currencyQuotes: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
     val currencyNames = MutableLiveData<Map<String, String>>()
     val currencyRates = MutableLiveData<Map<String, Double?>>()
+
+    val network = CurrencyApiNetwork
 
     //Currency Names
     private fun getCurrencyNames(
