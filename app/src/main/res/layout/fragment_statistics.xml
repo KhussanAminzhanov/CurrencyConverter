@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.userprofile.StatisticsFragment">
+    tools:context=".presentation.userprofile.StatisticsFragment">
 
     <TextView
         android:id="@+id/tv_total_time_spent"
