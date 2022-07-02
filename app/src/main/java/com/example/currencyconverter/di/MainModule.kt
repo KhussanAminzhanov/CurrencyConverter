@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val mainModule = module {
     factory { CurrencyDatabase.getInstance(androidApplication()) }
-    factory { CurrencyRepository(get()) }
-    viewModel { (repository: CurrencyRepository) -> CurrencyViewModel(repository) }
+    factory { CurrencyRepository(get(), get()) }
+    viewModel { CurrencyViewModel(get()) }
     viewModel { LoginViewModel(get()) }
 }

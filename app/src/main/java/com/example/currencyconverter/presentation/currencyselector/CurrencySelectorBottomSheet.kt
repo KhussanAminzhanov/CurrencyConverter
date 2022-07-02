@@ -8,14 +8,13 @@ import com.example.currencyconverter.data.database.asCurrency
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.example.currencyconverter.presentation.converter.CurrencyViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class CurrencySelectorBottomSheet(
-    private val viewModel: CurrencyViewModel
-) : BottomSheetDialogFragment() {
+class CurrencySelectorBottomSheet : BottomSheetDialogFragment() {
 
+    private val viewModel: CurrencyViewModel by sharedViewModel()
     private var _binding: BottomSheetAddCurrencyBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var adapter: CurrencySelectorAdapter
 
     override fun onCreateView(

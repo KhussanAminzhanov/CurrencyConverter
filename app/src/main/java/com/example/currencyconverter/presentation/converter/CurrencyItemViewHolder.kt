@@ -1,10 +1,10 @@
 package com.example.currencyconverter.presentation.converter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.data.database.Currency
@@ -17,7 +17,7 @@ class CurrenciesItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val viewModel by lazy { adapter.viewModel }
-    private val checkBox = CheckBox(adapter.parent.context)
+    private val checkBox = CheckBox(itemView.context)
     private var checkboxHasParent = false
 
     companion object {
@@ -31,39 +31,40 @@ class CurrenciesItemViewHolder(
         }
     }
 
-    fun bind(item: Currency, context: Context) {
+    fun bind(item: Currency) {
         binding.currencyValueTextInputLayout.hint = item.name
         binding.currencyFlagImage.setImageDrawable(
             ContextCompat.getDrawable(
-                context,
+                itemView.context,
                 item.image
             )
         )
 
-        binding.currencyLayout.setOnLongClickListener {
-            viewModel.setItemSelected(true)
-            true
-        }
+        binding.currencyLayout.setOnLongClickListener { viewModel.setItemSelected(true); true }
 
-        viewModel.balance.observe(adapter.viewLifecycleOwner) { newValue ->
+        viewModel.balance.observe(itemView.context as LifecycleOwner) { newValue ->
             viewModel.viewModelScope.launch {
                 val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
                 binding.currencyValueEditText.setText(newValueFormatted)
             }
         }
 
-        viewModel.isItemSelected.observe(adapter.viewLifecycleOwner) { itemSelected ->
+        viewModel.isItemSelected.observe(itemView.context as LifecycleOwner) { itemSelected ->
             binding.currencyLayout.isLongClickable = !itemSelected
             binding.currencyLayout
             if (itemSelected) addCheckbox() else removeCheckbox()
         }
 
+        setupCheckbox(item)
+    }
+
+    private fun setupCheckbox(item: Currency) {
         checkBox.isChecked = isCheckboxChecked(item)
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
-                adapter.viewModel.addToCheckedCurrencies(item)
+                adapter.viewModel.addCheckedCurrency(item)
             } else {
-                adapter.viewModel.removeCurrencyFromCheckedCurrencies(item)
+                adapter.viewModel.removeCheckedCurrency(item)
             }
         }
     }
@@ -82,6 +83,6 @@ class CurrenciesItemViewHolder(
     }
 
     private fun isCheckboxChecked(currency: Currency): Boolean {
-        return adapter.viewModel.checkedCurrenciesContains(currency)
+        return adapter.viewModel.containsCheckedCurrency(currency)
     }
 }

@@ -2,46 +2,42 @@ package com.example.currencyconverter.presentation.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ActivityMainBinding
+import com.example.currencyconverter.presentation.converter.CurrencyViewModel
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var networkStatusHelper: NetworkStatusHelper
+
     private lateinit var binding: ActivityMainBinding
-    val toolbar by lazy { binding.toolbar }
-    val bottomNav by lazy { binding.bottomNav }
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var networkStatusHelper: NetworkStatusHelper
+    private val currencyViewModel: CurrencyViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        networkStatusHelper = NetworkStatusHelper(this@MainActivity)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        initialNetworkCheck()
+
+        setupNetworkStatusHelper()
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration.Builder(navController.graph).build()
-
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-        binding.bottomNav.setupWithNavController(navController)
-
-        networkStatusHelper.observe(this) {
-            when (it) {
-                NetworkStatus.Available -> display("Network Available")
-                NetworkStatus.Unavailable -> display("Network Unavailable")
-            }
-        }
+        setupNavigation()
+        setupObservers()
+        initialNetworkCheck()
 
         if (checkGooglePlayServices()) {
             logFirebaseIdentifiers()
@@ -50,13 +46,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun display(msg: String): String {
+    private fun setupNetworkStatusHelper() {
+        networkStatusHelper = NetworkStatusHelper(this@MainActivity)
+        networkStatusHelper.observe(this) {
+            when (it) {
+                NetworkStatus.Available -> displayToast("Network Available")
+                NetworkStatus.Unavailable -> displayToast("Network Unavailable")
+            }
+        }
+    }
+
+    private fun setupNavigation() {
+        navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        appBarConfiguration = AppBarConfiguration.Builder(navController.graph).build()
+
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        binding.bottomNav.setupWithNavController(navController)
+    }
+
+    private fun setupObservers() {
+        currencyViewModel.isItemSelected.observe(this) { itemSelected ->
+            if (itemSelected) {
+                changeLayout(R.color.hint, R.string.currencies_list_item_selected, View.GONE)
+            } else {
+                changeLayout(R.color.primaryColor, R.string.currency, View.VISIBLE)
+            }
+        }
+    }
+
+    private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
+        binding.toolbar.setBackgroundColor(ContextCompat.getColor(this, colorId))
+        binding.toolbar.title = getString(titleId)
+        binding.bottomNav.visibility = bottomNavVisibility
+    }
+
+    private fun displayToast(msg: String): String {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         return msg
     }
 
     private fun initialNetworkCheck() {
-        if (!networkStatusHelper.isInternetAvailable()) display("Network Unavailable")
+        if (!networkStatusHelper.isInternetAvailable()) displayToast("Network Unavailable")
     }
 
     private fun checkGooglePlayServices(): Boolean {

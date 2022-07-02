@@ -2,28 +2,22 @@ package com.example.currencyconverter.presentation.converter
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import com.example.currencyconverter.R
 import com.example.currencyconverter.data.database.Currency
 import com.google.android.material.snackbar.Snackbar
 
 class CurrencyListAdapter(
-    val viewModel: CurrencyViewModel,
-    val viewLifecycleOwner: LifecycleOwner
+    val viewModel: CurrencyViewModel
 ) : ListAdapter<Currency, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
-    lateinit var parent: ViewGroup
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesItemViewHolder {
-        this.parent = parent
-        return CurrenciesItemViewHolder.inflateFrom(parent, this)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        CurrenciesItemViewHolder.inflateFrom(parent, this)
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, holder.itemView.context)
+        holder.bind(item)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {

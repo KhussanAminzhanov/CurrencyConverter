@@ -8,8 +8,8 @@ import com.example.example.toMap
 
 class CurrencyRepository(
     val database: CurrencyDatabase,
+    private val network: CurrencyApiNetwork
 ) {
-    private val network = CurrencyApiNetwork
 
     suspend fun refreshCurrencyQuotes() {
         val source = "KZT"

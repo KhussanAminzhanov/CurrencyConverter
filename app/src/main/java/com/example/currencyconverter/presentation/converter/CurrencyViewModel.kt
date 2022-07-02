@@ -21,15 +21,12 @@ class CurrencyViewModel(
     private val _sortingType = MutableLiveData(SortType.UNSORTED)
     val sortingType: LiveData<SortType> = _sortingType
 
-    //TODO add set method
     private val _isItemSelected = MutableLiveData(false)
     val isItemSelected: LiveData<Boolean> = _isItemSelected
 
-    //TODO add set method
     private val _balance = MutableLiveData(1.0)
     val balance: LiveData<Double> = _balance
 
-    //TODO add clear, add methods
     private val checkedCurrencies = mutableListOf<Currency>()
 
     private val currencyDao = repository.database.currencyDao
@@ -73,9 +70,9 @@ class CurrencyViewModel(
         _balance.value = balance
     }
 
-    fun addToCheckedCurrencies(currency: Currency) = checkedCurrencies.add(currency)
-    fun removeCurrencyFromCheckedCurrencies(currency: Currency) = checkedCurrencies.remove(currency)
-    fun checkedCurrenciesContains(currency: Currency) = checkedCurrencies.contains(currency)
+    fun addCheckedCurrency(currency: Currency) = checkedCurrencies.add(currency)
+    fun removeCheckedCurrency(currency: Currency) = checkedCurrencies.remove(currency)
+    fun containsCheckedCurrency(currency: Currency) = checkedCurrencies.contains(currency)
     fun clearCheckCurrencies() = checkedCurrencies.clear()
 
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {

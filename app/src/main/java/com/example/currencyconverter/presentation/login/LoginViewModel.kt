@@ -47,8 +47,8 @@ class LoginViewModel(private val state: SavedStateHandle) : ViewModel() {
     }
 
     override fun onCleared() {
-        state.set(KEY_PIN_CODE_INDEX, _index.value)
-        state.set(KEY_PIN_CODE_STRING, input.value)
+        state[KEY_PIN_CODE_INDEX] = _index.value
+        state[KEY_PIN_CODE_STRING] = input.value
     }
 
     companion object {
