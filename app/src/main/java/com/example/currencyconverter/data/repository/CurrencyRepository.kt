@@ -1,78 +1,26 @@
 package com.example.currencyconverter.data.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.data.database.CurrencyDatabase
 import com.example.currencyconverter.data.database.CurrencyQuote
 import com.example.currencyconverter.data.network.CurrencyApiNetwork
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.currencyconverter.domain.models.rate.toMap
+import com.example.example.toMap
 
 class CurrencyRepository(
     val database: CurrencyDatabase,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
+    private val network = CurrencyApiNetwork
 
-    val currencyQuotes: LiveData<List<CurrencyQuote>> = database.currencyQuoteDao.getAll()
-    val currencyNames = MutableLiveData<Map<String, String>>()
-    val currencyRates = MutableLiveData<Map<String, Double?>>()
-
-    val network = CurrencyApiNetwork
-
-    //Currency Names
-    private fun getCurrencyNames(
-        onSuccess: (currencies: Map<String, String>) -> Unit,
-        onError: (msg: String) -> Unit
-    ) {
-        network.getCurrencies(onSuccess, onError)
-    }
-
-    private fun onCurrencyNamesFetchSuccess(currencyNames: Map<String, String>) {
-        this.currencyNames.value = currencyNames
-    }
-
-    private fun onCurrencyNamesFetchError(msg: String) {
-        Log.e(TAG, "Error loading currency names: $msg")
-    }
-
-    suspend fun refreshCurrencyNames() {
-        withContext(ioDispatcher) {
-            getCurrencyNames(::onCurrencyNamesFetchSuccess, ::onCurrencyNamesFetchError)
+    suspend fun refreshCurrencyQuotes() {
+        val source = "KZT"
+        val currencyNames = network.getCurrencies()?.data?.toMap() ?: return
+        val currencyRates = network.getRates()?.data?.toMap(source) ?: return
+        val currencyQuotes = currencyNames.map {
+            val ticket = it.key
+            val name = it.value
+            val rate = currencyRates["KZT$ticket"] ?: 1.0
+            CurrencyQuote(name = "$name $ticket", exchangeRate = rate)
         }
-    }
-
-    //Currency Rates
-    private fun getCurrencyRates(
-        onSuccess: (rates: Map<String, Double?>) -> Unit,
-        onError: (msg: String) -> Unit
-    ) {
-        network.getRates(onSuccess, onError)
-    }
-
-    private fun onCurrencyRatesFetchSuccess(rates: Map<String, Double?>) {
-        this.currencyRates.value = rates
-    }
-
-    private fun onCurrencyRatesFetchError(msg: String) {
-        Log.e(TAG, "Error fetching quotes: $msg")
-    }
-
-    suspend fun refreshCurrencyRates() {
-        withContext(ioDispatcher) {
-            getCurrencyRates(::onCurrencyRatesFetchSuccess, ::onCurrencyRatesFetchError)
-        }
-    }
-
-    //Currency Quotes
-    suspend fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
-        withContext(ioDispatcher) {
-            database.currencyQuoteDao.insertAll(currencyQuotes)
-        }
-    }
-
-    companion object {
-        const val TAG = "currency_repository"
+        database.currencyQuoteDao.insertAll(currencyQuotes)
     }
 }

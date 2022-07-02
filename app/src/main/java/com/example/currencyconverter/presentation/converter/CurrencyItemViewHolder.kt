@@ -41,7 +41,7 @@ class CurrenciesItemViewHolder(
         )
 
         binding.currencyLayout.setOnLongClickListener {
-            viewModel.isItemSelected.value = true
+            viewModel.setItemSelected(true)
             true
         }
 
@@ -61,9 +61,9 @@ class CurrenciesItemViewHolder(
         checkBox.isChecked = isCheckboxChecked(item)
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
-                adapter.viewModel.checkedCurrencyPositions.add(item)
+                adapter.viewModel.addToCheckedCurrencies(item)
             } else {
-                adapter.viewModel.checkedCurrencyPositions.remove(item)
+                adapter.viewModel.removeCurrencyFromCheckedCurrencies(item)
             }
         }
     }
@@ -82,6 +82,6 @@ class CurrenciesItemViewHolder(
     }
 
     private fun isCheckboxChecked(currency: Currency): Boolean {
-        return adapter.viewModel.checkedCurrencyPositions.contains(currency)
+        return adapter.viewModel.checkedCurrenciesContains(currency)
     }
 }

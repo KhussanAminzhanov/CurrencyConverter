@@ -7,17 +7,17 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.R
 import com.example.currencyconverter.data.database.CurrencyDatabase
-import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 import com.example.currencyconverter.data.network.CurrencyApiNetwork
 import com.example.currencyconverter.data.repository.CurrencyRepository
+import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 import com.example.currencyconverter.presentation.currencyselector.CurrencySelectorBottomSheet
 import com.example.currencyconverter.presentation.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -55,7 +55,7 @@ class ConverterFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(value: Editable?) {
                 if (value == null || value.isEmpty()) return
-                model.balance.value = value.toString().toDouble()
+                model.setBalance(value.toString().toDouble())
             }
         })
 
@@ -87,17 +87,10 @@ class ConverterFragment : Fragment() {
             R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
             R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
             R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
-            R.id.menu_delete_item -> model.showDeleteConfirmationDialog(parentFragmentManager)
+            R.id.menu_delete_item -> showDeleteConfirmationDialog(parentFragmentManager)
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun addCurrency() {
-        CurrencySelectorBottomSheet(model).show(
-            childFragmentManager,
-            CurrencySelectorBottomSheet.TAG
-        )
     }
 
     private fun setupRecyclerView() {
@@ -114,13 +107,6 @@ class ConverterFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        model.isNetworkError.observe(viewLifecycleOwner) {
-            if (it) {
-                Snackbar.make(binding.root, "Network ERROR!", Snackbar.LENGTH_LONG)
-                    .setAnchorView(binding.etCurrencyValue)
-                    .show()
-            }
-        }
         model.currencies.observe(viewLifecycleOwner) {
             adapter.submitList(model.getCurrenciesSorted(it))
         }
@@ -133,8 +119,9 @@ class ConverterFragment : Fragment() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (model.isItemSelected.value == true) {
-                    model.isItemSelected.value = false
-                    model.checkedCurrencyPositions.clear()
+                    model.setItemSelected(false)
+//                    model.checkedCurrencyPositions.clear()
+                    model.clearCheckCurrencies()
                 } else {
                     activity?.finish()
                 }
@@ -143,9 +130,21 @@ class ConverterFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
+    private fun addCurrency() {
+        CurrencySelectorBottomSheet(model).show(
+            childFragmentManager,
+            CurrencySelectorBottomSheet.TAG
+        )
+    }
+
     private fun changeLayout(colorId: Int, titleId: Int, bottomNavVisibility: Int) {
         toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), colorId))
         toolbar.title = getString(titleId)
         bottomNav.visibility = bottomNavVisibility
+    }
+
+    private fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {
+        val dialog = DeleteConfirmationDialogFragment(model::deleteCurrencies)
+        dialog.show(fragmentManager, DeleteConfirmationDialogFragment.TAG)
     }
 }

@@ -1,13 +1,10 @@
 package com.example.currencyconverter.presentation.converter
 
-import android.util.Log
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.data.database.Currency
-import com.example.currencyconverter.data.database.CurrencyQuote
 import com.example.currencyconverter.data.repository.CurrencyRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -24,54 +21,39 @@ class CurrencyViewModel(
     private val _sortingType = MutableLiveData(SortType.UNSORTED)
     val sortingType: LiveData<SortType> = _sortingType
 
-    val isNetworkError = MutableLiveData(false)
-    val isItemSelected = MutableLiveData(false)
-    val balance = MutableLiveData(1.0)
-    val checkedCurrencyPositions = mutableListOf<Currency>()
-    val database = repository.database.currencyDao
+    //TODO add set method
+    private val _isItemSelected = MutableLiveData(false)
+    val isItemSelected: LiveData<Boolean> = _isItemSelected
+
+    //TODO add set method
+    private val _balance = MutableLiveData(1.0)
+    val balance: LiveData<Double> = _balance
+
+    //TODO add clear, add methods
+    private val checkedCurrencies = mutableListOf<Currency>()
+
+    private val currencyDao = repository.database.currencyDao
     val currencies = repository.database.currencyDao.getAll()
-    val currencyNames: LiveData<Map<String, String>> = repository.currencyNames
-    val currencyRates: LiveData<Map<String, Double?>> = repository.currencyRates
-    val currencyQuotes: LiveData<List<CurrencyQuote>> = repository.currencyQuotes
+    val currencyQuotes = repository.database.currencyQuoteDao.getAll()
 
 //    init {
-//        refreshCurrencyNames()
+//        refreshCurrencyQuotes()
 //    }
 
-    fun refreshCurrencyNames() {
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                Log.i(TAG, "refreshing currency names")
-                repository.refreshCurrencyNames()
-            } catch (e: Exception) {
-                onNetworkError("Error refreshing currency names: $e")
-            }
-        }
+    fun refreshCurrencyQuotes() = viewModelScope.launch(ioDispatcher) {
+        repository.refreshCurrencyQuotes()
     }
 
-    fun refreshCurrencyRates() {
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                repository.refreshCurrencyRates()
-            } catch (e: Exception) {
-                onNetworkError("Error refreshing currency rates: $e")
-            }
-        }
-    }
+    fun addCurrency(currency: Currency) =
+        viewModelScope.launch(ioDispatcher) { currencyDao.insert(currency) }
 
-    fun refreshCurrencyQuotes(currencyQuotes: List<CurrencyQuote>) {
-        viewModelScope.launch(ioDispatcher) {
-            repository.refreshCurrencyQuotes(currencyQuotes)
-        }
-    }
+    fun deleteCurrency(currency: Currency) =
+        viewModelScope.launch(ioDispatcher) { currencyDao.delete(currency) }
 
-    private fun onNetworkError(msg: String) {
-        Log.e(TAG, "Error refreshing currency quotes: $msg")
-        isNetworkError.value = true
+    fun deleteCurrencies() = viewModelScope.launch(ioDispatcher) {
+        currencyDao.deleteAll(checkedCurrencies)
+        checkedCurrencies.clear()
     }
-
-    fun addCurrency(currency: Currency) = viewModelScope.launch(ioDispatcher) { database.insert(currency) }
-    fun delete(currency: Currency) = viewModelScope.launch(ioDispatcher) { database.delete(currency) }
 
     fun getCurrenciesSorted(list: List<Currency>) = when (_sortingType.value) {
         SortType.ALPHABET -> list.sortedBy { it.name }
@@ -82,6 +64,19 @@ class CurrencyViewModel(
     fun setSortingType(sortType: SortType) {
         _sortingType.value = sortType
     }
+
+    fun setItemSelected(isItemSelected: Boolean) {
+        _isItemSelected.value = isItemSelected
+    }
+
+    fun setBalance(balance: Double) {
+        _balance.value = balance
+    }
+
+    fun addToCheckedCurrencies(currency: Currency) = checkedCurrencies.add(currency)
+    fun removeCurrencyFromCheckedCurrencies(currency: Currency) = checkedCurrencies.remove(currency)
+    fun checkedCurrenciesContains(currency: Currency) = checkedCurrencies.contains(currency)
+    fun clearCheckCurrencies() = checkedCurrencies.clear()
 
     fun moveCurrencies(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
@@ -107,24 +102,8 @@ class CurrencyViewModel(
         secondCurrency.currencyId = position
 
         viewModelScope.launch(ioDispatcher) {
-            database.update(firstCurrency)
-            database.update(secondCurrency)
+            currencyDao.update(firstCurrency)
+            currencyDao.update(secondCurrency)
         }
-    }
-
-    private fun deleteCurrencies() {
-        viewModelScope.launch(ioDispatcher) {
-            database.deleteAll(checkedCurrencyPositions)
-            checkedCurrencyPositions.clear()
-        }
-    }
-
-    fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {
-        val dialog = DeleteConfirmationDialogFragment(this::deleteCurrencies)
-        dialog.show(fragmentManager, DeleteConfirmationDialogFragment.TAG)
-    }
-
-    companion object {
-        private const val TAG = "currency_view_model"
     }
 }

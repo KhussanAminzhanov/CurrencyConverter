@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.currencyconverter.data.database.Currency
-import com.example.currencyconverter.data.database.CurrencyQuote
 import com.example.currencyconverter.data.database.asCurrency
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.example.currencyconverter.presentation.converter.CurrencyViewModel
@@ -17,7 +15,6 @@ class CurrencySelectorBottomSheet(
 
     private var _binding: BottomSheetAddCurrencyBinding? = null
     private val binding get() = _binding!!
-    private var data = mutableListOf<Currency>()
 
     private lateinit var adapter: CurrencySelectorAdapter
 
@@ -27,6 +24,7 @@ class CurrencySelectorBottomSheet(
         savedInstanceState: Bundle?
     ): View {
         _binding = BottomSheetAddCurrencyBinding.inflate(inflater, container, false)
+
         requireActivity()
         setupRecyclerView()
         setupObservers()
@@ -40,29 +38,10 @@ class CurrencySelectorBottomSheet(
             viewModel.addCurrency(currencyItem)
             this.dismiss()
         }
-        adapter.submitList(data)
         binding.recyclerViewCurrenciesNames.adapter = adapter
     }
 
     private fun setupObservers() {
-        viewModel.currencyNames.observe(viewLifecycleOwner) {
-            viewModel.refreshCurrencyRates()
-        }
-
-        viewModel.currencyRates.observe(viewLifecycleOwner) {
-            val currencyNames = viewModel.currencyNames.value
-            val currencyRates = viewModel.currencyRates.value
-            if (currencyNames != null && currencyRates != null) {
-                val currencyQuotes = currencyNames.map {
-                    val ticket = it.key
-                    val name = it.value
-                    val rate = currencyRates["KZT$ticket"] ?: 1.0
-                    CurrencyQuote(name = "$name $ticket", exchangeRate = rate)
-                }
-                viewModel.refreshCurrencyQuotes(currencyQuotes)
-            }
-        }
-
         viewModel.currencyQuotes.observe(viewLifecycleOwner) {
             val currencyList = it.map { currencyQuote ->  currencyQuote.asCurrency() }
             adapter.submitList(currencyList)

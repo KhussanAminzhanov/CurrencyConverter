@@ -33,7 +33,7 @@ class CurrencyListAdapter(
 
     override fun onItemDismiss(position: Int, view: View) {
         val deletedCurrency = getItem(position)
-        viewModel.delete(deletedCurrency)
+        viewModel.deleteCurrency(deletedCurrency)
 
         Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.bottom_nav)
