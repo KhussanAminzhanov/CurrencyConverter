@@ -71,7 +71,7 @@ class ConverterFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_add_currency -> addCurrency()
+            R.id.menu_add_currency -> showCurrencySelecterBottomSheet()
             R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
             R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
             R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
@@ -136,7 +136,7 @@ class ConverterFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
-    private fun addCurrency() {
+    private fun showCurrencySelecterBottomSheet() {
         CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
     }
 
