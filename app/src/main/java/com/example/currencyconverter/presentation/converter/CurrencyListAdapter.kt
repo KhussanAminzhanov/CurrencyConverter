@@ -1,19 +1,32 @@
 package com.example.currencyconverter.presentation.converter
 
-import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.ListAdapter
-import com.example.currencyconverter.R
 import com.example.currencyconverter.data.database.Currency
-import com.google.android.material.snackbar.Snackbar
 
 class CurrencyListAdapter(
-    val viewModel: CurrencyViewModel
+    private val balance: LiveData<Double>,
+    private val isItemSelected: LiveData<Boolean>,
+    private val onItemMoveCallback: (from: Int, to: Int) -> Unit,
+    private val onItemDismissCallback: (currency: Currency) -> Unit,
+    private val onItemLongClick: () -> Unit,
+    private val onItemCheck: (currency: Currency) -> Unit,
+    private val onItemUncheck: (currency: Currency) -> Unit,
+    private val isItemChecked: (currency: Currency) -> Boolean
 ) : ListAdapter<Currency, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
     CurrencyItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        CurrenciesItemViewHolder.inflateFrom(parent, this)
+        CurrenciesItemViewHolder.inflateFrom(
+            parent = parent,
+            balance = balance,
+            isItemSelected = isItemSelected,
+            onLongClick = onItemLongClick,
+            onItemCheck = onItemCheck,
+            onItemUncheck = onItemUncheck,
+            isItemChecked = isItemChecked,
+        )
 
     override fun onBindViewHolder(holder: CurrenciesItemViewHolder, position: Int) {
         val item = getItem(position)
@@ -21,19 +34,12 @@ class CurrencyListAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        viewModel.moveCurrencies(fromPosition, toPosition)
+        onItemMoveCallback(fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun onItemDismiss(position: Int, view: View) {
+    override fun onItemDismiss(position: Int) {
         val deletedCurrency = getItem(position)
-        viewModel.deleteCurrency(deletedCurrency)
-
-        Snackbar.make(view, "Currency deleted!", Snackbar.LENGTH_LONG)
-            .setAnchorView(R.id.bottom_nav)
-            .setAction("Undo") {
-                notifyItemInserted(itemCount)
-                viewModel.addCurrency(deletedCurrency)
-            }.show()
+        onItemDismissCallback(deletedCurrency)
     }
 }

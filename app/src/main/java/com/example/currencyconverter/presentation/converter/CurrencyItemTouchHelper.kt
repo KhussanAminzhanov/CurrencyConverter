@@ -1,12 +1,11 @@
 package com.example.currencyconverter.presentation.converter
 
-import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 interface CurrencyItemTouchHelperAdapter {
     fun onItemMove(fromPosition: Int, toPosition: Int)
-    fun onItemDismiss(position: Int, view: View)
+    fun onItemDismiss(position: Int)
 }
 
 class CurrenciesItemTouchHelperCallback(private val adapter: CurrencyItemTouchHelperAdapter) :
@@ -31,7 +30,7 @@ class CurrenciesItemTouchHelperCallback(private val adapter: CurrencyItemTouchHe
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapter.onItemDismiss(viewHolder.bindingAdapterPosition, viewHolder.itemView)
+        adapter.onItemDismiss(viewHolder.bindingAdapterPosition)
     }
 
     override fun isLongPressDragEnabled(): Boolean {

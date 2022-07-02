@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.R
+import com.example.currencyconverter.data.database.Currency
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 import com.example.currencyconverter.presentation.currencyselector.CurrencySelectorBottomSheet
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -25,7 +26,6 @@ class ConverterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        adapter = CurrencyListAdapter(model)
     }
 
     override fun onCreateView(
@@ -35,6 +35,7 @@ class ConverterFragment : Fragment() {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
 
         setupObservers()
+        setupRecyclerViewAdapter()
         setupRecyclerView()
         setupOnBackButtonPresses()
 
@@ -80,9 +81,27 @@ class ConverterFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupRecyclerView() {
-        adapter.submitList(model.currencies.value)
+    private fun setupRecyclerViewAdapter() {
+        adapter = CurrencyListAdapter(
+            model.balance,
+            model.isItemSelected,
+            ::onAdapterItemMove,
+            ::onAdapterItemDismiss,
+            ::onAdapterItemLongClick,
+            ::onAdapterItemCheck,
+            ::onAdapterItemUncheck,
+            ::isAdapterItemChecked
+        )
+    }
 
+    private fun onAdapterItemDismiss(currency: Currency) = model.deleteCurrency(currency)
+    private fun onAdapterItemMove(from: Int, to: Int) = model.moveCurrencies(from, to)
+    private fun onAdapterItemLongClick() = model.setItemSelected(true)
+    private fun onAdapterItemCheck(currency: Currency) = model.addCheckedCurrency(currency)
+    private fun onAdapterItemUncheck(currency: Currency) = model.removeCheckedCurrency(currency)
+    private fun isAdapterItemChecked(currency: Currency) = model.containsCheckedCurrency(currency)
+
+    private fun setupRecyclerView() {
         val callback = CurrenciesItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
 
@@ -97,8 +116,9 @@ class ConverterFragment : Fragment() {
         model.currencies.observe(viewLifecycleOwner) {
             adapter.submitList(model.getCurrenciesSorted(it))
         }
-        model.sortingType.observe(viewLifecycleOwner) { sortingType ->
-            adapter.submitList(model.currencies.value?.let { it -> model.getCurrenciesSorted(it) })
+        model.sortingType.observe(viewLifecycleOwner) {
+            val currencies = model.currencies.value ?: return@observe
+            adapter.submitList(currencies)
         }
     }
 
