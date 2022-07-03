@@ -9,37 +9,46 @@
         android:id="@+id/currencyFragment"
         android:name="com.example.currencyconverter.presentation.converter.ConverterFragment"
         android:label="@string/currency"
-        tools:layout="@layout/fragment_currencies" >
-        <action
-            android:id="@+id/action_currencyFragment_to_currencySelectorBottomSheet"
-            app:destination="@id/currencySelectorBottomSheet" />
+        tools:layout="@layout/fragment_currencies">
+        <deepLink
+            android:id="@+id/deep_link_currency_fragment"
+            app:uri="myapp://currencyconverter.com/converter" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.currencyconverter.presentation.favorites.FavoritesFragment"
         android:label="@string/favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites">
+        <deepLink
+            android:id="@+id/deep_link_currency_favorites"
+            app:uri="myapp://currencyconverter.com/favorites" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.currencyconverter.presentation.search.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <deepLink
+            android:id="@+id/deep_link_search_fragment"
+            app:uri="myapp://currencyconverter.com/search" />
+    </fragment>
     <fragment
         android:id="@+id/translateFragment"
         android:name="com.example.currencyconverter.presentation.translate.TranslateFragment"
         android:label="@string/translate"
-        tools:layout="@layout/fragment_translate" />
+        tools:layout="@layout/fragment_translate">
+        <deepLink
+            android:id="@+id/deep_link_translate_fragment"
+            app:uri="myapp://currencyconverter.com/translate" />
+    </fragment>
+
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.currencyconverter.presentation.userprofile.UserProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_user_profile" />
-    <dialog
-        android:id="@+id/currencySelectorBottomSheet"
-        android:name="com.example.currencyconverter.presentation.currencyselector.CurrencySelectorBottomSheet"
-        android:label="CurrencySelectorBottomSheet" >
-        <action
-            android:id="@+id/action_currencySelectorBottomSheet_to_currencyFragment"
-            app:destination="@id/currencyFragment" />
-    </dialog>
+        tools:layout="@layout/fragment_user_profile">
+        <deepLink
+            android:id="@+id/deep_link_user_profile_fragment"
+            app:uri="myapp://currencyconverter.com/userprofile" />
+    </fragment>
 </navigation>

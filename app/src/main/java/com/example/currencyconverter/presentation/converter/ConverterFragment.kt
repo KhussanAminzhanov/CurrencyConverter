@@ -5,6 +5,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,10 +25,10 @@ class ConverterFragment : Fragment() {
     private val model: CurrencyViewModel by sharedViewModel()
     private lateinit var adapter: CurrencyListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setHasOptionsMenu(true)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,34 +53,40 @@ class ConverterFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(getMenuProvider())
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         model.setItemSelected(false)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        model.isItemSelected.observe(viewLifecycleOwner) {
-            val menuLayoutId = if (it) {
-                R.menu.fragment_currencies_currency_selected
-            } else {
-                R.menu.fragment_currencies_normal
+    private fun getMenuProvider() = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            model.isItemSelected.observe(viewLifecycleOwner) {
+                val menuLayoutId = if (it) {
+                    R.menu.fragment_currencies_currency_selected
+                } else {
+                    R.menu.fragment_currencies_normal
+                }
+                menu.clear()
+                menuInflater.inflate(menuLayoutId, menu)
             }
-            menu.clear()
-            inflater.inflate(menuLayoutId, menu)
         }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_add_currency -> showCurrencySelecterBottomSheet()
-            R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
-            R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
-            R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
-            R.id.menu_delete_item -> showDeleteConfirmationDialog(parentFragmentManager)
-            else -> return super.onOptionsItemSelected(item)
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+                R.id.menu_add_currency -> showCurrencySelectorBottomSheet()
+                R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
+                R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
+                R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
+                R.id.menu_delete_item -> showDeleteConfirmationDialog(parentFragmentManager)
+            }
+            return true
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupRecyclerViewAdapter() {
@@ -136,7 +144,7 @@ class ConverterFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
-    private fun showCurrencySelecterBottomSheet() {
+    private fun showCurrencySelectorBottomSheet() {
         CurrencySelectorBottomSheet().show(childFragmentManager, CurrencySelectorBottomSheet.TAG)
     }
 

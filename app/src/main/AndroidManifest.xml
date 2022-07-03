@@ -29,7 +29,6 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/primaryColor" />
 
-
         <activity
             android:name=".presentation.main.MainActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -48,6 +47,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
         <service

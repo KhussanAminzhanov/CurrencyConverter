@@ -76,10 +76,6 @@ class CurrenciesItemViewHolder(
                 val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
                 binding.currencyValueEditText.setText(newValueFormatted)
             }
-//            viewModel.viewModelScope.launch {
-//                val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
-//                binding.currencyValueEditText.setText(newValueFormatted)
-//            }
         }
 
         isItemSelected.observe(itemView.context as LifecycleOwner) { itemSelected ->

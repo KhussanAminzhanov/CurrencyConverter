@@ -53,4 +53,9 @@
     <string name="video_title">Leon The Professional</string>
     <string name="movie_info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eleifend iaculis nulla non condimentum. Suspendisse nec facilisis felis. Pellentesque justo neque, fringilla at elementum sed, convallis a lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra mauris quis sagittis interdum. Mauris suscipit lobortis suscipit. Ut egestas luctus tortor et euismod. Sed congue accumsan tortor, ac placerat orci venenatis ac. </string>
     <string name="fast_and_furious">Fast and Furious</string>
+
+    //Shortcut Labels
+    <string name="shortcut_short_label_favorites">Favorites</string>
+    <string name="shortcut_long_label_favorites">Favorites Fragment</string>
+    <string name="shortcut_disabled_message_favorites">Favorites Shortcut Disabled</string>
 </resources>

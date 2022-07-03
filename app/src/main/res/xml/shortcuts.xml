@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="FavoritesFragment"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/shortcut_short_label_favorites"
+        android:shortcutLongLabel="@string/shortcut_long_label_favorites"
+        android:shortcutDisabledMessage="@string/shortcut_disabled_message_favorites"
+        android:icon="@drawable/ic_favorites">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="myapp://currencyconverter.com/favorites"/>
+    </shortcut>
+</shortcuts>
