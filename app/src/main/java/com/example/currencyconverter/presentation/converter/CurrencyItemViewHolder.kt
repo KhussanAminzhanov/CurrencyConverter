@@ -1,9 +1,10 @@
 package com.example.currencyconverter.presentation.converter
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -24,19 +25,17 @@ class CurrenciesItemViewHolder(
 
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private val checkBox = CheckBox(itemView.context)
-    private var checkboxHasParent = false
     private lateinit var item: Currency
 
     companion object {
         fun inflateFrom(
             parent: ViewGroup,
+            balance: LiveData<Double>,
+            isItemSelected: LiveData<Boolean>,
             onLongClick: () -> Unit,
             onItemCheck: (currency: Currency) -> Unit,
             onItemUncheck: (currency: Currency) -> Unit,
             isItemChecked: (currency: Currency) -> Boolean,
-            balance: LiveData<Double>,
-            isItemSelected: LiveData<Boolean>
         ): CurrenciesItemViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemCurrencyBinding.inflate(layoutInflater, parent, false)
@@ -60,47 +59,47 @@ class CurrenciesItemViewHolder(
     }
 
     private fun setupLayoutData() {
-        binding.currencyValueTextInputLayout.hint = item.name
-        binding.currencyFlagImage.setImageDrawable(
-            ContextCompat.getDrawable(
-                itemView.context,
-                item.image
-            )
-        )
+        binding.tvTicket.text = item.name.split(" ").last()
+        binding.tvName.text = item.name.slice(0..(item.name.length - 4))
         binding.currencyLayout.setOnLongClickListener { onItemLongClick(); true }
+        binding.edtCurrencyValue.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s == null) return
+                if (s.isEmpty()) s.append('0')
+                else s.trimStart('0')
+            }
+        })
     }
 
     private fun setupObservers() {
         balance.observe(itemView.context as LifecycleOwner) { newValue ->
             CoroutineScope(Dispatchers.Main).launch {
                 val newValueFormatted = "%.4f".format(newValue * item.exchangeRate)
-                binding.currencyValueEditText.setText(newValueFormatted)
+                binding.edtCurrencyValue.setText(newValueFormatted)
             }
         }
 
         isItemSelected.observe(itemView.context as LifecycleOwner) { itemSelected ->
             binding.currencyLayout.isLongClickable = !itemSelected
-            if (itemSelected) addCheckbox() else removeCheckbox()
+            if (itemSelected) showCheckbox() else hideCheckbox()
         }
     }
 
     private fun setupCheckbox() {
-        checkBox.isChecked = isItemChecked(item)
-        checkBox.setOnClickListener {
-            if (checkBox.isChecked) onItemCheck(item) else onItemUncheck(item)
+        binding.chbItemChecked.isChecked = isItemChecked(item)
+        binding.chbItemChecked.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) onItemCheck(item) else onItemUncheck(item)
         }
     }
 
-    private fun addCheckbox() {
-        if (checkboxHasParent) return
-        binding.innerLinearLayout.addView(checkBox)
-        checkboxHasParent = true
-        checkBox.isChecked = false
+    private fun showCheckbox() {
+        binding.chbItemChecked.visibility = View.VISIBLE
+        binding.chbItemChecked.isChecked = false
     }
 
-    private fun removeCheckbox() {
-        if (!checkboxHasParent) return
-        binding.innerLinearLayout.removeView(checkBox)
-        checkboxHasParent = false
+    private fun hideCheckbox() {
+        binding.chbItemChecked.visibility = View.GONE
     }
 }

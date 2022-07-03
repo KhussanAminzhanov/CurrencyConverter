@@ -24,6 +24,8 @@ class ConverterFragment : Fragment() {
 
     private val model: CurrencyViewModel by sharedViewModel()
     private lateinit var adapter: CurrencyListAdapter
+    private lateinit var menuHost: MenuHost
+    private lateinit var menuProvider: MenuProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +49,9 @@ class ConverterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        menuHost.removeMenuProvider(menuProvider)
         model.setItemSelected(false)
+        _binding = null
     }
 
     private fun setupLayout() {
@@ -114,8 +117,9 @@ class ConverterFragment : Fragment() {
     }
 
     private fun setupMenuOptions() {
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(getMenuProvider())
+        menuHost = requireActivity()
+        menuProvider = getMenuProvider()
+        menuHost.addMenuProvider(menuProvider)
     }
 
     private fun getMenuProvider() = object : MenuProvider {

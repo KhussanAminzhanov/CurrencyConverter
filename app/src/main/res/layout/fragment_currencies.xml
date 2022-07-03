@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:orientation="vertical"
     tools:context=".presentation.converter.ConverterFragment">
 
@@ -19,8 +20,10 @@
         android:id="@+id/et_currency_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/enter_value_to_be_converted"
         android:importantForAutofill="no"
         android:inputType="numberSigned"
-        android:hint="@string/enter_value_to_be_converted"/>
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

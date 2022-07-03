@@ -39,7 +39,6 @@ class CurrencyListAdapter(
     }
 
     override fun onItemDismiss(position: Int) {
-        val deletedCurrency = getItem(position)
-        onItemDismissCallback(deletedCurrency)
+        onItemDismissCallback(getItem(position))
     }
 }
