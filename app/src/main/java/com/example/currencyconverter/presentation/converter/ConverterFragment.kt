@@ -25,37 +25,24 @@ class ConverterFragment : Fragment() {
     private val model: CurrencyViewModel by sharedViewModel()
     private lateinit var adapter: CurrencyListAdapter
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setHasOptionsMenu(true)
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCurrenciesBinding.inflate(inflater, container, false)
 
+        setupLayout()
         setupObservers()
         setupRecyclerViewAdapter()
         setupRecyclerView()
-        setupOnBackButtonPresses()
-
-        binding.etCurrencyValue.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(value: Editable?) {
-                if (value == null || value.isEmpty()) return
-                model.setBalance(value.toString().toDouble())
-            }
-        })
+        setupOnBackButtonPres()
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(getMenuProvider())
+        super.onViewCreated(view, savedInstanceState)
+        setupMenuOptions()
     }
 
     override fun onDestroyView() {
@@ -64,28 +51,24 @@ class ConverterFragment : Fragment() {
         model.setItemSelected(false)
     }
 
-    private fun getMenuProvider() = object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            model.isItemSelected.observe(viewLifecycleOwner) {
-                val menuLayoutId = if (it) {
-                    R.menu.fragment_currencies_currency_selected
-                } else {
-                    R.menu.fragment_currencies_normal
-                }
-                menu.clear()
-                menuInflater.inflate(menuLayoutId, menu)
+    private fun setupLayout() {
+        binding.etCurrencyValue.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(value: Editable?) {
+                if (value == null || value.isEmpty()) return
+                model.setBalance(value.toString().toDouble())
             }
-        }
+        })
+    }
 
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-            when (menuItem.itemId) {
-                R.id.menu_add_currency -> showCurrencySelectorBottomSheet()
-                R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
-                R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
-                R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
-                R.id.menu_delete_item -> showDeleteConfirmationDialog(parentFragmentManager)
-            }
-            return true
+    private fun setupObservers() {
+        model.currencies.observe(viewLifecycleOwner) {
+            adapter.submitList(model.getCurrenciesSorted(it))
+        }
+        model.sortingType.observe(viewLifecycleOwner) {
+            val currencies = model.currencies.value ?: return@observe
+            adapter.submitList(currencies)
         }
     }
 
@@ -112,36 +95,52 @@ class ConverterFragment : Fragment() {
     private fun setupRecyclerView() {
         val callback = CurrenciesItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
-
         binding.currenciesListRecyclerView.adapter = adapter
         binding.currenciesListRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
 
-    private fun setupObservers() {
-        model.currencies.observe(viewLifecycleOwner) {
-            adapter.submitList(model.getCurrenciesSorted(it))
-        }
-        model.sortingType.observe(viewLifecycleOwner) {
-            val currencies = model.currencies.value ?: return@observe
-            adapter.submitList(currencies)
-        }
-    }
-
-    private fun setupOnBackButtonPresses() {
+    private fun setupOnBackButtonPres() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (model.isItemSelected.value == true) {
                     model.setItemSelected(false)
                     model.clearCheckCurrencies()
-                } else {
-                    activity?.finish()
-                }
+                } else activity?.finish()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun setupMenuOptions() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(getMenuProvider())
+    }
+
+    private fun getMenuProvider() = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            model.isItemSelected.observe(viewLifecycleOwner) {
+                val menuLayoutId = if (it) {
+                    R.menu.fragment_currencies_currency_selected
+                } else {
+                    R.menu.fragment_currencies_normal
+                }
+                menu.clear()
+                menuInflater.inflate(menuLayoutId, menu)
+            }
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+                R.id.menu_add_currency -> showCurrencySelectorBottomSheet()
+                R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
+                R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
+                R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
+                R.id.menu_delete_item -> showDeleteConfirmationDialog(parentFragmentManager)
+            }
+            return true
+        }
     }
 
     private fun showCurrencySelectorBottomSheet() {
