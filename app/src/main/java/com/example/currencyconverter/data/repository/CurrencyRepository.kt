@@ -3,7 +3,7 @@ package com.example.currencyconverter.data.repository
 import com.example.currencyconverter.data.database.CurrencyDatabase
 import com.example.currencyconverter.data.database.CurrencyQuote
 import com.example.currencyconverter.data.network.CurrencyApiNetwork
-import com.example.currencyconverter.domain.models.rate.toMap
+import com.example.currencyconverter.domain.models.currencyapi.rate.toMap
 import com.example.example.toMap
 
 class CurrencyRepository(

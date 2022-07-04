@@ -1,7 +1,7 @@
 package com.example.currencyconverter.data.network
 
-import com.example.currencyconverter.domain.models.currency.Currencies
-import com.example.currencyconverter.domain.models.rate.Rates
+import com.example.currencyconverter.domain.models.currencyapi.currency.Currencies
+import com.example.currencyconverter.domain.models.currencyapi.rate.Rates
 import retrofit2.Retrofit
 
 class CurrencyApiNetwork(retrofit: Retrofit) {
