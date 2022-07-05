@@ -25,7 +25,7 @@ class DownloadImageDialogFragment(val photo: Photo) : DialogFragment() {
 
         Glide.with(requireContext()).load(photo.urlRegular).into(binding.ivImage)
 
-        binding.btnDownload.setOnClickListener { viewModel.savePhoto(photo.urlFull) }
+        binding.btnDownload.setOnClickListener { viewModel.savePhoto(photo) }
         binding.btnCancel.setOnClickListener { dismiss() }
 
         return binding.root

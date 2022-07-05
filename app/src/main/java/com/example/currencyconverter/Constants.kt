@@ -8,4 +8,6 @@ const val NOTIFICATION_ID = 1
 const val OUTPUT_PATH = "currency_converter_outputs"
 const val KEY_IMAGE_URI = "KEY_IMAGE_URI"
 const val KEY_IMAGE_URL = "KEY_IMAGE_URL"
+const val KEY_IMAGE_ID = "KEY_IMAGE_ID"
 const val TAG_OUTPUT = "OUTPUT"
+const val DOWNLOAD_IMAGE_WORK_NAME = "download_image_work_name"

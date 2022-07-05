@@ -22,7 +22,6 @@ class CurrenciesItemViewHolder(
     private val onItemCheck: (currency: Currency) -> Unit,
     private val onItemUncheck: (currency: Currency) -> Unit,
     private val isItemChecked: (currency: Currency) -> Boolean
-
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var item: Currency

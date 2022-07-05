@@ -6,9 +6,12 @@ import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.currencyconverter.KEY_IMAGE_ID
 import com.example.currencyconverter.KEY_IMAGE_URL
+import com.example.currencyconverter.data.database.Photo
 import com.example.currencyconverter.data.repository.PhotosRepository
 import com.example.currencyconverter.workers.SavePhotoWorker
+import com.example.currencyconverter.workers.SendAnalyticsToFirebaseWorker
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,17 +32,34 @@ class SearchViewModel(
         repository.searchPhotos(query)
     }
 
-    fun savePhoto(imageUrl: String) {
+    fun savePhoto(photo: Photo) {
         val constraints = Constraints.Builder()
             .setRequiresStorageNotLow(true)
             .setRequiresBatteryNotLow(true)
             .build()
 
         val save = OneTimeWorkRequestBuilder<SavePhotoWorker>()
-        save.setInputData(createInputDataForUrl(imageUrl))
-        save.setConstraints(constraints)
+            .setInputData(createInputDataForUrl(photo.urlFull))
+            .setConstraints(constraints)
+            .build()
 
-        workManager.enqueue(save.build())
+        val send = OneTimeWorkRequestBuilder<SendAnalyticsToFirebaseWorker>()
+            .setInputData(createInputDataForImageId(photo.id))
+            .build()
+
+//        val continuation = workManager.beginUniqueWork(
+//            DOWNLOAD_IMAGE_WORK_NAME,
+//            ExistingWorkPolicy.REPLACE,
+//            send
+//        )
+
+        val continuation = workManager.beginWith(save).then(send).enqueue()
+    }
+
+    private fun createInputDataForImageId(photoId: Int): Data {
+        val builder = Data.Builder()
+        builder.putString(KEY_IMAGE_ID, photoId.toString())
+        return builder.build()
     }
 
     private fun createInputDataForUrl(imageUrl: String): Data {
