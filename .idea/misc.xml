@@ -41,6 +41,7 @@
         <entry key="app/src/main/res/layout/currency_item.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/delete_currency_alert_dialog_layout.xml" value="0.4005208333333333" />
         <entry key="app/src/main/res/layout/dialog_fragment_delete_confirmation.xml" value="0.4015625" />
+        <entry key="app/src/main/res/layout/dialog_fragment_download_image.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_all_users.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_another.xml" value="0.38958333333333334" />
         <entry key="app/src/main/res/layout/fragment_currencies.xml" value="0.38958333333333334" />

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 
 class LoginViewModel(private val state: SavedStateHandle) : ViewModel() {
 
-    private val correctPinCode = ""
+    private val correctPinCode = "8888"
     val pinCodeLength = correctPinCode.length
 
     private var input = state.getLiveData(KEY_PIN_CODE_STRING, "0".repeat(pinCodeLength))

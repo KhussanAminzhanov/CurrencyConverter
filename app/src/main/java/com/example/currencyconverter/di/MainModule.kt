@@ -1,5 +1,6 @@
 package com.example.currencyconverter.di
 
+import androidx.work.WorkManager
 import com.example.currencyconverter.data.database.CurrencyDatabase
 import com.example.currencyconverter.data.database.PhotoDatabase
 import com.example.currencyconverter.data.repository.CurrencyRepository
@@ -19,9 +20,10 @@ val mainModule = module {
     viewModel { CurrencyViewModel(get()) }
 
     // Search and Download Photo Screen Dependencies
+    factory { WorkManager.getInstance(androidApplication()) }
     factory { PhotoDatabase.getInstance(androidApplication()) }
     factory { PhotosRepository(get(), get()) }
-    viewModel { SearchViewModel(get()) }
+    viewModel { SearchViewModel(get(), get()) }
 
     viewModel { LoginViewModel(get()) }
 }

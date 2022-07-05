@@ -9,8 +9,9 @@ import com.example.currencyconverter.databinding.ItemPhotoBinding
 
 class PhotoViewHolder(val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(photo: Photo) {
+    fun bind(photo: Photo, onClick: (Photo) -> Unit) {
         Glide.with(itemView.context).load(photo.urlThumb).into(binding.ivPhotoThumb)
+        binding.ivPhotoThumb.setOnClickListener { onClick(photo) }
     }
 
     companion object {
