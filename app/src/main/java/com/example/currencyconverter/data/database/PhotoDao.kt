@@ -3,7 +3,6 @@ package com.example.currencyconverter.data.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
-import com.example.currencyconverter.domain.models.unsplash.Photo
 
 @Dao
 interface PhotoDao {

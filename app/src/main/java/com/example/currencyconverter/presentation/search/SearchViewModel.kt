@@ -12,6 +12,10 @@ class SearchViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
+//    init {
+//        searchPhotos("city ")
+//    }
+
     val photos = repository.database.photoDao.getAll()
 
     fun searchPhotos(query: String) = viewModelScope.launch(ioDispatcher) {

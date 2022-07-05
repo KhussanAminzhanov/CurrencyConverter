@@ -1,6 +1,7 @@
 package com.example.currencyconverter.data.network
 
 import com.example.currencyconverter.domain.models.unsplash.SearchPhotoResult
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,7 +16,7 @@ interface UnsplashApiService {
         @Query("page") page: Int = 1,
         @Query("per_page") perPage: Int = 30,
         @Query("client_id") clientId: String = API_KEY
-    ) : SearchPhotoResult
+    ) : Call<SearchPhotoResult>
 }
 
 class UnsplashApiNetwork(retrofit: Retrofit) {

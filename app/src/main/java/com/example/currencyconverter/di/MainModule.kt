@@ -13,10 +13,12 @@ import org.koin.dsl.module
 
 val mainModule = module {
 
+    // Create and Convert Currency Screen Dependencies
     factory { CurrencyDatabase.getInstance(androidApplication()) }
     factory { CurrencyRepository(get(), get()) }
     viewModel { CurrencyViewModel(get()) }
 
+    // Search and Download Photo Screen Dependencies
     factory { PhotoDatabase.getInstance(androidApplication()) }
     factory { PhotosRepository(get(), get()) }
     viewModel { SearchViewModel(get()) }

@@ -12,9 +12,11 @@ import java.util.concurrent.TimeUnit
 
 private const val CURRENCY_API_BASE_URL = "https://api.currencyapi.com/v3/"
 private const val UNSPLASH_API_BASE_URL = "https://api.unsplash.com/"
+private const val NAME_CURRENCY_RETROFIT = "CURRENCY_RETROFIT"
+private const val NAME_PHOTO_RETROFIT = "PHOTO_RETROFIT"
 
 val networkModule = module {
-    factory { GsonConverterFactory.create(GsonBuilder().create()) }
+    factory { GsonBuilder().create() }
     factory {
         OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -22,20 +24,24 @@ val networkModule = module {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-    factory(named("CurrencyRetrofit")) {
+
+    // Currency Data Api Dependencies
+    factory(named(NAME_CURRENCY_RETROFIT)) {
         Retrofit.Builder()
             .client(get())
             .baseUrl(CURRENCY_API_BASE_URL)
-            .addConverterFactory(get())
+            .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
-    single { CurrencyApiNetwork(get()) }
-    factory(named("UnsplashRetrofit")) {
+    single { CurrencyApiNetwork(get(named(NAME_CURRENCY_RETROFIT))) }
+
+    // Unsplash Photos Api Dependencies
+    factory(named(NAME_PHOTO_RETROFIT)) {
         Retrofit.Builder()
             .client(get())
             .baseUrl(UNSPLASH_API_BASE_URL)
-            .addConverterFactory(get())
+            .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
-    single { UnsplashApiNetwork(get()) }
+    single { UnsplashApiNetwork(get(named(NAME_PHOTO_RETROFIT))) }
 }
