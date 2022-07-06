@@ -17,6 +17,10 @@ class CurrencySelectorBottomSheet : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: CurrencySelectorAdapter
 
+//    init {
+//        viewModel.refreshCurrencyQuotes()
+//    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

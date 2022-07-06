@@ -25,7 +25,7 @@ val networkModule = module {
             .build()
     }
 
-    // Currency Data Api Dependencies
+    // Currency RatesData Api Dependencies
     factory(named(NAME_CURRENCY_RETROFIT)) {
         Retrofit.Builder()
             .client(get())

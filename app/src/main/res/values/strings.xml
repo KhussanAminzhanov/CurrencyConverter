@@ -61,4 +61,7 @@
     <string name="random_photo">random photo</string>
     <string name="download">Download</string>
     <string name="image">image</string>
+    <string name="chat">Chat</string>
+    <string name="message">Message</string>
+    <string name="send_message">send message</string>
 </resources>

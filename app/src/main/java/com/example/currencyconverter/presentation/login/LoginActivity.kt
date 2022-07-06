@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private val model: LoginViewModel by stateViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
@@ -64,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
         for (i in 1..9) {
             binding.gridLayoutNumericKeypad.addView(getNormalNumericButton(i.toString()) {
                 model.enterPinCodeDigit(i)
+                checkPinCode()
             })
         }
         binding.gridLayoutNumericKeypad.addView(getBackButton())
@@ -91,24 +92,25 @@ class LoginActivity : AppCompatActivity() {
     private fun getOkButton(): Button {
         val okButton = getNormalNumericButton(getString(R.string.ok_button_text))
         okButton.background = AppCompatResources.getDrawable(this, R.drawable.btn_ok_selector)
-        okButton.setOnClickListener {
-            if (model.index.value == model.pinCodeLength) {
-                if (model.checkPinCode()) {
-                    finish()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    model.resetPinCodeIndex()
-                    vibrate()
-                    val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
-                    animation.setAnimationListener(getPinCodeTextViewAnimationListener())
-                    binding.llPinCode.startAnimation(animation)
-                }
-            }
-        }
+        okButton.setOnClickListener { checkPinCode() }
         return okButton
     }
 
+    private fun checkPinCode() {
+        if (model.index.value == model.pinCodeLength) {
+            if (model.checkPinCode()) {
+                finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            } else {
+                model.resetPinCodeIndex()
+                vibrate()
+                val animation = AnimationUtils.loadAnimation(this, R.anim.shake)
+                animation.setAnimationListener(getPinCodeTextViewAnimationListener())
+                binding.llPinCode.startAnimation(animation)
+            }
+        }
+    }
 
     private fun getPinCodeTextViewAnimationListener(): Animation.AnimationListener {
         return object : Animation.AnimationListener {

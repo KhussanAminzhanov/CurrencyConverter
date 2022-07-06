@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.bottomNav.elevation = 0F
+        binding.toolbar.elevation = 0F
 
         setupNetworkStatusHelper()
         setContentView(binding.root)

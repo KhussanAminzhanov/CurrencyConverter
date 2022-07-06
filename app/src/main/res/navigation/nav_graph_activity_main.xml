@@ -33,10 +33,10 @@
             app:uri="myapp://currencyconverter.com/search" />
     </fragment>
     <fragment
-        android:id="@+id/translateFragment"
-        android:name="com.example.currencyconverter.presentation.translate.TranslateFragment"
-        android:label="@string/translate"
-        tools:layout="@layout/fragment_translate">
+        android:id="@+id/chatFragment"
+        android:name="com.example.currencyconverter.presentation.chat.ChatFragment"
+        android:label="@string/chat"
+        tools:layout="@layout/fragment_chat">
         <deepLink
             android:id="@+id/deep_link_translate_fragment"
             app:uri="myapp://currencyconverter.com/translate" />

@@ -22,9 +22,9 @@ class SearchViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-//    init {
-//        searchPhotos("city ")
-//    }
+    init {
+        searchPhotos("city ")
+    }
 
     val photos = repository.database.photoDao.getAll()
 

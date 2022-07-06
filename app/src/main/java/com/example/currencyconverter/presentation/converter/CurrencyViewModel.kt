@@ -55,7 +55,7 @@ class CurrencyViewModel(
     fun getCurrenciesSorted(list: List<Currency>) = when (_sortingType.value) {
         SortType.ALPHABET -> list.sortedBy { it.name }
         SortType.VALUE -> list.sortedBy { it.exchangeRate }
-        else -> list
+        else -> list.sortedBy { it.currencyId }
     }
 
     fun setSortingType(sortType: SortType) {

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "476362290264",
+    "firebase_url": "https://currency-converter-6c8cf-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "currency-converter-6c8cf",
     "storage_bucket": "currency-converter-6c8cf.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "476362290264-5sf0of3miq6st90oem63mr4kf3pbbnr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.currencyconverter",
+            "certificate_hash": "57e8fe005c23825caa0b25c3809e61b11df7d48a"
+          }
+        },
         {
           "client_id": "476362290264-ltle3bbbs6v26t2hsmftspftekkp8kfo.apps.googleusercontent.com",
           "client_type": 3
