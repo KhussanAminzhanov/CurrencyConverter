@@ -30,22 +30,12 @@ class ChatFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
+
         if (auth.currentUser == null) {
             startActivity(Intent(requireContext(), SignInActivity::class.java))
             requireActivity().finish()
             return
         }
-
-        db = Firebase.database
-        val messageRef = db.reference.child(MESSAGE_CHILD)
-
-        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
-            .setQuery(messageRef, ChatMessage::class.java)
-            .build()
-
-        adapter = MessageAdapter(options, getUserName())
-        manager = LinearLayoutManager(requireContext())
-        manager.stackFromEnd = true
     }
 
     override fun onCreateView(
@@ -54,7 +44,18 @@ class ChatFragment : Fragment() {
     ): View {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
-        binding.progressBar.visibility = View.INVISIBLE
+        db = Firebase.database
+        val messageRef = db.reference.child(MESSAGE_CHILD)
+
+        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
+            .setQuery(messageRef, ChatMessage::class.java)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
+
+        adapter = MessageAdapter(options, getUserName())
+        manager = LinearLayoutManager(requireContext())
+        manager.stackFromEnd = true
+
         binding.rvMessages.layoutManager = manager
         binding.rvMessages.adapter = adapter
 
@@ -96,8 +97,8 @@ class ChatFragment : Fragment() {
         super.onPause()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 
