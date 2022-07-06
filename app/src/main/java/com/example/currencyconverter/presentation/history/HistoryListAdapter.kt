@@ -1,4 +1,4 @@
-package com.example.currencyconverter.presentation.favorites
+package com.example.currencyconverter.presentation.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,26 +8,26 @@ import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.ItemPodcastPlayerBinding
 import com.example.currencyconverter.databinding.ItemVideoPlayerBinding
 
-class FavoritesListAdapter(
+class HistoryListAdapter(
     private val data: List<String>,
     private val fm: FragmentManager
-) : RecyclerView.Adapter<FavoritesViewHolder>() {
+) : RecyclerView.Adapter<TransactionViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             TYPE_VIDEO -> {
                 val binding = ItemVideoPlayerBinding.inflate(inflater, parent, false)
-                FavoritesViewHolder(binding)
+                TransactionViewHolder(binding)
             }
             else -> {
                 val binding = ItemPodcastPlayerBinding.inflate(inflater, parent, false)
-                FavoritesViewHolder(binding)
+                TransactionViewHolder(binding)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val item = data[position]
         when (holder.itemViewType) {
             TYPE_VIDEO -> {

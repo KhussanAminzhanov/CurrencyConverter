@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.currencyconverter.presentation.favorites.FavoritesFragment"
+        android:name="com.example.currencyconverter.presentation.history.HistoryFragment"
         android:label="@string/favorites"
-        tools:layout="@layout/fragment_favorites">
+        tools:layout="@layout/fragment_history">
         <deepLink
             android:id="@+id/deep_link_currency_favorites"
             app:uri="myapp://currencyconverter.com/favorites" />

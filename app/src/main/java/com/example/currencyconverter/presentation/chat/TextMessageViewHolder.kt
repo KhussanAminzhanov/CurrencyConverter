@@ -13,9 +13,9 @@ class TextMessageViewHolder(private val binding: ItemTextMessageBinding) :
     fun bind(item: ChatMessage, currencyUserName: String?) {
         binding.tvMessage.text = item.text
         setTextColor(item.name, currencyUserName, binding.tvMessage)
-        binding.tvMessengerFullName.text =
-            if (item.name == null) ChatFragment.ANONYMOUS else item.name
-        binding.tvMessengerCapitalLetter.text = "A"
+        val userNameCapital = (item.name ?: "A").first().toString()
+        binding.tvMessengerFullName.text = if (item.name == null) ChatFragment.ANONYMOUS else item.name
+        binding.tvMessengerCapitalLetter.text = userNameCapital
     }
 
     private fun setTextColor(userName: String?, currentUserName: String?, textView: TextView) {

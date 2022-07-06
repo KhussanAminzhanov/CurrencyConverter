@@ -32,10 +32,10 @@ class CurrencyViewModel(
     private val currencyDao = repository.database.currencyDao
     val currencies = repository.database.currencyDao.getAll()
     val currencyQuotes = repository.database.currencyQuoteDao.getAll()
-
-    init {
-        refreshCurrencyQuotes()
-    }
+//
+//    init {
+//        refreshCurrencyQuotes()
+//    }
 
     fun refreshCurrencyQuotes() = viewModelScope.launch(ioDispatcher) {
         repository.refreshCurrencyQuotes()

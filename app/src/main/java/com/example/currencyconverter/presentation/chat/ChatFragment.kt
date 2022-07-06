@@ -1,6 +1,7 @@
 package com.example.currencyconverter.presentation.chat
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,9 +17,12 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 
 class ChatFragment : Fragment() {
 
@@ -31,6 +35,11 @@ class ChatFragment : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
+
+    private val openDocument = registerForActivityResult(OpenDocumentContract()) { uri ->
+        if (uri == null) return@registerForActivityResult
+        onImageSelected(uri)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +108,13 @@ class ChatFragment : Fragment() {
         binding.rvMessages.layoutManager = manager
         binding.rvMessages.adapter = adapter
 
-        adapter.registerAdapterDataObserver(MyScrollToBottomObserver(binding.rvMessages, adapter, manager))
+        adapter.registerAdapterDataObserver(
+            MyScrollToBottomObserver(
+                binding.rvMessages,
+                adapter,
+                manager
+            )
+        )
     }
 
     private fun setupLayout() {
@@ -114,6 +129,9 @@ class ChatFragment : Fragment() {
             )
             db.reference.child(MESSAGE_CHILD).push().setValue(chatMessage)
             binding.edtMessage.setText("")
+        }
+        binding.ibtnSendImage.setOnClickListener {
+            openDocument.launch(arrayOf("image/*"))
         }
     }
 
@@ -159,6 +177,51 @@ class ChatFragment : Fragment() {
         AuthUI.getInstance().signOut(requireContext())
         startActivity(Intent(requireContext(), SignInActivity::class.java))
         requireActivity().finish()
+    }
+
+    private fun onImageSelected(uri: Uri) {
+        Log.d(TAG, "Uri: $uri")
+        val user = auth.currentUser
+        val tempMessage =
+            ChatMessage(null, getUserName(), getUserEmail(), getPhotoUrl(), LOADING_IMAGE_URL)
+        db.reference
+            .child(MESSAGE_CHILD)
+            .push()
+            .setValue(tempMessage, DatabaseReference.CompletionListener { error, ref ->
+                if (error != null) {
+                    Log.w(TAG, "Unable to write messages to database.", error.toException())
+                    return@CompletionListener
+                }
+                val key = ref.key
+                val storageReference = Firebase.storage
+                    .getReference(user!!.uid)
+                    .child(key!!)
+                    .child(uri.lastPathSegment!!)
+                putImageInStorage(storageReference, uri, key)
+            })
+    }
+
+    private fun putImageInStorage(storageReference: StorageReference, uri: Uri, key: String?) {
+        storageReference.putFile(uri)
+            .addOnSuccessListener(requireActivity()) { taskSnapshot ->
+                taskSnapshot.metadata!!.reference!!.downloadUrl
+                    .addOnSuccessListener { uri ->
+                        val chatMessage = ChatMessage(
+                            null,
+                            getUserName(),
+                            getUserEmail(),
+                            getPhotoUrl(),
+                            uri.toString()
+                        )
+                        db.reference
+                            .child(MESSAGE_CHILD)
+                            .child(key!!)
+                            .setValue(chatMessage)
+                    }
+            }
+            .addOnFailureListener(requireActivity()) {
+                Log.w(TAG, "Image upload task was unsuccessful.", it)
+            }
     }
 
     companion object {

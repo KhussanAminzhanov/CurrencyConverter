@@ -1,4 +1,4 @@
-package com.example.currencyconverter.presentation.favorites
+package com.example.currencyconverter.presentation.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.currencyconverter.databinding.FragmentFavoritesBinding
 
-class FavoritesFragment : Fragment() {
+class HistoryFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     val binding get() = _binding!!
 
-    private lateinit var adapter: FavoritesListAdapter
+    private lateinit var adapter: HistoryListAdapter
     private lateinit var fm: FragmentManager
 
     override fun onCreateView(
@@ -23,7 +23,7 @@ class FavoritesFragment : Fragment() {
         _binding = FragmentFavoritesBinding.inflate(inflater)
         fm = requireActivity().supportFragmentManager
 
-        adapter = FavoritesListAdapter(listOf("First", "Second", "Third", "Fourth", "Fifth", "Sixth"), fm)
+        adapter = HistoryListAdapter(listOf("First", "Second", "Third", "Fourth", "Fifth", "Sixth"), fm)
         binding.rvNews.adapter = adapter
 
         return binding.root

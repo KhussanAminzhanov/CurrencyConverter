@@ -1,10 +1,10 @@
-package com.example.currencyconverter.presentation.favorites
+package com.example.currencyconverter.presentation.history
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.databinding.ItemPodcastPlayerBinding
 import com.example.currencyconverter.databinding.ItemVideoPlayerBinding
 
-class FavoritesViewHolder : RecyclerView.ViewHolder {
+class TransactionViewHolder : RecyclerView.ViewHolder {
     var videoBinding: ItemVideoPlayerBinding? = null
     var podcastBinding: ItemPodcastPlayerBinding? = null
 

@@ -8,7 +8,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     app:layoutDescription="@xml/fragment_movie_info_scene"
-    tools:context=".presentation.favorites.MovieInfoFragment">
+    tools:context=".presentation.history.MovieInfoFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_container"
