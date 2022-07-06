@@ -77,8 +77,9 @@ class ChatFragment : Fragment() {
         super.onPause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        menuHost.removeMenuProvider(menuProvider)
         _binding = null
     }
 
