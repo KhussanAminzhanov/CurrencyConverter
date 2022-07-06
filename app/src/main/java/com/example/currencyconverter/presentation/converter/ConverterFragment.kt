@@ -126,9 +126,9 @@ class ConverterFragment : Fragment() {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             model.isItemSelected.observe(viewLifecycleOwner) {
                 val menuLayoutId = if (it) {
-                    R.menu.fragment_currencies_currency_selected
+                    R.menu.menu_fragment_currencies_currency_selected
                 } else {
-                    R.menu.fragment_currencies_normal
+                    R.menu.menu_fragment_currencies_normal
                 }
                 menu.clear()
                 menuInflater.inflate(menuLayoutId, menu)
