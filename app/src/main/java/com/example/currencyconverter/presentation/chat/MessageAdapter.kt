@@ -55,9 +55,8 @@ class MessageAdapter(
         fun bind(item: ChatMessage) {
             binding.tvMessage.text = item.text
             setTextColor(item.name, binding.tvMessage)
-            val messengerName = item.name ?: "A"
             binding.tvMessengerFullName.text = if (item.name == null) ANONYMOUS else item.name
-            binding.tvMessengerCapitalLetter.text = messengerName.first().toString()
+            binding.tvMessengerCapitalLetter.text = "A"
         }
 
         private fun setTextColor(userName: String?, textView: TextView) {

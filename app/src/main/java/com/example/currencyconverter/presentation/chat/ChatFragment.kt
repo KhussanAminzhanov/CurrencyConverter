@@ -27,7 +27,6 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
@@ -36,6 +35,17 @@ class ChatFragment : Fragment() {
             requireActivity().finish()
             return
         }
+
+        db = Firebase.database
+        val messageRef = db.reference.child(MESSAGE_CHILD)
+
+        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
+            .setQuery(messageRef, ChatMessage::class.java)
+            .build()
+
+        adapter = MessageAdapter(options, getUserName())
+        manager = LinearLayoutManager(requireContext())
+        manager.stackFromEnd = true
     }
 
     override fun onCreateView(
@@ -44,20 +54,25 @@ class ChatFragment : Fragment() {
     ): View {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
-        db = Firebase.database
-        val messageRef = db.reference.child(MESSAGE_CHILD)
-
-        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
-            .setQuery(messageRef, ChatMessage::class.java)
-            .build()
-        adapter = MessageAdapter(options, getUserName())
         binding.progressBar.visibility = View.INVISIBLE
-        manager = LinearLayoutManager(requireContext())
-        manager.stackFromEnd = true
         binding.rvMessages.layoutManager = manager
         binding.rvMessages.adapter = adapter
 
         adapter.registerAdapterDataObserver(MyScrollToBottomObserver(binding.rvMessages, adapter, manager))
+
+        binding.edtMessage.addTextChangedListener(SendButtonObserver(binding.ibtnSendMessage))
+
+        binding.ibtnSendMessage.setOnClickListener {
+            val chatMessage = ChatMessage(
+                binding.edtMessage.text.toString(),
+                getUserName(),
+                getUserEmail(),
+                getPhotoUrl(),
+                null
+            )
+            db.reference.child(MESSAGE_CHILD).push().setValue(chatMessage)
+            binding.edtMessage.setText("")
+        }
 
         return binding.root
     }
@@ -95,6 +110,13 @@ class ChatFragment : Fragment() {
         val user = auth.currentUser
         return if (user != null) {
             user.displayName
+        } else ANONYMOUS
+    }
+
+    private fun getUserEmail(): String? {
+        val user = auth.currentUser
+        return if (user != null) {
+            user.email
         } else ANONYMOUS
     }
 
