@@ -27,7 +27,7 @@ class MainInfoFragment : Fragment() {
         binding.shareButton.setOnClickListener {
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "Message of share button")
+                putExtra(Intent.EXTRA_TEXT, "ChatMessage of share button")
                 type = "text/plain"
             }
             val intent = Intent.createChooser(shareIntent, "Share with")

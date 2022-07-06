@@ -6,13 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.currencyconverter.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.currencyconverter.databinding.FragmentChatBinding
+import com.example.currencyconverter.domain.models.ChatMessage
+import com.example.currencyconverter.presentation.main.SignInActivity
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class ChatFragment : Fragment() {
 
+    private lateinit var manager: LinearLayoutManager
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseDatabase
+    private lateinit var adapter: MessageAdapter
+
+    private var _binding: FragmentChatBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,14 +36,30 @@ class ChatFragment : Fragment() {
             requireActivity().finish()
             return
         }
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+    ): View {
+        _binding = FragmentChatBinding.inflate(inflater, container, false)
+
+        db = Firebase.database
+        val messageRef = db.reference.child(MESSAGE_CHILD)
+
+        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
+            .setQuery(messageRef, ChatMessage::class.java)
+            .build()
+        adapter = MessageAdapter(options, getUserName())
+        binding.progressBar.visibility = View.INVISIBLE
+        manager = LinearLayoutManager(requireContext())
+        manager.stackFromEnd = true
+        binding.rvMessages.layoutManager = manager
+        binding.rvMessages.adapter = adapter
+
+        adapter.registerAdapterDataObserver(MyScrollToBottomObserver(binding.rvMessages, adapter, manager))
+
+        return binding.root
     }
 
     override fun onStart() {
@@ -39,6 +69,21 @@ class ChatFragment : Fragment() {
             requireActivity().finish()
             return
         }
+    }
+
+    override fun onResume() {
+        adapter.startListening()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        adapter.stopListening()
+        super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun getPhotoUrl(): String? {
@@ -61,7 +106,7 @@ class ChatFragment : Fragment() {
 
     companion object {
         private const val TAG = "ChatFragment"
-        const val MESSAGE_CHILD = "message"
+        const val MESSAGE_CHILD = "messages"
         const val ANONYMOUS = "anonymous"
         private const val LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif"
     }

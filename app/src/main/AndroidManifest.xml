@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CurrencyConverter">
         <activity
-            android:name=".presentation.chat.SignInActivity"
+            android:name=".presentation.main.SignInActivity"
             android:exported="false" />
 
         <meta-data

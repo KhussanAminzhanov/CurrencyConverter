@@ -21,4 +21,6 @@
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
     <color name="toolbar_background">#ffffff</color>
+    <color name="colorGray">#dedede</color>
+    <color name="colorBlue">#2962FF</color>
 </resources>

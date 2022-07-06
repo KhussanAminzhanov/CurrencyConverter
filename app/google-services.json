@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "476362290264",
-    "firebase_url": "https://currency-converter-6c8cf-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "currency-converter-6c8cf",
-    "storage_bucket": "currency-converter-6c8cf.appspot.com"
+    "project_number": "278680746919",
+    "firebase_url": "https://currency-82170-default-rtdb.firebaseio.com",
+    "project_id": "currency-82170",
+    "storage_bucket": "currency-82170.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:476362290264:android:52823f6ec0fd5172d8c62d",
+        "mobilesdk_app_id": "1:278680746919:android:9ccb7c2fb80ab96e931482",
         "android_client_info": {
           "package_name": "com.example.currencyconverter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "476362290264-5sf0of3miq6st90oem63mr4kf3pbbnr0.apps.googleusercontent.com",
+          "client_id": "278680746919-1n5rt7ig87vnep9t8d8uj7j4q4cjoo7l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.currencyconverter",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "476362290264-ltle3bbbs6v26t2hsmftspftekkp8kfo.apps.googleusercontent.com",
+          "client_id": "278680746919-qquc1p0g998ca8mcb8ejbq5glnour8gt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBLrXoIgM735v3MtwFlzhQJFPO8dMeHWo8"
+          "current_key": "AIzaSyAVdGeB7sDOZhk88KXAB6E3hykhCVuB5pk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "476362290264-ltle3bbbs6v26t2hsmftspftekkp8kfo.apps.googleusercontent.com",
+              "client_id": "278680746919-qquc1p0g998ca8mcb8ejbq5glnour8gt.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
