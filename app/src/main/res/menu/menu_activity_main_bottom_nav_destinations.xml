@@ -5,9 +5,9 @@
         android:icon="@drawable/ic_translate"
         android:title="@string/chat" />
     <item
-        android:id="@+id/favoritesFragment"
+        android:id="@+id/historyFragment"
         android:icon="@drawable/ic_favorites"
-        android:title="@string/favorites" />
+        android:title="@string/history" />
 
     <item
         android:id="@+id/currencyFragment"

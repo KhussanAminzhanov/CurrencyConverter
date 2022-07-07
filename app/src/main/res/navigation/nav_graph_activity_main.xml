@@ -15,13 +15,13 @@
             app:uri="myapp://currencyconverter.com/converter" />
     </fragment>
     <fragment
-        android:id="@+id/favoritesFragment"
+        android:id="@+id/historyFragment"
         android:name="com.example.currencyconverter.presentation.history.HistoryFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_history">
         <deepLink
-            android:id="@+id/deep_link_currency_favorites"
-            app:uri="myapp://currencyconverter.com/favorites" />
+            android:id="@+id/deep_link_history_fragment"
+            app:uri="myapp://currencyconverter.com/history" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

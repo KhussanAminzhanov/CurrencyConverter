@@ -23,4 +23,6 @@
     <color name="toolbar_background">#ffffff</color>
     <color name="colorGray">#dedede</color>
     <color name="colorBlue">#2962FF</color>
+    <color name="colorDarkerGray">#393737</color>
+    <color name="blue_light">#101789DB</color>
 </resources>

@@ -2,15 +2,15 @@ package com.example.currencyconverter.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.OnConflictStrategy.IGNORE
+import androidx.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface PhotoDao {
 
-    @Insert(onConflict = IGNORE)
+    @Insert(onConflict = REPLACE)
     fun add(photo: Photo)
 
-    @Insert(onConflict = IGNORE)
+    @Insert(onConflict = REPLACE)
     fun addAll(photos: List<Photo>)
 
     @Update

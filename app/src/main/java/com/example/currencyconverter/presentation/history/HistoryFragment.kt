@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.currencyconverter.databinding.FragmentFavoritesBinding
+import com.example.currencyconverter.databinding.FragmentHistoryBinding
 
 class HistoryFragment : Fragment() {
 
-    private var _binding: FragmentFavoritesBinding? = null
+    private var _binding: FragmentHistoryBinding? = null
     val binding get() = _binding!!
 
     private lateinit var adapter: HistoryListAdapter
@@ -20,10 +20,10 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoritesBinding.inflate(inflater)
+        _binding = FragmentHistoryBinding.inflate(inflater)
         fm = requireActivity().supportFragmentManager
 
-        adapter = HistoryListAdapter(listOf("First", "Second", "Third", "Fourth", "Fifth", "Sixth"), fm)
+        adapter = HistoryListAdapter(listOf("First", "Second", "Third", "Fourth", "Fifth", "Sixth"))
         binding.rvNews.adapter = adapter
 
         return binding.root

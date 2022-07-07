@@ -2,12 +2,12 @@ package com.example.currencyconverter.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.OnConflictStrategy.IGNORE
+import androidx.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface CurrencyDao {
 
-    @Insert(onConflict = IGNORE)
+    @Insert(onConflict = REPLACE)
     suspend fun insert(currency: Currency)
 
     @Update

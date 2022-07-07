@@ -1,18 +1,24 @@
 package com.example.currencyconverter.presentation.history
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.currencyconverter.databinding.ItemPodcastPlayerBinding
-import com.example.currencyconverter.databinding.ItemVideoPlayerBinding
+import com.example.currencyconverter.data.database.Transaction
+import com.example.currencyconverter.databinding.ItemTransactionBinding
 
-class TransactionViewHolder : RecyclerView.ViewHolder {
-    var videoBinding: ItemVideoPlayerBinding? = null
-    var podcastBinding: ItemPodcastPlayerBinding? = null
+class TransactionViewHolder(val binding: ItemTransactionBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-    constructor(binding: ItemVideoPlayerBinding) : super(binding.root) {
-        videoBinding = binding
+    fun bind(item: Transaction) {
+        binding.tvValue.text = item.value.toString()
+        binding.tvCurrencyName.text = item.name
     }
 
-    constructor(binding: ItemPodcastPlayerBinding) : super(binding.root) {
-        podcastBinding = binding
+    companion object {
+        fun inflateFrom(parent: ViewGroup): TransactionViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val binding = ItemTransactionBinding.inflate(inflater, parent, false)
+            return TransactionViewHolder(binding)
+        }
     }
 }
