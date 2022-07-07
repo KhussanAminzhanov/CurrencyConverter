@@ -5,10 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Currency::class, CurrencyQuote::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Currency::class, CurrencyQuote::class, CurrencyTransaction::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class CurrencyDatabase : RoomDatabase() {
     abstract val currencyDao: CurrencyDao
     abstract val currencyQuoteDao: CurrencyQuoteDao
+    abstract val transactionDao: CurrencyTransactionDao
 
     companion object {
         @Volatile

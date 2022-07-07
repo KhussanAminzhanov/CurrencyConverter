@@ -5,33 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.currencyconverter.databinding.FragmentHistoryBinding
+import com.example.currencyconverter.presentation.chat.HistoryViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryFragment : Fragment() {
 
     private var _binding: FragmentHistoryBinding? = null
     val binding get() = _binding!!
 
+    private val viewModel: HistoryViewModel by viewModel()
+
     private lateinit var adapter: HistoryListAdapter
-    private lateinit var fm: FragmentManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHistoryBinding.inflate(inflater)
-        fm = requireActivity().supportFragmentManager
 
-        adapter = HistoryListAdapter(listOf("First", "Second", "Third", "Fourth", "Fifth", "Sixth"))
         binding.rvNews.adapter = adapter
 
         return binding.root
+    }
+
+    private fun setupObservers() {
+        viewModel.currencyTransactions.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

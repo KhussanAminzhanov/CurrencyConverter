@@ -3,12 +3,15 @@ package com.example.currencyconverter.data.repository
 import android.util.Log
 import com.example.currencyconverter.data.database.CurrencyDatabase
 import com.example.currencyconverter.data.database.CurrencyQuote
+import com.example.currencyconverter.data.database.CurrencyTransaction
 import com.example.currencyconverter.data.network.CurrencyApiNetwork
 
 class CurrencyRepository(
     val database: CurrencyDatabase,
     private val network: CurrencyApiNetwork
 ) {
+
+    val transactionDao = database.transactionDao
 
     suspend fun refreshCurrencyQuotes() {
         val currencyNames = network.getCurrencies()?.data ?: return
@@ -23,4 +26,10 @@ class CurrencyRepository(
         }
         database.currencyQuoteDao.insertAll(currencyQuotes)
     }
+
+    fun getCurrencyTransactions() = transactionDao.getAll()
+    suspend fun addCurrencyTransaction(currencyTransaction: CurrencyTransaction) =
+        transactionDao.insert(currencyTransaction)
+    suspend fun deleteCurrencyTransaction(currencyTransaction: CurrencyTransaction) =
+        transactionDao.delete(currencyTransaction)
 }
