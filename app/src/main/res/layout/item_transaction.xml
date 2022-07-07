@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_margin="8dp"
     android:background="@drawable/shape_rounded_blue"
     android:padding="8dp">
 
@@ -37,7 +37,7 @@
         android:layout_marginHorizontal="16dp"
         android:background="@color/colorGray"
         app:layout_constraintBottom_toBottomOf="@+id/ibtn_move"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/ibtn_delete"
         app:layout_constraintStart_toEndOf="@id/ibtn_move"
         app:layout_constraintTop_toTopOf="@+id/ibtn_move" />
 
@@ -53,7 +53,7 @@
         tools:text="US Dollar" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/ibtn_delete"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@android:color/transparent"

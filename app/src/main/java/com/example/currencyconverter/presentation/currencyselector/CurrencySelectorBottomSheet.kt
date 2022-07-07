@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.currencyconverter.R
+import com.example.currencyconverter.data.database.Currency
 import com.example.currencyconverter.data.database.asCurrency
 import com.example.currencyconverter.databinding.BottomSheetAddCurrencyBinding
 import com.example.currencyconverter.presentation.converter.CurrencyViewModel
@@ -46,14 +48,21 @@ class CurrencySelectorBottomSheet : BottomSheetDialogFragment() {
 
     private fun setupObservers() {
         viewModel.currencyQuotes.observe(viewLifecycleOwner) {
-            val currencyList = it.map { currencyQuote ->  currencyQuote.asCurrency() }
-            adapter.submitList(currencyList)
+            val currencyList = it.map { currencyQuote -> currencyQuote.asCurrency() }
+            if (currencyList.isEmpty()) adapter.submitList(getCurrenciesList())
+            else adapter.submitList(currencyList)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getCurrenciesList(): List<Currency> {
+        val currencyUSD = Currency( name = "US Dollar USD", image = R.drawable.flag_usa, exchangeRate = 0.0023)
+        val currencyTRY = Currency( name = "Turkish Lira TRY", image = R.drawable.flag_turkey, exchangeRate = 0.04)
+        return listOf(currencyUSD, currencyTRY)
     }
 
     companion object {

@@ -15,7 +15,7 @@ class CurrencyListAdapter(
     private val onItemUncheck: (currency: Currency) -> Unit,
     private val isItemChecked: (currency: Currency) -> Boolean
 ) : ListAdapter<Currency, CurrenciesItemViewHolder>(CurrencyDiffItemCallback()),
-    CurrencyItemTouchHelperAdapter {
+    CustomItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         CurrenciesItemViewHolder.inflateFrom(

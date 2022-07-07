@@ -1,6 +1,5 @@
 package com.example.currencyconverter.data.database
 
-import android.net.TrafficStats
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
@@ -23,7 +22,7 @@ interface CurrencyTransactionDao {
     suspend fun deleteAll(transactions: List<CurrencyTransaction>)
 
     @Query("SELECT * FROM transaction_table WHERE id = :transactionId")
-    fun get(transactionId: Int): LiveData<TrafficStats>
+    fun get(transactionId: Int): LiveData<CurrencyTransaction>
 
     @Query("SELECT * FROM TRANSACTION_TABLE ORDER BY id")
     fun getAll(): LiveData<List<CurrencyTransaction>>

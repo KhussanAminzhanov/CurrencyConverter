@@ -12,3 +12,8 @@ data class Currency constructor(
     var image: Int = R.drawable.flag_usa,
     var exchangeRate: Double,
 )
+
+
+fun Currency.toCurrencyTransaction(value: Double) : CurrencyTransaction {
+    return CurrencyTransaction(name = this.name, value = value)
+}

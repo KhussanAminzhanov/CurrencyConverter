@@ -3,12 +3,12 @@ package com.example.currencyconverter.presentation.converter
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-interface CurrencyItemTouchHelperAdapter {
+interface CustomItemTouchHelperAdapter {
     fun onItemMove(fromPosition: Int, toPosition: Int)
     fun onItemDismiss(position: Int)
 }
 
-class CurrenciesItemTouchHelperCallback(private val adapter: CurrencyItemTouchHelperAdapter) :
+class CustomItemTouchHelperCallback(private val adapter: CustomItemTouchHelperAdapter) :
     ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(

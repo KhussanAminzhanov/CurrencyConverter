@@ -1,4 +1,4 @@
-package com.example.currencyconverter.presentation.chat
+package com.example.currencyconverter.presentation.history
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.currencyconverter.data.database.CurrencyTransaction

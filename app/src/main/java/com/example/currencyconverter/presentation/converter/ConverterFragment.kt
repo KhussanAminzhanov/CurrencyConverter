@@ -10,11 +10,11 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyconverter.R
 import com.example.currencyconverter.data.database.Currency
 import com.example.currencyconverter.databinding.FragmentCurrenciesBinding
 import com.example.currencyconverter.presentation.currencyselector.CurrencySelectorBottomSheet
+import com.example.currencyconverter.presentation.history.HistoryViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ConverterFragment : Fragment() {
@@ -22,7 +22,8 @@ class ConverterFragment : Fragment() {
     private var _binding: FragmentCurrenciesBinding? = null
     private val binding get() = _binding!!
 
-    private val model: CurrencyViewModel by sharedViewModel()
+    private val currencyViewModel: CurrencyViewModel by sharedViewModel()
+    private val historyViewModel: HistoryViewModel by sharedViewModel()
     private lateinit var adapter: CurrencyListAdapter
     private lateinit var menuHost: MenuHost
     private lateinit var menuProvider: MenuProvider
@@ -50,7 +51,7 @@ class ConverterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         menuHost.removeMenuProvider(menuProvider)
-        model.setItemSelected(false)
+        currencyViewModel.setItemSelected(false)
         _binding = null
     }
 
@@ -60,25 +61,25 @@ class ConverterFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(value: Editable?) {
                 if (value == null || value.isEmpty()) return
-                model.setBalance(value.toString().toDouble())
+                currencyViewModel.setBalance(value.toString().toDouble())
             }
         })
     }
 
     private fun setupObservers() {
-        model.currencies.observe(viewLifecycleOwner) {
-            adapter.submitList(model.getCurrenciesSorted(it))
+        currencyViewModel.currencies.observe(viewLifecycleOwner) {
+            adapter.submitList(currencyViewModel.getCurrenciesSorted(it))
         }
-        model.sortingType.observe(viewLifecycleOwner) {
-            val currencies = model.currencies.value ?: return@observe
+        currencyViewModel.sortingType.observe(viewLifecycleOwner) {
+            val currencies = currencyViewModel.currencies.value ?: return@observe
             adapter.submitList(currencies)
         }
     }
 
     private fun setupRecyclerViewAdapter() {
         adapter = CurrencyListAdapter(
-            model.balance,
-            model.isItemSelected,
+            currencyViewModel.balance,
+            currencyViewModel.isItemSelected,
             ::onAdapterItemMove,
             ::onAdapterItemDismiss,
             ::onAdapterItemLongClick,
@@ -88,28 +89,26 @@ class ConverterFragment : Fragment() {
         )
     }
 
-    private fun onAdapterItemDismiss(currency: Currency) = model.deleteCurrency(currency)
-    private fun onAdapterItemMove(from: Int, to: Int) = model.moveCurrencies(from, to)
-    private fun onAdapterItemLongClick() = model.setItemSelected(true)
-    private fun onAdapterItemCheck(currency: Currency) = model.addCheckedCurrency(currency)
-    private fun onAdapterItemUncheck(currency: Currency) = model.removeCheckedCurrency(currency)
-    private fun isAdapterItemChecked(currency: Currency) = model.containsCheckedCurrency(currency)
+    private fun onAdapterItemDismiss(currency: Currency) = currencyViewModel.deleteCurrency(currency)
+    private fun onAdapterItemMove(from: Int, to: Int) = currencyViewModel.moveCurrencies(from, to)
+    private fun onAdapterItemLongClick() = currencyViewModel.setItemSelected(true)
+    private fun onAdapterItemCheck(currency: Currency) = currencyViewModel.addCheckedCurrency(currency)
+    private fun onAdapterItemUncheck(currency: Currency) = currencyViewModel.removeCheckedCurrency(currency)
+    private fun isAdapterItemChecked(currency: Currency) = currencyViewModel.containsCheckedCurrency(currency)
 
     private fun setupRecyclerView() {
-        val callback = CurrenciesItemTouchHelperCallback(adapter)
+        val callback = CustomItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
         binding.currenciesListRecyclerView.adapter = adapter
-        binding.currenciesListRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         touchHelper.attachToRecyclerView(binding.currenciesListRecyclerView)
     }
 
     private fun setupOnBackButtonPres() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (model.isItemSelected.value == true) {
-                    model.setItemSelected(false)
-                    model.clearCheckCurrencies()
+                if (currencyViewModel.isItemSelected.value == true) {
+                    currencyViewModel.setItemSelected(false)
+                    currencyViewModel.clearCheckCurrencies()
                 } else activity?.finish()
             }
         }
@@ -124,7 +123,7 @@ class ConverterFragment : Fragment() {
 
     private fun getMenuProvider() = object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            model.isItemSelected.observe(viewLifecycleOwner) {
+            currencyViewModel.isItemSelected.observe(viewLifecycleOwner) {
                 val menuLayoutId = if (it) {
                     R.menu.menu_fragment_currencies_currency_selected
                 } else {
@@ -138,9 +137,9 @@ class ConverterFragment : Fragment() {
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             when (menuItem.itemId) {
                 R.id.menu_add_currency -> showCurrencySelectorBottomSheet()
-                R.id.menu_alphabet -> model.setSortingType(CurrencyViewModel.SortType.ALPHABET)
-                R.id.menu_value -> model.setSortingType(CurrencyViewModel.SortType.VALUE)
-                R.id.menu_reset -> model.setSortingType(CurrencyViewModel.SortType.UNSORTED)
+                R.id.menu_alphabet -> currencyViewModel.setSortingType(CurrencyViewModel.SortType.ALPHABET)
+                R.id.menu_value -> currencyViewModel.setSortingType(CurrencyViewModel.SortType.VALUE)
+                R.id.menu_reset -> currencyViewModel.setSortingType(CurrencyViewModel.SortType.UNSORTED)
                 R.id.menu_delete_item -> showDeleteConfirmationDialog(parentFragmentManager)
             }
             return true
@@ -152,7 +151,7 @@ class ConverterFragment : Fragment() {
     }
 
     private fun showDeleteConfirmationDialog(fragmentManager: FragmentManager) {
-        val dialog = DeleteConfirmationDialogFragment(model::deleteCurrencies)
+        val dialog = DeleteConfirmationDialogFragment(currencyViewModel::deleteCurrencies)
         dialog.show(fragmentManager, DeleteConfirmationDialogFragment.TAG)
     }
 }

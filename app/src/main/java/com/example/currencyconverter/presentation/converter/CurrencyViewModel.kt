@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.data.database.Currency
+import com.example.currencyconverter.data.database.toCurrencyTransaction
 import com.example.currencyconverter.data.repository.CurrencyRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ class CurrencyViewModel(
     private val checkedCurrencies = mutableListOf<Currency>()
 
     private val currencyDao = repository.database.currencyDao
+    private val transactionDao = repository.database.transactionDao
     val currencies = repository.database.currencyDao.getAll()
     val currencyQuotes = repository.database.currencyQuoteDao.getAll()
 //
@@ -42,7 +44,10 @@ class CurrencyViewModel(
     }
 
     fun addCurrency(currency: Currency) =
-        viewModelScope.launch(ioDispatcher) { currencyDao.insert(currency) }
+        viewModelScope.launch(ioDispatcher) {
+            currencyDao.insert(currency)
+            transactionDao.insert(currency.toCurrencyTransaction(balance.value ?: .0))
+        }
 
     fun deleteCurrency(currency: Currency) =
         viewModelScope.launch(ioDispatcher) { currencyDao.delete(currency) }
@@ -79,12 +84,12 @@ class CurrencyViewModel(
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 currencies.value?.let { Collections.swap(it, i, i + 1) }
-                swapCurrencyId(i, i + 1)
+//                swapCurrencyId(i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 currencies.value?.let { Collections.swap(it, i, i - 1) }
-                swapCurrencyId(i, i - 1)
+//                swapCurrencyId(i, i - 1)
             }
         }
     }
@@ -99,8 +104,7 @@ class CurrencyViewModel(
         secondCurrency.currencyId = position
 
         viewModelScope.launch(ioDispatcher) {
-            currencyDao.update(firstCurrency)
-            currencyDao.update(secondCurrency)
+            currencyDao.updateAll(listOf(firstCurrency, secondCurrency))
         }
     }
 }

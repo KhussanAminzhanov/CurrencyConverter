@@ -11,7 +11,7 @@ class CurrencyRepository(
     private val network: CurrencyApiNetwork
 ) {
 
-    val transactionDao = database.transactionDao
+    private val transactionDao = database.transactionDao
 
     suspend fun refreshCurrencyQuotes() {
         val currencyNames = network.getCurrencies()?.data ?: return
