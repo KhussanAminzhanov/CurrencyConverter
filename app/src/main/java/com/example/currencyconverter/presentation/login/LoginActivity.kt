@@ -15,6 +15,7 @@ import com.example.currencyconverter.databinding.ActivityLoginBinding
 import com.example.currencyconverter.presentation.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
