@@ -15,6 +15,9 @@ interface CurrencyTransactionDao {
     @Update
     suspend fun update(transaction: CurrencyTransaction)
 
+    @Update
+    suspend fun updateAll(transactions: List<CurrencyTransaction>)
+
     @Delete
     suspend fun delete(transaction: CurrencyTransaction)
 

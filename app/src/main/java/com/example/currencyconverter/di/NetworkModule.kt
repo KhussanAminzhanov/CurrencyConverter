@@ -1,9 +1,12 @@
 package com.example.currencyconverter.di
 
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.currencyconverter.data.network.CurrencyApiNetwork
 import com.example.currencyconverter.data.network.UnsplashApiNetwork
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -19,6 +22,14 @@ val networkModule = module {
     factory { GsonBuilder().create() }
     factory {
         OkHttpClient.Builder()
+            .addInterceptor(
+                ChuckerInterceptor.Builder(androidApplication())
+                    .collector(ChuckerCollector(androidApplication()))
+                    .maxContentLength(250000L)
+                    .redactHeaders(emptySet())
+                    .alwaysReadResponseBody(false)
+                    .build()
+            )
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

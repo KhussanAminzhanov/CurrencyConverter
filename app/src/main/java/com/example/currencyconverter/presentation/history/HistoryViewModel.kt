@@ -26,6 +26,11 @@ class HistoryViewModel(
             repository.deleteCurrencyTransaction(transaction)
         }
 
+    fun updateAllCurrencyTransactions(transactions: List<CurrencyTransaction>) =
+        viewModelScope.launch(ioDispatcher){
+            repository.database.transactionDao.updateAll(transactions)
+        }
+
     fun moveCurrencyTransactions(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
@@ -36,5 +41,9 @@ class HistoryViewModel(
                 currencyTransactions.value?.let { Collections.swap(it, i, i - 1) }
             }
         }
+    }
+
+    companion object {
+        const val TAG = "HistoryViewModel"
     }
 }
