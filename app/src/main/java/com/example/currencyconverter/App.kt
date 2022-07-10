@@ -20,3 +20,11 @@ class App : Application() {
         }
     }
 }
+
+//fun Context.getAnalytics(): Analytics = if (GoogleApiAvailability.getInstance()
+//        .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+//) {
+//    GMSAnalytics(this)
+//} else {
+//    HMSAnalytics(this)
+//}

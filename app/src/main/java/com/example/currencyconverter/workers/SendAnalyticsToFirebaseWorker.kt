@@ -13,7 +13,7 @@ class SendAnalyticsToFirebaseWorker(context: Context, params: WorkerParameters) 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun doWork(): Result {
-        makeStatusNotifications("Sending Analytics", applicationContext)
+        makeStatusNotifications("Sending GMSAnalytics", applicationContext)
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
         val itemId = inputData.getString(KEY_IMAGE_ID)
