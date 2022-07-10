@@ -1,8 +1,12 @@
 package com.example.currencyconverter
 
 import android.app.Application
+import android.content.Context
+import com.example.currencyconverter.di.analyticsModule
 import com.example.currencyconverter.di.mainModule
 import com.example.currencyconverter.di.networkModule
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.koin.androidContext
@@ -16,15 +20,16 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(mainModule, networkModule)
+            modules(mainModule, networkModule, analyticsModule)
         }
     }
 }
 
-//fun Context.getAnalytics(): Analytics = if (GoogleApiAvailability.getInstance()
-//        .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-//) {
-//    GMSAnalytics(this)
-//} else {
+fun Context.getAnalytics(): Analytics = if (GoogleApiAvailability.getInstance()
+        .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+) {
+    GMSAnalytics(this)
+} else {
 //    HMSAnalytics(this)
-//}
+    GMSAnalytics(this)
+}

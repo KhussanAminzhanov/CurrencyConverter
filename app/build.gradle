@@ -41,11 +41,9 @@ android {
     productFlavors {
         huawei {
             dimension 'platform'
-            applicationId 'com.currencyconverter.huawei'
         }
         google {
             dimension 'platform'
-            applicationId 'com.currencyconverter.google'
         }
 
     }
