@@ -2,6 +2,7 @@ package com.example.currencyconverter.domain.models.unsplash
 
 import com.example.currencyconverter.data.database.Photo
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class PhotoResult(
     @SerializedName("id") var id: String? = null,
@@ -10,6 +11,7 @@ data class PhotoResult(
 
 fun PhotoResult.toDatabasePhoto() : Photo {
     return Photo(
+        searchDate = Date(),
         urlFull = this.urls.full ?: "",
         urlRaw = this.urls.raw ?: "",
         urlRegular = this.urls.regular ?: "",
