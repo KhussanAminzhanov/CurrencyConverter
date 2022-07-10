@@ -4,11 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.currencyconverter.data.database.migrations.CurrencyMigration1To2
 
 @Database(
     entities = [Currency::class, CurrencyQuote::class, CurrencyTransaction::class],
-    version = 1,
-    exportSchema = false
+    version = 2,
+    exportSchema = true
 )
 abstract class CurrencyDatabase : RoomDatabase() {
     abstract val currencyDao: CurrencyDao
@@ -26,10 +27,12 @@ abstract class CurrencyDatabase : RoomDatabase() {
                         context.applicationContext,
                         CurrencyDatabase::class.java,
                         "currency_database"
-                    ).build()
+                    ).addMigrations(MIGRATIN_1_2).build()
                 }
                 return INSTANCE
             }
         }
+
+        val MIGRATIN_1_2 = CurrencyMigration1To2()
     }
 }

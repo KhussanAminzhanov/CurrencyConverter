@@ -11,6 +11,7 @@ data class Currency constructor(
     var name: String = "Tenge, Kazakhstan",
     var image: Int = R.drawable.flag_usa,
     var exchangeRate: Double,
+    var value: Double = 0.0
 )
 
 
